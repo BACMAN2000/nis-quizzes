@@ -439,7 +439,7 @@ const render={
     const verdict = pct>=80?'Excellent — a strong, well-developed performance.':pct>=60?'Good — a solid pass with room to refine.':pct>=40?'Developing — keep practising structure and coverage.':'Needs work — focus on covering all points and length.';
     app.className='app';
     app.innerHTML=`
-      <div class="topbar"><img src="nordic-logo-h.svg" alt="Nordic"><div><h1 style="margin:0;font-size:1.4rem">Writing results</h1><div style="color:var(--muted)">${ex.title}</div></div></div>
+      <div class="topbar"><img src="nordic-logo-h.svg" alt="Nordic"><div><h1 style="margin:0;font-size:1.4rem">Writing submitted</h1><div style="color:var(--muted)">${ex.title}</div></div></div>
       <div class="pdf-actions">
         <button class="btn" onclick="window._pdf()">⬇ Download PDF</button>
         <button class="btn" id="sendEmail">📧 Send to my email</button>
@@ -451,20 +451,17 @@ const render={
           <div><b>Student:</b> ${esc(state.name)}</div><div><b>Grade:</b> ${esc(state.grade)}</div>
           <div><b>Level:</b> ${state.level} · ${LEVEL_NAMES[state.level]}</div><div><b>Date:</b> ${new Date().toLocaleString()}</div>
         </div></div>
-        <div class="card score-card">
-          <div class="big">${totalBand} / ${maxBand}</div>
-          <div class="pct">${pct}%</div>
-          <div style="color:var(--muted);margin-top:6px">${verdict}</div>
+        <div class="card" style="text-align:center;border-left:4px solid var(--good)">
+          <div style="font-size:2.2rem">✓</div>
+          <h2 style="margin:4px 0">Writing submitted</h2>
+          <p style="color:var(--muted);margin:0">Your writing is <strong>not graded automatically</strong>. It has been sent to your teacher, who will read it and give you a mark by hand. Below is a copy of what you wrote.</p>
         </div>
         <div class="card">
-          <h2>Automatic feedback</h2>
-          <p style="color:var(--muted);font-size:.9rem;margin:0 0 10px">Estimate based on the Cambridge ${state.level} writing criteria (Content, Organisation, Language), each 0–5. Your teacher may adjust it.</p>
+          <h2>Your answers</h2>
           ${r.tasks.map(t=>`<div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:14px">
-            <div style="display:flex;justify-content:space-between;align-items:center"><strong>${t.label}</strong><span class="band-badge">Band ${t.band} / ${t.max}</span></div>
-            <div style="color:var(--muted);font-size:.85rem;margin:4px 0 8px">${t.wordCount} words · ${esc(t.taskType)}</div>
-            ${t.criteria.map(c=>`<div class="crit-row"><span class="nm">${c.name}</span><span class="sc">${c.score}/${c.max}</span><span class="nt">${c.note}</span></div>`).join('')}
-            <div class="fb"><strong>Feedback:</strong> ${t.feedback}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><strong>${t.label}</strong><span style="color:var(--muted);font-size:.85rem">${t.wordCount} words</span></div>
             <div class="answer">${t.text?esc(t.text):'<em>No response written.</em>'}</div>
+            ${t.feedback?`<div class="fb"><strong>Self-check tips (not your grade):</strong> ${t.feedback}</div>`:''}
           </div>`).join('')}
         </div>
       </div>
@@ -481,7 +478,7 @@ const render={
 };
 
 function finalize(){
-  if(!confirm('Submit your writing and finish? Your answers will be assessed.')) return;
+  if(!confirm('Submit your writing and finish? Your answers will be sent to your teacher to mark.')) return;
   stopTimer();
   const ex=exam();
   const tasks=[];

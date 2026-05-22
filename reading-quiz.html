@@ -3782,8 +3782,10 @@ function scoreExam(ex){
   let counter = 1;
   ex.parts.forEach((p,idx)=>{
     if(p.type === 'writing'){
+      // Writing is NOT given a final grade to the student and does NOT count
+      // toward the Reading score. We still capture the answers (and a provisional
+      // automatic estimate) so the teacher can mark them manually.
       const partName = p.part.replace(/\s*—\s*not auto-scored/i,'');
-      if(!partsMap[partName]) partsMap[partName] = {name:partName, correct:0, total:0, writing:true};
       const isEmail = writingHasBullets(p);
       const bullets = getWritingBullets(p);
       p.prompts.forEach((pr,i)=>{
@@ -3794,9 +3796,7 @@ function scoreExam(ex){
         const m = task.match(/(\d+)\s*(?:[–-]\s*\d+)?\s*words?/i);
         const minWords = m ? parseInt(m[1]) : 25;
         const res = scoreWriting({text, minWords, isEmail, bulletItems:bullets});
-        correct += res.band; total += res.max;
-        partsMap[partName].correct += res.band; partsMap[partName].total += res.max;
-        writing.push({part:partName, q:num, prompt:(typeof pr==='string'?pr:''), task, text, wordCount:res.wordCount, band:res.band, max:res.max, criteria:res.criteria, feedback:res.feedback});
+        writing.push({part:partName, q:num, prompt:(typeof pr==='string'?pr:''), task, text, wordCount:res.wordCount, provisionalBand:res.band, max:res.max, criteria:res.criteria, feedback:res.feedback});
       });
       counter += p.prompts.length;
       return;
@@ -4386,7 +4386,7 @@ const render = {
           ` : ''}
           ${(!strengths.length && !weaknesses.length) ? `<p>Consistent performance across all parts — no specific section is dragging your score down.</p>` : ''}
           <p style="margin-top:14px;color:var(--muted);font-size:.88rem">
-            Cambridge passing standard is approximately 60%. Writing tasks are auto-assessed with an estimated band (shown below) and are included in your total; your teacher may adjust them.
+            Cambridge passing standard is approximately 60%. This score covers the auto-marked Reading parts only. Any Writing tasks are <strong>not graded automatically</strong> — they are sent to your teacher to mark by hand.
           </p>
         </div>
 
@@ -4397,17 +4397,14 @@ const render = {
 
         ${(r.writing&&r.writing.length)?`
         <div class="card">
-          <h2>Writing — automatic feedback</h2>
-          <p class="sub" style="margin-bottom:10px">Instant estimate based on the Cambridge ${state.level} writing criteria (Content, Organisation, Language), each scored 0–5. This is included in your total score. Your teacher may adjust it.</p>
+          <h2>Writing tasks — sent for teacher review</h2>
+          <p class="sub" style="margin-bottom:10px">Your writing is <strong>not graded automatically</strong>. It has been sent to your teacher, who will read it and give you a mark by hand. Below is a copy of what you wrote.</p>
           ${r.writing.map(w=>`
             <div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:14px">
               <div style="display:flex;justify-content:space-between;align-items:center">
                 <strong>${w.part}</strong>
-                <span style="background:#4987c6;color:#fff;padding:3px 12px;border-radius:20px;font-weight:700;font-size:.9rem">Band ${w.band} / ${w.max}</span>
+                <span style="color:var(--muted);font-size:.85rem">${w.wordCount} words</span>
               </div>
-              <div style="color:var(--muted);font-size:.85rem;margin:4px 0 10px">${w.wordCount} words</div>
-              ${w.criteria.map(c=>`<div style="display:flex;gap:10px;align-items:baseline;padding:3px 0;font-size:.9rem"><span style="min-width:100px;font-weight:600">${c.name}</span><span style="color:#4987c6;font-weight:700;min-width:36px">${c.score}/${c.max}</span><span style="color:var(--muted)">${c.note}</span></div>`).join('')}
-              <div style="margin-top:10px;background:#f8fafc;border-left:3px solid #4987c6;padding:8px 12px;border-radius:6px;font-size:.9rem"><strong>Feedback:</strong> ${w.feedback}</div>
               <div class="passage" style="margin-top:8px;white-space:pre-wrap">${(w.text||'<em>No response written.</em>').replace(/</g,'&lt;')}</div>
             </div>
           `).join('')}
