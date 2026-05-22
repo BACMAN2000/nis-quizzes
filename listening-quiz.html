@@ -558,157 +558,80 @@ const QUIZ = {
   /* ---------------- C1 — TOEFL real audio (advanced) ---------------- */
   C1: {
     label: "C1 — Advanced",
-    cefr: "TOEFL listening · C1",
-    blurb: "Lecturas universitarias largas. Inferencia y matiz.",
+    cefr: "Cambridge Advanced (CAE) · C1 official format",
+    blurb: "4 partes, 30 preguntas: opción múltiple, completar, entrevista y multiple matching (2 tareas).",
     audios: [
       {
-        id: "C1-1", title: "Audio 1 · The changing view of Mars",
-        kind: "file", file: "C1/Test_2_050.mp3",
-        intro: "An astronomy lecture about how scientific knowledge of Mars has evolved from the 1960s to today.",
+        id: "C1-P1", title: "Part 1 · Questions 1–6", kind: "file", paged: true,
+        intro: "You will hear people talking in three different situations. For each question, choose the best answer (A, B or C).",
+        segments: ["A presentation","A novel","A restaurant","A project","Research findings","A decision"],
+        scripts: [
+          "Question one. Woman: I've finished the slides for Monday. Man: They look great, very thorough. If anything, I'd cut about half of them. People stop listening when there's too much detail, and your strongest points get lost.",
+          "Question two. Man: Did you enjoy the novel? Woman: The plot was a bit predictable, to be honest, and some characters felt flat. But the way the author describes the city, almost like a living thing, that's what stayed with me.",
+          "Woman: So we'd booked the restaurant for the view, which everyone had praised. The food, surprisingly, was excellent. What let it down was the service: we waited nearly an hour between courses, and nobody apologised.",
+          "Question four. Man: I've read your report. The research itself is solid and the data's convincing. My only real concern is the conclusion, it overstates what the figures actually show. I'd be more cautious there.",
+          "Question five. Woman: When we ran the experiment, we expected the warmer samples to react faster. In fact, they barely changed at all. It was the cold samples that transformed completely, which nobody had predicted.",
+          "Question six. Man: Have you decided about the job offer? Woman: I have, actually. The salary's tempting and it's a real step up, but it would mean relocating, and right now keeping my family settled matters more to me than any promotion."
+        ],
         questions: [
-          {type:"mc", q:"What is the lecture mainly about?", o:["The chemistry of Mars","The development of views about the nature of Mars","Confirmed life on Mars","Mars's moons"], c:1},
-          {type:"mc", q:"After the 1965 flyby, scientists concluded that Mars was…", o:["Very similar to Earth","A dead, cratered place much like our Moon","Covered in oceans","Full of vegetation"], c:1},
-          {type:"mc", q:"What is Mars's atmosphere mostly made of?", o:["Oxygen","Nitrogen","Carbon dioxide","Methane"], c:2},
-          {type:"mc", q:"What did the 1970s missions reveal?", o:["Ancient cities","Volcanoes, deep canyons, dried-up riverbeds","Active oceans","Forests"], c:1},
-          {type:"mc", q:"For surface water to have existed in the past, Mars likely needed…", o:["Less gravity","Warmer temperatures AND a thicker atmosphere","A second moon","Only a magnetic field"], c:1},
-          {type:"mc", q:"Which feature is now used as possible evidence of water on Mars?", o:["Gullies","Mountains","Craters","Clouds"], c:0},
-          {type:"mc", q:"The professor compares Mars to Earth in that it may have…", o:["No atmosphere at all","Active oceans today","Long cycles similar to ice ages","Volcanic chains exactly like Earth's"], c:2},
-          {type:"tf", q:"Early science fiction usually portrayed Mars realistically.", c:false},
-          {type:"tf", q:"The professor confirms there is liquid water on Mars's surface right now.", c:false},
-          {type:"tf", q:"The 1970s missions included landers and orbiters, not just flybys.", c:true},
-          {type:"tf", q:"Modern instruments are less advanced than those of the 1970s.", c:false},
-          {type:"tf", q:"The professor calls Mars 'a fascinating fossil'.", c:true},
-          {type:"inf", q:"The professor's overall position is that our view of Mars has…", o:["Stayed the same","Been wrong from the start","Been progressively refined as evidence accumulates","Been irrelevant to science"], c:2},
-          {type:"inf", q:"By calling Mars a 'fossil', the professor implies it…", o:["Never existed","Was once dynamic and alive in some sense","Is dying","Is fake"], c:1},
-          {type:"inf", q:"The male student's 'What were they thinking?' expresses…", o:["Admiration for old movies","Criticism of the old movies' inaccuracy","A genuine question to the professor","Approval of the era"], c:1},
-          {type:"inf", q:"'If we could only get a lander there…' suggests that…", o:["Gullies are inaccessible to current landers","Landers are forbidden on Mars","Mars is hidden from us","All current data is fake"], c:0},
-          {type:"seq", q:"Order the historical views of Mars in the lecture (1 = first):",
-            items:[
-              "Mars as imagined in early science fiction (red planet, green people)",
-              "1965 flyby: dead, Moon-like, cratered planet",
-              "1970s missions: volcanoes, canyons, dried riverbeds — possibility of past water",
-              "Recent observations: gullies, possible current water cycles"
-            ]}
+          {type:"mc", q:"What does the man suggest about the presentation?", o:["Add more detail","Reduce the number of slides","Change the order"], c:1, audio:"C1/C1-P1-q1.mp3"},
+          {type:"mc", q:"What impressed the woman about the novel?", o:["The plot","The characters","The description of the city"], c:2, audio:"C1/C1-P1-q2.mp3"},
+          {type:"mc", q:"Why was the woman disappointed with the restaurant?", o:["The view","The food","The service"], c:2, audio:"C1/C1-P1-q3.mp3"},
+          {type:"mc", q:"What does the man criticise in the report?", o:["The data","The conclusion","The research method"], c:1, audio:"C1/C1-P1-q4.mp3"},
+          {type:"mc", q:"What surprised the researchers?", o:["The warm samples reacted fastest","The cold samples changed most","Nothing changed"], c:1, audio:"C1/C1-P1-q5.mp3"},
+          {type:"mc", q:"Why has the woman decided against the job?", o:["The salary is too low","It is not a promotion","She doesn't want to relocate"], c:2, audio:"C1/C1-P1-q6.mp3"}
         ]
       },
       {
-        id: "C1-2", title: "Audio 2 · Colossal statues as symbols",
-        kind: "file", file: "C1/Test_2_053.mp3",
-        intro: "An art history lecture on modern colossal statues — Mount Rushmore and the Statue of Liberty.",
+        id: "C1-P2", title: "Part 2 · Questions 7–14", kind: "file", file: "C1/C1-P2.mp3",
+        intro: "You will hear a woman called Helena giving a talk about urban beekeeping. For each question, complete the sentences with a word or short phrase.",
+        scripts: [
+          "Hello, I'm Helena, and I keep bees on rooftops here in the city. People are often surprised to learn that city honey is frequently purer than honey from the countryside, mainly because there are fewer pesticides. I started keeping bees five years ago, after I inherited a single hive from my uncle. Today I look after twelve hives across the city. A common myth is that bees are dangerous, but in fact they only sting when they feel threatened. The biggest challenge for a beekeeper isn't the bees, it's actually the weather, especially long periods of rain. Each hive can produce up to twenty kilograms of honey a year. If you want to start, the most important piece of equipment is a good smoker, which keeps the bees calm. And my final tip: never open a hive in the afternoon, always do it in the morning."
+        ],
+        gapTitle: "Urban Beekeeping",
         questions: [
-          {type:"mc", q:"What does the professor mainly discuss?", o:["The design of the Statue of Liberty","The purpose and symbolism of colossal statues","The creators of two statues","Costs in ancient vs modern times"], c:1},
-          {type:"mc", q:"What does the term 'colossus' originally mean?", o:["A king","A giant, larger-than-life statue","A tomb","A hero"], c:1},
-          {type:"mc", q:"About how high are the faces on Mount Rushmore?", o:["6 feet","16 feet","60 feet","600 feet"], c:2},
-          {type:"mc", q:"In what period was Mount Rushmore carved?", o:["The Civil War","The Great Depression","World War I","The Cold War"], c:1},
-          {type:"mc", q:"What did South Dakota originally want Mount Rushmore to be?", o:["A presidential memorial","A tourist attraction","A religious site","A military fort"], c:1},
-          {type:"mc", q:"Who designed the Statue of Liberty?", o:["An American sculptor","A French sculptor","A British architect","An Italian artist"], c:1},
-          {type:"mc", q:"What does Emma Lazarus's poem describe the Statue of Liberty as?", o:["A warning to enemies","A welcome to the tired and poor of the world","A French symbol only","A monument to soldiers"], c:1},
-          {type:"tf", q:"The professor thinks the original symbolism of these monuments has never changed.", c:false},
-          {type:"tf", q:"Mount Rushmore was carved in less than a year.", c:false},
-          {type:"tf", q:"The Statue of Liberty was first intended to symbolize French-U.S. friendship.", c:true},
-          {type:"tf", q:"The Emma Lazarus poem was placed on the pedestal in the early 1900s.", c:true},
-          {type:"tf", q:"Modern colossal statues are funded by ancient kings.", c:false},
-          {type:"inf", q:"What evidence does the professor give that modern statues are social/political symbols?", o:["They are very costly and require public agreement to build","They are very beautiful","They are visible from space","They are always made of marble"], c:0},
-          {type:"inf", q:"Why does the professor say 'so on and so forth' after quoting the poem?", o:["He has forgotten the rest","He assumes the students already know the poem","The poem ends there","He is unsure of the date"], c:1},
-          {type:"inf", q:"What is the professor's main point about the meaning of monuments?", o:["Their meaning is permanent","Their meaning can shift over time","Only sculptors decide meaning","Meaning does not matter"], c:1},
-          {type:"inf", q:"Why does the professor mention the Great Depression?", o:["To say monuments waste money","To show people want symbols of strength in hard times","To explain immigration","To criticize Roosevelt"], c:1},
-          {type:"seq", q:"Order the ideas in the lecture (1 = first):",
-            items:[
-              "Definition of 'colossus' and ancient examples",
-              "Mount Rushmore: originally a tourist project",
-              "Mount Rushmore: reframed as a symbol of national endurance",
-              "Statue of Liberty: shift from friendship symbol to welcome to immigrants"
-            ]}
+          {type:"gap", label:"City honey is often purer because there are fewer ____", accept:["pesticides"]},
+          {type:"gap", label:"Helena started after inheriting a hive from her ____", accept:["uncle"]},
+          {type:"gap", label:"She now looks after ____ hives", accept:["12","twelve"]},
+          {type:"gap", label:"Bees only sting when they feel ____", accept:["threatened"]},
+          {type:"gap", label:"The biggest challenge is the ____", accept:["weather"]},
+          {type:"gap", label:"Each hive produces up to ____ kilograms a year", accept:["20","twenty"]},
+          {type:"gap", label:"The most important equipment is a good ____", accept:["smoker"]},
+          {type:"gap", label:"Never open a hive in the ____", accept:["afternoon"]}
         ]
       },
       {
-        id: "C1-3", title: "Audio 3 · Conservation and the cat family",
-        kind: "file", file: "C1/test_15_radio_show.mp3",
-        intro: "A four-part recording: a radio interview on big-cat conservation, a campus orientation, students planning social activities, and a talk on the history of tea.",
+        id: "C1-P3", title: "Part 3 · Questions 15–20", kind: "file", file: "C1/C1-P3.mp3",
+        intro: "You will hear an interview with a marine biologist called Marcus. For each question, choose the best answer (A, B, C or D).",
+        scripts: [
+          "Interviewer: Marcus, what first drew you to marine biology? Marcus: Everyone assumes it was childhood holidays by the sea, but actually I grew up far inland. It was a single documentary I watched at fifteen that changed everything. Interviewer: Your research focuses on coral. Why coral specifically? Marcus: Because coral reefs are like the rainforests of the ocean. They cover a tiny fraction of the sea floor, yet they support a quarter of all marine species. If they go, the consequences are unimaginable. Interviewer: Is your work mostly underwater? Marcus: People picture me diving all day, but honestly I spend far more time analysing data in the lab than in the water. The diving is the small, glamorous part. Interviewer: What's the biggest misconception about coral? Marcus: That it's a plant. It's actually an animal, and that distinction matters enormously for how we protect it. Interviewer: Are you optimistic about the future? Marcus: I'm cautiously hopeful. The science is alarming, but I've seen damaged reefs recover surprisingly quickly when given the chance. Interviewer: What advice would you give a young scientist? Marcus: Don't specialise too early. The most interesting discoveries happen at the borders between subjects. Interviewer: Marcus, thank you."
+        ],
         questions: [
-          {type:"mc", q:"Which member of the cat family is Professor Ripley's personal favourite?", o:["The jaguar","The lion","The tiger","The snow leopard"], c:1},
-          {type:"mc", q:"Roughly how many tigers does the professor say live in the wild?", o:["Fewer than 6,000","About 30,000","About 50,000","About 100,000"], c:0},
-          {type:"mc", q:"What is described as the main problem for the snow leopard?", o:["Poaching","Loss of high-altitude habitat to agriculture","Disease","Warming of the oceans"], c:1},
-          {type:"mc", q:"On which campus are history and architecture taught?", o:["Dinglewood","Churchdown","Trailway (southern)","Block 39"], c:2},
-          {type:"mc", q:"Which film do Wolfgang and Mary plan to see?", o:["A film with Richard Dreyfuss","Rocky, with Sylvester Stallone","An international students' film","A BBC documentary"], c:1},
-          {type:"mc", q:"Who is credited with introducing the small four o'clock meal with tea?", o:["Thomas Twining","Richard Twining","The Duchess of Bedford","William Pitt"], c:2},
-          {type:"mc", q:"Tea was first regarded in Britain as…", o:["A woman's drink","A man's drink enjoyed at coffee houses","A cheap everyday drink","A type of medicine"], c:1},
-          {type:"tf", q:"The professor finds it easy to measure the African lion population accurately.", c:false},
-          {type:"tf", q:"Tiger body parts have been used in medicines in the Far East.", c:true},
-          {type:"tf", q:"Students need their ID pass to buy things in the campus shop and cafeteria.", c:true},
-          {type:"tf", q:"The trip to Stratford-on-Avon takes place on Friday.", c:false},
-          {type:"tf", q:"Twining still has a shop on The Strand today.", c:true},
-          {type:"inf", q:"Why are many lions moved to protected areas?", o:["To increase tourism","To protect them from poachers and maintain the population","Because they prefer it there","To study their social behaviour"], c:1},
-          {type:"inf", q:"What is the professor's overall message about the cat family?", o:["They are thriving","Several species are endangered, mainly because of human activity","Only the lion is at risk","Conservation has already solved the problem"], c:1},
-          {type:"inf", q:"Why does Dr. Donovan warn that the campus will be noisy?", o:["Because of student parties","Because the gardens are being extended and a fountain installed","Because a new block is being built","Because of heavy traffic"], c:1},
-          {type:"inf", q:"The talk on tea mainly traces…", o:["How tea is grown","How tea-drinking became an established British custom","Why tea is unhealthy","Only the Twining family business"], c:1},
-          {type:"seq", q:"Order the recording's four sections (1 = first):",
-            items:[
-              "An interview about conservation of the cat family",
-              "A university campus orientation talk",
-              "Two students planning social activities",
-              "A talk on the history of tea in Britain"
-            ]}
+          {type:"mc", q:"What first inspired Marcus's career?", o:["Seaside holidays","A documentary","His family","A school trip"], c:1},
+          {type:"mc", q:"Why does Marcus study coral?", o:["It is easy to find","It supports a quarter of marine species","It is colourful","It grows quickly"], c:1},
+          {type:"mc", q:"How does Marcus spend most of his time?", o:["Diving","Teaching","Analysing data in the lab","Travelling"], c:2},
+          {type:"mc", q:"What misconception does Marcus correct?", o:["Coral is a plant","Coral is dead","Coral is a rock","Coral is harmful"], c:0},
+          {type:"mc", q:"How does Marcus feel about the future?", o:["Very pessimistic","Cautiously hopeful","Completely confident","Indifferent"], c:1},
+          {type:"mc", q:"What advice does he give young scientists?", o:["Specialise early","Work alone","Don't specialise too early","Avoid data"], c:2}
         ]
       },
       {
-        id: "C1-4", title: "Audio 4 · Using the city archives",
-        kind: "file", file: "C1/test_14_city_archives.mp3",
-        intro: "A four-part recording: a student learning to use the city archives, a stationery order, a lecture on restoration ecology, and a lecture on the Irish Great Famine.",
+        id: "C1-P4", title: "Part 4 · Questions 21–30", kind: "file", file: "C1/C1-P4.mp3",
+        intro: "You will hear five people talking about changing careers. TASK ONE (21–25): choose each speaker's main reason for the change. TASK TWO (26–30): choose what each speaker now finds most difficult.",
+        scripts: [
+          "Speaker one. Woman: I'd been a lawyer for fifteen years and I was simply bored, the same cases over and over. So I retrained as a teacher. The hardest thing now? Honestly, it's the drop in income, I earn about half what I used to. Speaker two. Man: I loved my office job, but a serious illness made me rethink everything. I now run a small bakery. The baking I adore, but I never expected how lonely it would feel working on my own all day. Speaker three. Woman: I was made redundant when the factory closed, so the change wasn't really my choice. I became a nurse. The most difficult part is learning so many new skills at my age, it's exhausting but rewarding. Speaker four. Man: I'd always dreamed of being a photographer, so I finally followed my passion and quit accounting. The work is wonderful, but the uncertainty is hard, never knowing if there'll be money coming in next month. Speaker five. Woman: A friend offered me a job in her travel company completely out of the blue, and I took the chance. I love it, but the hours are brutal, far longer than I ever worked before."
+        ],
         questions: [
-          {type:"mc", q:"How can the student use the archives free of charge?", o:["By paying an annual fee","By showing a current University ID card","By getting permission from the director","By living in the city"], c:1},
-          {type:"mc", q:"Which day are the archives closed?", o:["Sunday","Saturday","Monday","They never close"], c:2},
-          {type:"mc", q:"Where are the 19th-century photographs kept?", o:["The ground floor","The basement (photography collection)","The second floor","The fifth floor"], c:1},
-          {type:"mc", q:"On which floor are the newspapers kept?", o:["Ground floor","First floor","Second floor","Third floor"], c:2},
-          {type:"mc", q:"What is Jackson's company called?", o:["Rainbow Computer","Rainbow Communications","Clean-it","Globetrotters"], c:1},
-          {type:"mc", q:"According to Aldo Leopold, land should be regarded as…", o:["A commodity","A community of interdependent parts","Private property","A source of profit"], c:1},
-          {type:"mc", q:"By 1851, how many people had died or left Ireland because of the famine?", o:["One million","Two million","Eight million","Half a million"], c:1},
-          {type:"tf", q:"City residents can use the archives free of charge.", c:false},
-          {type:"tf", q:"Visitors can usually only see photographic reproductions of the very old maps.", c:true},
-          {type:"tf", q:"The recycled photocopy paper is white and cheaper than the normal paper.", c:false},
-          {type:"tf", q:"The restoration ecology program combines formal science with practical applications.", c:true},
-          {type:"tf", q:"The Irish population began to recover immediately after 1851.", c:false},
-          {type:"inf", q:"Why does the librarian give the student a map of the archives?", o:["Because the student is lost","So the student can find the collections on each floor","Because the maps are kept on the third floor","To replace the photographs"], c:1},
-          {type:"inf", q:"What can be inferred about Ogden's Woolen Mill?", o:["It was unimportant to the city","It played a major role in the city's 19th-century growth","It is still operating today","It owns the archives"], c:1},
-          {type:"inf", q:"Why does the lecturer mention Edmund Moukala?", o:["To criticise his research","As an example of the program's varied, real-world research","Because he failed the program","To discuss Congo politics"], c:1},
-          {type:"inf", q:"The lecture on the Great Famine suggests that its effects on Ireland were…", o:["Brief and minor","Long-lasting, shaping society for over a century","Purely economic","Limited to 1845–1848"], c:1},
-          {type:"seq", q:"Order the four parts (1 = first):",
-            items:[
-              "A student asking how to use the city archives",
-              "A telephone stationery order",
-              "A lecture on restoration ecology",
-              "A lecture on the Irish Great Famine"
-            ]}
-        ]
-      },
-      {
-        id: "C1-5", title: "Audio 5 · An after-sales customer survey",
-        kind: "file", file: "C1/Test_29_cleanit_customer_survey.mp3",
-        intro: "A four-part recording: an after-sales customer survey, an interview about a Sahara trek, students discussing a presentation, and a lecture on balloons and airships.",
-        questions: [
-          {type:"mc", q:"Which model did Mr. Sergeant buy?", o:["The super cleaner","The easy clean","The Mr Tidy","The Johnson"], c:0},
-          {type:"mc", q:"Which salesperson did Mr. Sergeant praise?", o:["Tom","Jim","Daisy","Colin"], c:1},
-          {type:"mc", q:"How long did Colin Clark's Sahara trek take?", o:["3 days","8 days","14 days","20 days"], c:2},
-          {type:"mc", q:"On the river, Colin mostly travelled by…", o:["Four-wheel drive","A pirro (canoe)","A ferry","A pinissee"], c:1},
-          {type:"mc", q:"In the study Joe describes, brand names were recognised more readily when shown…", o:["In lowercase","In capital letters","In colour only","Very slowly"], c:1},
-          {type:"mc", q:"Where did the first balloon flight take place?", o:["The United States","France","Britain","Germany"], c:1},
-          {type:"mc", q:"Why did the airship programme largely end in the 1930s?", o:["Lack of public interest","Faster airliners and an alarming number of crashes","Government bans","A shortage of materials"], c:1},
-          {type:"tf", q:"Mr. Sergeant had no problems with the cleanit products.", c:true},
-          {type:"tf", q:"It rained every day during Colin's Sahara trek.", c:false},
-          {type:"tf", q:"Colin found the four-wheel drive very comfortable.", c:false},
-          {type:"tf", q:"Modern hot air balloons are cheaper and safer than gas balloons.", c:true},
-          {type:"tf", q:"Airships are no longer built by any country.", c:false},
-          {type:"inf", q:"What is the main purpose of Tom's phone call?", o:["To sell a new vacuum","To check customer satisfaction after a purchase","To complain about a product","To arrange a delivery"], c:1},
-          {type:"inf", q:"What can be inferred about the pirros used on the river?", o:["They are always safely loaded","They are often dangerously overloaded","They never have motors","They are only used for cargo"], c:1},
-          {type:"inf", q:"Why does Joe consider including brand names in a presentation on names?", o:["Because it is unrelated to names","Because research suggests brand names are processed in a special way in the brain","Because Angela insisted on it","To talk only about business studies"], c:1},
-          {type:"inf", q:"The lecture suggests balloons and airships are worth studying because they…", o:["Are no longer used at all","Were humans' first flight successes and are still used today","Are faster than modern planes","Were never actually successful"], c:1},
-          {type:"seq", q:"Order the recording's four sections (1 = first):",
-            items:[
-              "An after-sales customer satisfaction survey",
-              "An interview about a Sahara desert trek",
-              "Students discussing a presentation on names",
-              "A lecture on balloons and airships"
-            ]}
+          {type:"match", taskLabel:"Task 1 — main reason for changing career", person:"Speaker 1", bank:["wanted a higher salary","felt bored at work","health made them rethink","followed a passion","was made redundant","a chance opportunity","wanted to help others","wanted more free time"], c:"felt bored at work"},
+          {type:"match", taskLabel:"Task 1 — main reason for changing career", person:"Speaker 2", bank:["wanted a higher salary","felt bored at work","health made them rethink","followed a passion","was made redundant","a chance opportunity","wanted to help others","wanted more free time"], c:"health made them rethink"},
+          {type:"match", taskLabel:"Task 1 — main reason for changing career", person:"Speaker 3", bank:["wanted a higher salary","felt bored at work","health made them rethink","followed a passion","was made redundant","a chance opportunity","wanted to help others","wanted more free time"], c:"was made redundant"},
+          {type:"match", taskLabel:"Task 1 — main reason for changing career", person:"Speaker 4", bank:["wanted a higher salary","felt bored at work","health made them rethink","followed a passion","was made redundant","a chance opportunity","wanted to help others","wanted more free time"], c:"followed a passion"},
+          {type:"match", taskLabel:"Task 1 — main reason for changing career", person:"Speaker 5", bank:["wanted a higher salary","felt bored at work","health made them rethink","followed a passion","was made redundant","a chance opportunity","wanted to help others","wanted more free time"], c:"a chance opportunity"},
+          {type:"match", taskLabel:"Task 2 — what they now find most difficult", person:"Speaker 1", bank:["the lower income","working alone","learning new skills","the uncertainty","the longer hours","less status","the travel","explaining it to family"], c:"the lower income"},
+          {type:"match", taskLabel:"Task 2 — what they now find most difficult", person:"Speaker 2", bank:["the lower income","working alone","learning new skills","the uncertainty","the longer hours","less status","the travel","explaining it to family"], c:"working alone"},
+          {type:"match", taskLabel:"Task 2 — what they now find most difficult", person:"Speaker 3", bank:["the lower income","working alone","learning new skills","the uncertainty","the longer hours","less status","the travel","explaining it to family"], c:"learning new skills"},
+          {type:"match", taskLabel:"Task 2 — what they now find most difficult", person:"Speaker 4", bank:["the lower income","working alone","learning new skills","the uncertainty","the longer hours","less status","the travel","explaining it to family"], c:"the uncertainty"},
+          {type:"match", taskLabel:"Task 2 — what they now find most difficult", person:"Speaker 5", bank:["the lower income","working alone","learning new skills","the uncertainty","the longer hours","less status","the travel","explaining it to family"], c:"the longer hours"}
         ]
       }
     ]
@@ -1236,9 +1159,10 @@ function renderQuestions(audio, container){
         <div class="gapwrap" data-key="${key}"><input type="text" class="gapinput" autocomplete="off" placeholder="una palabra, número, fecha u hora"></div>`;
     }
     else if(q.type==="match"){
-      const bank = audio.bank || [];
+      const bank = q.bank || audio.bank || [];
       el.innerHTML = `
         <div class="meta"><span class="pill">Emparejar</span> <span>Pregunta ${qi+1}</span></div>
+        ${q.taskLabel?`<div class="stem" style="color:#4987c6">${q.taskLabel}</div>`:''}
         <div class="stem">${q.person}</div>
         <select class="matchsel" data-key="${key}"><option value="">— elige —</option>${bank.map(b=>`<option value="${b}">${b}</option>`).join("")}</select>`;
     }
