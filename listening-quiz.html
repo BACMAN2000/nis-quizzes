@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Listening Quiz — NIS English (A2 · B1 · B2 · C1)</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 <!-- Auto-version: always load the latest deployed version without clearing cache. -->
 <script>
 (function(){
@@ -145,6 +146,48 @@
   .level-pick{max-width:780px; margin:0 auto; padding:34px 22px}
   .level-pick h1{font-size:1.7rem; margin:0 0 4px; color:#0f172a}
   .level-pick .sub{color:#475569; margin:0 0 18px}
+  /* ===== Results screen (match Reading/Writing report) ===== */
+  body.result-mode > header{display:none}
+  body.result-mode{background:linear-gradient(180deg,#dfe3f7 0%,#eef1fb 35%,#f4f6fb 100%)}
+  .res-wrap{max-width:900px; margin:0 auto; padding:34px 22px}
+  .res-wrap .crumb{color:#64748b; font-size:14px; margin-bottom:8px}
+  .res-wrap h1{font-size:2rem; margin:0 0 4px; color:#0f172a}
+  .res-wrap .res-sub{color:#475569; margin:0 0 18px}
+  .motivation-card{background:linear-gradient(135deg,#4987c6 0%,#0ea5e9 100%); color:#fff; border-radius:18px; padding:24px; margin-bottom:18px; text-align:center; box-shadow:0 12px 30px rgba(15,23,42,.18)}
+  .motivation-card h2{color:#fff; font-size:1.4rem; margin:0 0 6px}
+  .motivation-card p{margin:6px 0; font-size:1rem; line-height:1.5; opacity:.95}
+  .pdf-actions{display:flex; gap:10px; justify-content:center; margin:8px 0 12px; flex-wrap:wrap}
+  .pdf-actions button{background:#4987c6; color:#fff; border:none; padding:12px 22px; border-radius:10px; font-weight:700; cursor:pointer; font-size:.95rem; font:inherit; font-weight:700}
+  .pdf-actions button.email{background:#0ea5e9}
+  .pdf-actions button:disabled{background:#cbd5e1; cursor:not-allowed}
+  .send-status{text-align:center; margin:6px 0 14px; color:#16a34a; font-weight:700}
+  .send-status.err{color:#dc2626}
+  #pdfTarget{background:#fff; border-radius:16px; padding:22px; box-shadow:0 12px 40px rgba(15,23,42,.10)}
+  .pdf-brand{text-align:center; padding:6px 0 12px; border-bottom:2px solid #4987c6; margin-bottom:14px}
+  .pdf-brand img{height:46px; width:auto}
+  .pdf-brand .rep{color:#64748b; font-size:.78rem; letter-spacing:1px; margin-top:4px; font-weight:700}
+  .res-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:.92rem; margin-bottom:16px}
+  @media(max-width:520px){.res-grid{grid-template-columns:1fr}}
+  .res-grid > div{padding:10px 12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px}
+  .res-grid label{display:block; color:#64748b; font-size:.7rem; letter-spacing:.6px; text-transform:uppercase; margin-bottom:4px; font-weight:700}
+  .score-card{background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:26px; text-align:center; margin-bottom:16px}
+  .score-card .big{font-size:3rem; font-weight:800; line-height:1}
+  .score-card .big.pass{color:#16a34a}
+  .score-card .big.fail{color:#dc2626}
+  .score-card .pct{font-size:1.2rem; color:#4987c6; font-weight:700; margin-top:2px}
+  .score-card .verdict{margin-top:8px; color:#475569}
+  .part-bar{background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 16px; margin:8px 0; display:grid; grid-template-columns:1fr auto; gap:6px 14px; align-items:center}
+  .part-bar .pname{font-weight:700; color:#0f172a}
+  .part-bar .meta{font-size:.82rem; color:#64748b}
+  .part-bar .pctn{font-weight:800; font-family:Consolas,monospace}
+  .part-bar .barw{grid-column:1/-1; background:#e2e8f0; border-radius:6px; height:8px; overflow:hidden}
+  .part-bar .barf{height:100%; background:#4987c6}
+  .res-card{background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px; margin:14px 0}
+  .res-card h2{margin:0 0 8px; font-size:1.1rem}
+  .res-line{display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid #f1f5f9}
+  .res-ans{font-size:.85rem; color:#64748b; padding:0 0 8px}
+  .res-ok{color:#16a34a; font-weight:700}
+  .res-bad{color:#dc2626; font-weight:700}
   .q .stem{font-weight:600; margin-bottom:6px}
   .q .meta{font-size:12px; color:var(--muted); margin-bottom:8px; display:flex; gap:8px; align-items:center}
   .pill{display:inline-block; padding:2px 8px; background:#eef2ff; color:#3730a3; border-radius:999px; font-size:11px; font-weight:700}
@@ -966,7 +1009,7 @@ function shuffle(a){
 /* ---------- VIEW: Welcome ---------- */
 function viewWelcome(){
   TTS.stop();
-  document.body.classList.remove('exam-mode');
+  document.body.classList.remove('exam-mode','result-mode');
   document.body.classList.add('signin-mode');
   hdrRight.innerHTML = "";
   app.innerHTML = `
@@ -998,7 +1041,7 @@ function viewWelcome(){
 
 function viewLevelSelect(){
   TTS.stop();
-  document.body.classList.remove('exam-mode');
+  document.body.classList.remove('exam-mode','result-mode');
   document.body.classList.add('signin-mode');
   app.innerHTML = `
     <div class="level-pick">
@@ -1029,6 +1072,7 @@ function viewLevelSelect(){
 /* ---------- VIEW: Quiz ---------- */
 function viewQuiz(){
   const lev = QUIZ[state.level];
+  document.body.classList.remove('signin-mode','result-mode');
   document.body.classList.add('exam-mode');
   // per-part starting question number
   let counter = 1;
@@ -1438,31 +1482,26 @@ function onSubmit(){
     breakdown: score.breakdown
   };
 
-  saveLocal(payload);
+  state.lastPayload = payload;
+  viewResult(payload);
+}
 
-  let sent = false;
-  if(CONFIG.APPS_SCRIPT_URL && !CONFIG.APPS_SCRIPT_URL.startsWith("PEGA_AQUI")){
-    try {
-      const f = document.createElement("form");
-      f.method = "POST";
-      f.action = CONFIG.APPS_SCRIPT_URL;
-      f.target = "submit_frame";
-      const i = document.createElement("input");
-      i.type = "hidden"; i.name = "data"; i.value = JSON.stringify(payload);
-      f.appendChild(i);
-      let fr = document.querySelector('iframe[name=submit_frame]');
-      if(!fr){
-        fr = document.createElement("iframe");
-        fr.name = "submit_frame"; fr.style.display="none";
-        document.body.appendChild(fr);
-      }
-      document.body.appendChild(f);
-      f.submit();
-      sent = true;
-    } catch(e){ console.warn(e); }
-  }
+/* POST result to the Apps Script (no-cors). The script saves it to the Sheet and
+   emails the teacher AND the student. Returns a promise (resolves even on no-cors). */
+function sendResultToWebhook(payload){
+  if(!CONFIG.APPS_SCRIPT_URL || CONFIG.APPS_SCRIPT_URL.startsWith("PEGA_AQUI")) return Promise.resolve({skipped:true});
+  return fetch(CONFIG.APPS_SCRIPT_URL, {
+    method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body: JSON.stringify(payload)
+  }).then(()=>({ok:true})).catch(()=>({ok:false}));
+}
 
-  viewResult(payload, sent);
+function downloadResultPDF(filename){
+  const el = document.getElementById('pdfTarget');
+  if(!window.html2pdf || !el){ alert('PDF library still loading — try again in a moment.'); return; }
+  html2pdf().set({margin:8, filename:filename, image:{type:'jpeg',quality:0.95},
+    html2canvas:{scale:2, useCORS:true}, jsPDF:{unit:'mm', format:'a4', orientation:'portrait'},
+    pagebreak:{mode:['css','legacy']}}).from(el).save();
 }
 
 function saveLocal(prefilled){
@@ -1484,51 +1523,82 @@ function saveLocal(prefilled){
 }
 
 /* ---------- VIEW: Result ---------- */
-function viewResult(payload, sent){
-  document.body.classList.remove('exam-mode');
-  document.body.classList.remove('signin-mode');
-  const pct = Math.round(100 * payload.score / payload.total);
-  const verdict = pct>=85?"Excellent":pct>=70?"Good":pct>=50?"Keep practicing":"Needs review";
-  hdrRight.innerHTML = `<span class="badge-level">${payload.level}</span>`;
+function viewResult(payload){
+  document.body.classList.remove('exam-mode'); document.body.classList.remove('signin-mode');
+  document.body.classList.add('result-mode');
+  hdrRight.innerHTML = "";
+  const pct = payload.total ? Math.round(100 * payload.score / payload.total) : 0;
+  const pass = pct >= 60;
+  const first = (payload.name||'Student').split(' ')[0];
+  const verdict = pct>=80 ? `Outstanding work, ${first}! A very strong performance.`
+                : pct>=60 ? `Well done, ${first}! That's a pass (Cambridge standard ≈ 60%).`
+                : pct>=40 ? `Good effort, ${first}. Review the parts you found hardest and try again.`
+                : `Don't be discouraged, ${first}. Every attempt sharpens your skills — review and try again soon.`;
+  // per-part breakdown (grouped by audio/part title)
+  const pm = {}, parts = [];
+  payload.breakdown.forEach(b=>{ if(!pm[b.audio]){ pm[b.audio]={name:b.audio, ok:0, tot:0}; parts.push(pm[b.audio]); } pm[b.audio].tot++; if(b.ok) pm[b.audio].ok++; });
+  parts.forEach(p=>p.pct = p.tot ? Math.round(100*p.ok/p.tot) : 0);
+  const partsHTML = parts.map(p=>`<div class="part-bar">
+      <div><div class="pname">${p.name}</div><div class="meta">${p.ok} of ${p.tot} correct</div></div>
+      <div class="pctn" style="color:${p.pct>=75?'#16a34a':p.pct>=50?'#f59e0b':'#dc2626'}">${p.pct}%</div>
+      <div class="barw"><div class="barf" style="width:${p.pct}%;background:${p.pct>=75?'#16a34a':p.pct>=50?'#f59e0b':'#dc2626'}"></div></div>
+    </div>`).join('');
+  const detailHTML = payload.breakdown.map(b=>`
+      <div class="res-line"><span>${(b.q||'').replace(/<[^>]+>/g,'')}</span><span class="${b.ok?'res-ok':'res-bad'}">${b.ok?'✓':'✗'}</span></div>
+      <div class="res-ans">Your answer: <b>${b.given}</b> &nbsp;|&nbsp; Correct: <b style="color:#16a34a">${b.correct}</b></div>`).join('');
+
   app.innerHTML = `
-    <div class="card">
-      <h1>¡Listo, ${payload.name}! 🎉</h1>
-      <p>Nivel: <b>${payload.level}</b> · Tiempo: <b>${payload.elapsed_min} min</b></p>
-      <div class="score"><span class="${pct>=70?'ok':'bad'}">${payload.score} / ${payload.total}</span> · ${pct}% · <span style="font-size:18px">${verdict}</span></div>
-      ${sent
-        ? `<div class="reveal correct">✅ Respuestas enviadas a tu profesor.</div>`
-        : `<div class="reveal wrong">⚠ No se pudo enviar automáticamente. Se descargó una copia local — entrégala al profesor.</div>`
-      }
-      <div class="toolbar">
-        <button class="btn" id="btnEmailAns">📧 Enviar por email al profesor</button>
-        <button class="btn secondary" id="btnReviewAns">Ver mis respuestas</button>
-        <button class="btn ghost" id="btnAgain">Hacer otro nivel</button>
+    <div class="res-wrap">
+      <div class="crumb">Results</div>
+      <h1>Exam results</h1>
+      <p class="res-sub">${QUIZ[payload.level] ? QUIZ[payload.level].label : payload.level} — Listening</p>
+      <div class="motivation-card">
+        <h2>${pass?'🎉 Congratulations':'Keep going'}, ${first}!</h2>
+        <p>${verdict}</p>
       </div>
-      <div class="hint" style="margin-top:8px">Si el envío automático falla, usa el botón <b>Email</b> — abre tu correo con todas tus respuestas listas para mandar.</div>
-    </div>
-    <div class="card">
-      <details>
-        <summary>Detalle pregunta por pregunta</summary>
-        <div id="bdown"></div>
-      </details>
-    </div>
-    <div class="footer">NIS English · 2026</div>
-  `;
-  const bd = $("#bdown");
-  payload.breakdown.forEach((b)=>{
-    const row = document.createElement("div");
-    row.className = "q";
-    row.innerHTML = `
-      <div class="meta"><span class="pill ${b.type==='tf'?'tf':b.type==='inf'?'inf':b.type==='seq'?'seq':''}">${b.type.toUpperCase()}</span> <span>${b.audio}</span></div>
-      <div class="stem">${b.q}</div>
-      <div class="reveal ${b.ok?'correct':'wrong'}">
-        Tu respuesta: <b>${b.given}</b> · Correcta: <b>${b.correct}</b> ${b.ok?'✓':'✗'}
-      </div>`;
-    bd.appendChild(row);
+      <div class="pdf-actions">
+        <button onclick="downloadResultPDF('NIS-Listening-${payload.level}-${(payload.name||'').replace(/\\s+/g,'_')}.pdf')">⬇ Download PDF</button>
+        <button class="email" id="lSendEmail">📧 Send to my email</button>
+      </div>
+      <div class="send-status" id="lSendStatus" style="display:none"></div>
+      <div id="pdfTarget">
+        <div class="pdf-brand"><img src="nordic-logo-h.svg" alt="Nordic"><div class="rep">CAMBRIDGE-FORMAT LISTENING REPORT</div></div>
+        <div class="res-grid">
+          <div><label>Student</label>${payload.name||''}</div>
+          <div><label>Email</label>${payload.email||'—'}</div>
+          <div><label>Grade / Class</label>${payload.klass||''}</div>
+          <div><label>Level</label>${payload.level||''}</div>
+          <div><label>Skill</label>Listening</div>
+          <div><label>Time spent</label>${payload.elapsed_min||0} min</div>
+        </div>
+        <div class="score-card">
+          <div class="big ${pass?'pass':'fail'}">${payload.score} / ${payload.total}</div>
+          <div class="pct">${pct}%</div>
+          <div class="verdict">${pass?'Pass':'Below the Cambridge passing standard (≈ 60%)'}</div>
+        </div>
+        <div class="res-card"><h2>Score by part</h2>${partsHTML}</div>
+        <div class="res-card"><h2>Detailed question review</h2>${detailHTML}</div>
+      </div>
+      <div class="row" style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+        <button class="btn" id="lAgain">Try another level</button>
+        <a class="btn secondary" style="text-decoration:none" href="quizzes.html">All quizzes ↗</a>
+      </div>
+    </div>`;
+  $("#lAgain").onclick = viewWelcome;
+
+  // Auto-send to the webhook (saves to Sheet + emails teacher AND student)
+  const st = document.getElementById('lSendStatus');
+  st.style.display='block'; st.textContent='Sending your result…';
+  sendResultToWebhook(payload).then(res=>{
+    if(res.skipped){ st.classList.add('err'); st.textContent='⚠ No webhook configured — use ⬇ Download PDF.'; }
+    else { st.classList.remove('err'); st.textContent='✓ Result sent. Check your email shortly for your report.'; }
   });
-  $("#btnAgain").onclick = viewWelcome;
-  $("#btnReviewAns").onclick = ()=>document.querySelector("details").open = true;
-  $("#btnEmailAns").onclick = ()=>sendByEmail(payload);
+  document.getElementById('lSendEmail').onclick = async ()=>{
+    const b=document.getElementById('lSendEmail'); b.disabled=true; b.textContent='Sending…';
+    const res=await sendResultToWebhook(payload); b.disabled=false; b.textContent='📧 Send to my email';
+    if(res.skipped){ st.classList.add('err'); st.textContent='⚠ No webhook configured.'; }
+    else { st.classList.remove('err'); st.textContent='✓ Sent. Check your email shortly.'; }
+  };
 }
 
 function sendByEmail(payload){
