@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Nordic — Quizzes (Listening & Reading)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Auto-version: always load the latest deployed version without clearing cache. -->
+<script>
+(function(){
+  try{
+    var params = new URLSearchParams(location.search);
+    var loadedV = params.get('v');
+    fetch('version.json?t=' + Date.now(), {cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        if(!data || !data.version) return;
+        if(loadedV !== data.version){
+          params.set('v', data.version);
+          location.replace(location.pathname + '?' + params.toString() + location.hash);
+        }
+      })
+      .catch(function(){});
+  }catch(e){}
+})();
+</script>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font:15px/1.55 "Montserrat",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:#0f172a; background:linear-gradient(180deg,#d1d2ea 0%,#f8fafc 60%,#fff 100%); min-height:100vh}
+  header{background:#fff; color:#0f172a; padding:12px 22px; display:flex; align-items:center; gap:14px;
+    box-shadow:0 4px 16px rgba(15,23,42,.06); position:sticky; top:0; z-index:10; border-bottom:1px solid #e2e8f0}
+  header .logo img{display:block; height:38px; width:auto}
+  header .sub{color:#636465; font-size:13px; margin-left:auto; font-weight:600}
+  main{max-width:880px; margin:0 auto; padding:18px}
+  h1{font-size:22px; margin:0 0 6px}
+  p.lead{color:#475569; margin:0 0 18px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px}
+  .card{background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:22px;
+    box-shadow:0 8px 24px rgba(15,23,42,.08); text-align:center}
+  .card h2{font-size:20px; margin:0 0 4px}
+  .card .desc{color:#475569; font-size:13px; margin:0 0 14px; min-height:38px}
+  .qr{width:210px; height:210px; border:1px solid #e2e8f0; border-radius:12px; padding:8px; background:#fff}
+  .btn{display:inline-block; margin-top:14px; text-decoration:none; border-radius:10px;
+    padding:12px 20px; font-weight:700; background:#4987c6; color:#fff;
+    box-shadow:0 8px 24px rgba(15,23,42,.08); font-family:"Montserrat",sans-serif}
+  .btn:hover{filter:brightness(.95)}
+  .btn.read{background:#2d5a8d}
+  .btn.write{background:#16a34a}
+  .url{display:block; margin-top:8px; font-size:12px; color:#64748b; word-break:break-all}
+  .footer{color:#475569; font-size:12px; text-align:center; padding:22px 0 32px}
+  .tip{background:#fef9c3; border:1px solid #fde68a; padding:12px 14px; border-radius:12px;
+    color:#92400e; font-size:13px; margin:18px 0}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="quizzes.html"><img src="nordic-logo-h.svg" alt="Nordic International School of Lima"></a>
+  <div class="sub">Quizzes · A2 / B1 / B2 / C1</div>
+</header>
+<main>
+  <h1>English Quizzes</h1>
+  <p class="lead">Elige una actividad. Escanea el código QR con la cámara del teléfono o pulsa el botón.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>🎧 Listening Quiz</h2>
+      <div class="desc">Audios A2/B1 (voz del navegador) y B2/C1 (audio real). 5 actividades por nivel.</div>
+      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=210x210&amp;data=https://bacman2000.github.io/nis-quizzes/listening-quiz.html" alt="QR Listening Quiz" width="210" height="210">
+      <a class="btn" href="listening-quiz.html">Abrir Listening Quiz</a>
+      <span class="url">bacman2000.github.io/nis-quizzes/listening-quiz.html</span>
+    </div>
+
+    <div class="card">
+      <h2>📖 Reading Quiz</h2>
+      <div class="desc">Textos originales estilo KET/PET/FCE/CAE con temporizador. 3 lecturas por nivel.</div>
+      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=210x210&amp;data=https://bacman2000.github.io/nis-quizzes/reading-quiz.html" alt="QR Reading Quiz" width="210" height="210">
+      <a class="btn read" href="reading-quiz.html">Abrir Reading Quiz</a>
+      <span class="url">bacman2000.github.io/nis-quizzes/reading-quiz.html</span>
+    </div>
+
+    <div class="card">
+      <h2>✍️ Writing Quiz</h2>
+      <div class="desc">Tareas estilo PET/FCE/CAE (Part 1 obligatoria + Part 2 a elegir) con evaluación automática por rúbrica. Solo B1 · B2 · C1.</div>
+      <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=210x210&amp;data=https://bacman2000.github.io/nis-quizzes/writing-quiz.html" alt="QR Writing Quiz" width="210" height="210">
+      <a class="btn write" href="writing-quiz.html">Abrir Writing Quiz</a>
+      <span class="url">bacman2000.github.io/nis-quizzes/writing-quiz.html</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    💡 Los estudiantes inician con su <b>nombre completo</b> y <b>grado/sección</b> (sin contraseña).
+    Los resultados se envían automáticamente al profesor.
+  </div>
+
+  <div class="footer">NIS English · 2026</div>
+</main>
+</body>
+</html>

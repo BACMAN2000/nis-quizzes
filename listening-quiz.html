@@ -1,0 +1,1548 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Listening Quiz — NIS English (A2 · B1 · B2 · C1)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Auto-version: always load the latest deployed version without clearing cache. -->
+<script>
+(function(){
+  try{
+    var params = new URLSearchParams(location.search);
+    var loadedV = params.get('v');
+    fetch('version.json?t=' + Date.now(), {cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        if(!data || !data.version) return;
+        if(loadedV !== data.version){
+          params.set('v', data.version);
+          location.replace(location.pathname + '?' + params.toString() + location.hash);
+        }
+      })
+      .catch(function(){});
+  }catch(e){}
+})();
+</script>
+<style>
+  :root{
+    --bg:#0f172a; --card:#fff; --ink:#0f172a; --muted:#475569;
+    --brand:#0ea5e9; --ok:#16a34a; --bad:#dc2626; --warn:#f59e0b;
+    --line:#e2e8f0; --soft:#f1f5f9;
+    --shadow:0 8px 24px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:linear-gradient(180deg,#eef2ff 0%,#f8fafc 60%,#fff 100%);
+    min-height:100vh;
+  }
+  header{
+    background:#0b1220; color:#fff; padding:14px 18px; display:flex; align-items:center; gap:12px;
+    box-shadow:var(--shadow); position:sticky; top:0; z-index:10;
+  }
+  header .logo{font-weight:800; letter-spacing:.3px}
+  header .sub{color:#9ca3af; font-size:13px}
+  main{max-width:880px; margin:0 auto; padding:18px}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px; box-shadow:var(--shadow); margin-bottom:16px;
+  }
+  h1{font-size:22px; margin:0 0 6px}
+  h2{font-size:17px; margin:0 0 10px}
+  h3{font-size:15px; margin:0 0 8px; color:var(--muted)}
+  label{display:block; font-size:13px; color:var(--muted); margin-bottom:4px}
+  input[type=text]{
+    width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px;
+    font:inherit; background:#fff;
+  }
+  .row{display:flex; gap:10px; flex-wrap:wrap}
+  .row > *{flex:1 1 220px}
+  .levels{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-top:10px}
+  .level{
+    border:2px solid var(--line); border-radius:14px; padding:14px; cursor:pointer; background:#fff;
+    transition:all .15s ease; text-align:center;
+  }
+  .level:hover{border-color:var(--brand); transform:translateY(-1px)}
+  .level .tag{font-weight:800; font-size:22px}
+  .level .name{color:var(--muted); margin-top:4px; font-size:13px}
+  .level .cef{font-size:11px; color:#64748b; margin-top:2px}
+  .btn{
+    appearance:none; border:0; border-radius:10px; padding:11px 16px; font:inherit; font-weight:700;
+    background:var(--brand); color:#fff; cursor:pointer; box-shadow:var(--shadow);
+  }
+  .btn.secondary{background:#fff; color:var(--brand); border:2px solid var(--brand)}
+  .btn.ghost{background:transparent; color:var(--muted); box-shadow:none}
+  .btn.small{padding:6px 10px; font-size:13px}
+  .btn:disabled{opacity:.6; cursor:not-allowed}
+  .audioblock{background:var(--soft); border-radius:12px; padding:12px; margin:10px 0}
+  audio{width:100%; margin-top:6px}
+  .tts-controls{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .tts-status{font-size:13px; color:var(--muted); margin-top:6px}
+  .speed{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted)}
+  .speed input{width:120px}
+  .q{padding:14px 0; border-top:1px solid var(--line)}
+  .q:first-child{border-top:0}
+  .q .stem{font-weight:600; margin-bottom:6px}
+  .q .meta{font-size:12px; color:var(--muted); margin-bottom:8px; display:flex; gap:8px; align-items:center}
+  .pill{display:inline-block; padding:2px 8px; background:#eef2ff; color:#3730a3; border-radius:999px; font-size:11px; font-weight:700}
+  .pill.tf{background:#fef3c7; color:#92400e}
+  .pill.inf{background:#dcfce7; color:#166534}
+  .pill.seq{background:#fce7f3; color:#9d174d}
+  .opts{display:grid; gap:6px}
+  .opt{
+    display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1px solid var(--line);
+    border-radius:10px; cursor:pointer; background:#fff;
+  }
+  .opt:hover{background:var(--soft)}
+  .opt input{margin-top:3px}
+  .seqlist{display:grid; gap:6px}
+  .seqitem{display:flex; gap:10px; align-items:center; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:#fff}
+  .seqitem select{padding:6px 10px; border:1px solid var(--line); border-radius:8px; font:inherit}
+  .progress{height:8px; background:var(--soft); border-radius:999px; overflow:hidden; margin:6px 0}
+  .progress > div{height:100%; background:linear-gradient(90deg,var(--brand),#22d3ee); width:0%}
+  .toolbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .score{font-size:32px; font-weight:800}
+  .score .ok{color:var(--ok)}
+  .score .bad{color:var(--bad)}
+  .footer{color:var(--muted); font-size:12px; text-align:center; padding:12px 0 32px}
+  .right{text-align:right}
+  details summary{cursor:pointer; font-weight:700; padding:6px 0}
+  .reveal{background:#f8fafc; padding:10px; border-radius:8px; margin-top:6px; font-size:13px}
+  .reveal.correct{background:#dcfce7; color:#166534}
+  .reveal.wrong{background:#fee2e2; color:#991b1b}
+  .badge-level{padding:4px 10px; background:#0ea5e9; color:#fff; border-radius:999px; font-size:12px; font-weight:700}
+  .warn{background:#fef9c3; border:1px solid #fde68a; padding:10px; border-radius:10px; color:#92400e; font-size:13px}
+  .hint{font-size:12px; color:var(--muted); margin-top:4px}
+  .seg-list{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
+  .seg{padding:4px 10px; border-radius:999px; background:#fff; border:1px solid var(--line); font-size:12px; color:var(--muted)}
+  .seg.playing{background:#0ea5e9; color:#fff; border-color:#0ea5e9}
+  .seg.done{background:#dcfce7; color:#166534; border-color:#86efac}
+  @media (max-width:520px){
+    main{padding:12px}
+    .card{padding:14px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🎧 Listening Quiz</div>
+  <div class="sub">NIS English · A2 / B1 / B2 / C1</div>
+  <div style="margin-left:auto" id="hdrRight"></div>
+</header>
+<main id="app"></main>
+
+<script>
+/* ========================================================================
+   CONFIG
+   ======================================================================== */
+const CONFIG = {
+  AUDIO_BASE: "./mp3/",                // for B2 / C1 mp3 files
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyuPQ2jpb7OxrPgtb5JWUs8bnea3XdnNkKBd9nEV7grSCuvlE8X7JTTnW6RUFLU64iSTg/exec",
+  TEACHER_EMAIL: "paolobaca2000@gmail.com",
+  CLASS_LABEL: "NIS English 2026"
+};
+
+/* ========================================================================
+   QUIZ DATA — 4 levels × 40 questions (=160 total)
+
+   A2 & B1: TTS playback (browser voice) of Cambridge-calibrated scripts.
+            KET = A2 official, PET = B1 official. No mp3 file needed.
+   B2 & C1: real TOEFL mp3 audio files in ./mp3/
+   ======================================================================== */
+const QUIZ = {
+
+  /* ---------------- A2 — Cambridge KET (A2-calibrated) ---------------- */
+  A2: {
+    label: "A2 — Elementary",
+    cefr: "Cambridge KET · A2 official",
+    blurb: "Conversaciones muy cortas y claras de la vida diaria.",
+    audios: [
+      {
+        id: "A2-1", title: "Audio set 1 · Daily situations", kind: "tts",
+        intro: "You will hear five short conversations. Listen carefully and answer the questions below.",
+        segments: ["Train to London","Buying apples","Last weekend","Directions to a supermarket","The English test"],
+        scripts: [
+          "Conversation one. Woman: What time does the train to London leave? Man: Let me check. There is one at quarter past nine, and another at ten thirty. Woman: I will take the earlier one, please.",
+          "Conversation two. Man: How much are the apples? Woman: They are one pound fifty for a bag. Man: OK, I will take two bags, please. Woman: That is three pounds.",
+          "Conversation three. Girl: What did you do last weekend? Boy: I wanted to play football, but it rained all day Saturday, so I stayed home and watched a film. On Sunday, I went shopping with my mum.",
+          "Conversation four. Woman: Excuse me, is there a supermarket near here? Man: Yes, go straight ahead, then turn left at the traffic lights. It is on the right, next to the bank.",
+          "Conversation five. Teacher: Do not forget, the English test is on Thursday this week, not Friday. Student: Oh! I thought it was Friday. Teacher: No, we changed it because Friday is a holiday."
+        ],
+        questions: [
+          {type:"mc", q:"What time train does the woman want?", o:["Quarter past nine (9:15)","Half past nine (9:30)","Ten thirty (10:30)"], c:0},
+          {type:"mc", q:"How much does the man pay for the apples in total?", o:["One pound fifty","Two pounds","Three pounds"], c:2},
+          {type:"mc", q:"What did the boy do on Saturday?", o:["Played football","Watched a film at home","Went shopping"], c:1},
+          {type:"mc", q:"Where exactly is the supermarket?", o:["Next to the bank, on the right","Behind the traffic lights","Opposite the bank"], c:0},
+          {type:"mc", q:"When is the English test?", o:["Wednesday","Thursday","Friday"], c:1},
+          {type:"mc", q:"Why is the test NOT on Friday?", o:["It rained","Friday is a holiday","The teacher is sick"], c:1},
+          {type:"mc", q:"How many bags of apples does the man buy?", o:["One","Two","Three"], c:1},
+          {type:"tf", q:"The train at ten thirty leaves earlier than the one at quarter past nine.", c:false},
+          {type:"tf", q:"The boy went shopping with his mum on Sunday.", c:true},
+          {type:"tf", q:"The supermarket is on the left after the traffic lights.", c:false},
+          {type:"tf", q:"Apples cost one pound fifty for ONE apple.", c:false},
+          {type:"tf", q:"The student thought the test was on Friday.", c:true},
+          {type:"inf", q:"The woman who asks about the train probably prefers to…", o:["Arrive earlier","Arrive later","Not travel today"], c:0},
+          {type:"inf", q:"How did the boy probably feel about the rain on Saturday?", o:["Disappointed","Excited","Surprised"], c:0},
+          {type:"inf", q:"The man asking for the supermarket is probably…", o:["A local resident","A tourist or new to the area","Driving a taxi"], c:1},
+          {type:"inf", q:"The student in the test conversation probably feels…", o:["Relieved","Worried because of the new date","Angry with the teacher"], c:1},
+          {type:"seq", q:"In which order did you hear these topics? (1 = first)",
+            items:[
+              "Asking about a train to London",
+              "Buying apples in a shop",
+              "Talking about the weekend",
+              "Asking for directions to a supermarket"
+            ]}
+        ]
+      },
+      {
+        id: "A2-2", title: "Audio set 2 · At school and around town", kind: "tts",
+        intro: "You will hear five more short conversations. Listen and answer.",
+        segments: ["Cinema tickets","A new teacher","Ordering a drink","First time at the gym","A birthday wish"],
+        scripts: [
+          "Conversation one. Man: I would like a ticket for the film at seven o'clock, please. Woman: I am sorry, that showing is full. We have seats at eight fifteen. Man: OK, that is fine.",
+          "Conversation two. Girl: What is your new teacher like? Boy: She is great! She is very friendly, and she explains things clearly. She is much better than our old teacher.",
+          "Conversation three. Woman: Would you like tea or coffee? Man: Actually, could I just have a glass of water? I am really thirsty. Woman: Of course! With or without ice? Man: Without, please.",
+          "Conversation four. Man: I went to the gym yesterday for the first time. Woman: How was it? Man: It was hard! I am so tired today. My legs hurt. But I want to go again next week.",
+          "Conversation five. Boy: Mum, can I have a dog for my birthday? Woman: We already have two cats. I do not think we need another pet. Boy: Please! I will take care of it every day. Woman: Let me talk to your father about it."
+        ],
+        questions: [
+          {type:"mc", q:"What time will the man see the film?", o:["Seven o'clock","Seven thirty","Eight fifteen"], c:2},
+          {type:"mc", q:"Why can't the man see the seven o'clock showing?", o:["It is too expensive","It is full","It is closed"], c:1},
+          {type:"mc", q:"What does the boy think of his new teacher?", o:["She is boring","She is strict","She is great and very good"], c:2},
+          {type:"mc", q:"What does the man want to drink?", o:["Tea","Coffee","A glass of water"], c:2},
+          {type:"mc", q:"How does the man feel today after the gym?", o:["Energetic","Tired with sore legs","Sick"], c:1},
+          {type:"mc", q:"What pets does the family already have?", o:["A dog","Two cats","A bird"], c:1},
+          {type:"mc", q:"Who will help decide about the dog?", o:["Only the mother","The father (mum will ask him)","The boy alone"], c:1},
+          {type:"tf", q:"The man originally wanted to see the film at seven o'clock.", c:true},
+          {type:"tf", q:"The boy thinks his new teacher is worse than the old one.", c:false},
+          {type:"tf", q:"The man asks for water without ice.", c:true},
+          {type:"tf", q:"The man does not want to go to the gym again.", c:false},
+          {type:"tf", q:"The boy promises to take care of the dog every day.", c:true},
+          {type:"inf", q:"Why is the seven o'clock showing probably full?", o:["The film is popular","The cinema is closed","Nobody likes the film"], c:0},
+          {type:"inf", q:"What can we infer about the boy at school?", o:["He probably enjoys his lessons more now","He wants to change schools","He hates the new teacher"], c:0},
+          {type:"inf", q:"At the gym, the man probably exercised…", o:["His legs (because they hurt)","His arms","His back"], c:0},
+          {type:"inf", q:"The mother's reaction to the dog is best described as…", o:["Excited and supportive","Hesitant but open to discussion","Completely against any pets"], c:1},
+          {type:"seq", q:"Put the topics in the order you heard them (1 = first):",
+            items:[
+              "Buying a cinema ticket",
+              "Talking about a new teacher",
+              "Choosing a drink",
+              "Talking about going to the gym"
+            ]}
+        ]
+      },
+      {
+        id: "A2-3", title: "Audio set 3 · Shopping and free time", kind: "tts",
+        intro: "You will hear five short conversations. Listen carefully and answer the questions below.",
+        segments: ["Buying a T-shirt","A phone call","At the library","Weekend plans","Lost keys"],
+        scripts: [
+          "Conversation one. Woman: Can I help you? Man: Yes, I would like this T-shirt, but in blue. Woman: What size? Man: Medium, please. Woman: Here you are. That is ten pounds.",
+          "Conversation two. Girl: Hello? Boy: Hi, it's Tom. Do you want to play tennis this afternoon? Girl: Sorry, I can't. I have to study for my maths exam. Maybe tomorrow. Boy: OK, see you tomorrow.",
+          "Conversation three. Man: Excuse me, can I take these three books? Librarian: Yes, but you must bring them back in two weeks. Man: OK. Can I use the computer too? Librarian: Yes, the computers are upstairs.",
+          "Conversation four. Woman: What are you doing this weekend? Man: On Saturday I'm visiting my grandparents. On Sunday I want to go to the beach if the weather is good. Woman: That sounds nice.",
+          "Conversation five. Boy: Mum, I can't find my keys! Woman: Did you look in your school bag? Boy: Yes, they're not there. Woman: Look on the kitchen table. Boy: Oh, here they are! Thanks."
+        ],
+        questions: [
+          {type:"mc", q:"What colour T-shirt does the man want?", o:["Red","Blue","Green"], c:1},
+          {type:"mc", q:"How much does the T-shirt cost?", o:["Five pounds","Ten pounds","Fifteen pounds"], c:1},
+          {type:"mc", q:"Why can't the girl play tennis this afternoon?", o:["She is tired","She has to study for an exam","She doesn't like tennis"], c:1},
+          {type:"mc", q:"How long can the man keep the library books?", o:["One week","Two weeks","One month"], c:1},
+          {type:"mc", q:"What is the man doing on Saturday?", o:["Going to the beach","Visiting his grandparents","Studying"], c:1},
+          {type:"mc", q:"Where are the boy's keys?", o:["In the school bag","On the kitchen table","In the bedroom"], c:1},
+          {type:"mc", q:"Where are the library computers?", o:["Upstairs","Downstairs","Outside"], c:0},
+          {type:"tf", q:"The man wants a small T-shirt.", c:false},
+          {type:"tf", q:"The boy and girl will maybe play tennis tomorrow.", c:true},
+          {type:"tf", q:"The man wants to go to the beach on Saturday.", c:false},
+          {type:"tf", q:"The boy found his keys in his school bag.", c:false},
+          {type:"tf", q:"The man can use a computer at the library.", c:true},
+          {type:"inf", q:"How does the girl probably feel about her exam?", o:["Relaxed","A little worried and busy","Bored"], c:1},
+          {type:"inf", q:"What can we infer about the man's weekend?", o:["He has plans for both days","He has no plans","He is working all weekend"], c:0},
+          {type:"inf", q:"How does the boy probably feel when he finds the keys?", o:["Happy and relieved","Angry","Sad"], c:0},
+          {type:"inf", q:"The man in the first conversation is probably…", o:["A customer","The shop owner","A librarian"], c:0},
+          {type:"seq", q:"In which order did you hear these topics? (1 = first)",
+            items:[
+              "Buying a T-shirt",
+              "A phone call about tennis",
+              "At the library",
+              "Talking about the weekend"
+            ]}
+        ]
+      },
+      {
+        id: "A2-4", title: "Audio set 4 · Around town and at home", kind: "tts",
+        intro: "You will hear five short conversations. Listen and answer the questions.",
+        segments: ["At the café","Asking the time","A doctor's appointment","Feeding the cat","Bus to the museum"],
+        scripts: [
+          "Conversation one. Waiter: What would you like? Woman: A coffee and a piece of chocolate cake, please. Waiter: Anything else? Woman: No, thank you. How much is that? Waiter: Four pounds fifty.",
+          "Conversation two. Boy: Excuse me, what time is it? Man: It's half past three. Boy: Oh no, my bus leaves at twenty to four! Man: Don't worry, the bus stop is very near. You have time.",
+          "Conversation three. Receptionist: Good morning, Dr. Smith's clinic. Woman: Hello, I'd like an appointment, please. Receptionist: Can you come on Wednesday at four o'clock? Woman: Yes, that's fine. Thank you.",
+          "Conversation four. Man: Did you feed the cat this morning? Girl: No, I forgot. I was late for school. Man: That's OK, I'll do it now. Please remember tomorrow. Girl: Sorry, Dad. I will.",
+          "Conversation five. Woman: Which bus goes to the museum? Man: Take the number eight. It stops right in front of the museum. Woman: How long does it take? Man: About fifteen minutes."
+        ],
+        questions: [
+          {type:"mc", q:"What does the woman order at the café?", o:["Tea and cake","Coffee and chocolate cake","Coffee only"], c:1},
+          {type:"mc", q:"How much does she pay?", o:["Four pounds","Four pounds fifty","Five pounds"], c:1},
+          {type:"mc", q:"What time is it in conversation two?", o:["Half past three","Twenty to four","Four o'clock"], c:0},
+          {type:"mc", q:"When is the woman's doctor's appointment?", o:["Wednesday at four o'clock","Tuesday at four o'clock","Wednesday at three o'clock"], c:0},
+          {type:"mc", q:"Why didn't the girl feed the cat?", o:["She forgot because she was late","She doesn't like the cat","The cat wasn't hungry"], c:0},
+          {type:"mc", q:"Which bus goes to the museum?", o:["Number four","Number eight","Number fifteen"], c:1},
+          {type:"mc", q:"How long does the bus take to the museum?", o:["Five minutes","Fifteen minutes","Fifty minutes"], c:1},
+          {type:"tf", q:"The woman wants something else after the cake.", c:false},
+          {type:"tf", q:"The boy's bus leaves at twenty to four.", c:true},
+          {type:"tf", q:"The woman's appointment is on Wednesday.", c:true},
+          {type:"tf", q:"The father will feed the cat now.", c:true},
+          {type:"tf", q:"The bus stops far from the museum.", c:false},
+          {type:"inf", q:"How does the boy in conversation two probably feel?", o:["Worried at first, then calmer","Very happy","Angry"], c:0},
+          {type:"inf", q:"What can we infer about the girl in conversation four?", o:["She was in a hurry this morning","She hates the cat","She is never late"], c:0},
+          {type:"inf", q:"The woman calling the clinic probably…", o:["Is not feeling well or needs a check-up","Wants a job","Is the doctor"], c:0},
+          {type:"inf", q:"The man giving bus information is probably…", o:["Helpful and knows the area","Lost","The bus driver"], c:0},
+          {type:"seq", q:"Put the topics in the order you heard them (1 = first):",
+            items:[
+              "Ordering at a café",
+              "Asking the time",
+              "Making a doctor's appointment",
+              "Talking about feeding the cat"
+            ]}
+        ]
+      },
+      {
+        id: "A2-5", title: "Audio set 5 · School and travel", kind: "tts",
+        intro: "You will hear five short conversations. Listen and answer the questions.",
+        segments: ["Homework problem","Booking a hotel room","A birthday present","Missing the train","Weather and clothes"],
+        scripts: [
+          "Conversation one. Girl: I don't understand this homework. Boy: Which subject? Girl: Science. Question four is very difficult. Boy: Ask the teacher tomorrow. She always explains things well. Girl: Good idea.",
+          "Conversation two. Receptionist: Sunshine Hotel, can I help you? Man: Yes, I'd like a room for two nights, please. Receptionist: For how many people? Man: Two adults. Receptionist: That is eighty pounds a night.",
+          "Conversation three. Woman: It's Grandma's birthday next week. What can we buy her? Girl: She loves reading. Let's buy her a book. Woman: Good idea. And some flowers too. Girl: She'll be very happy.",
+          "Conversation four. Man: We missed the train! Woman: What time is the next one? Man: In forty minutes, at half past two. Woman: Let's get a coffee while we wait. Man: OK, there's a café over there.",
+          "Conversation five. Boy: Is it cold outside? Mum: Yes, and it's going to rain this afternoon. Take your jacket and an umbrella. Boy: OK. Can I wear my new boots? Mum: Yes, that's a good idea."
+        ],
+        questions: [
+          {type:"mc", q:"Which subject is the girl's difficult homework?", o:["Maths","Science","English"], c:1},
+          {type:"mc", q:"What does the boy suggest?", o:["Ask the teacher tomorrow","Copy his homework","Forget about it"], c:0},
+          {type:"mc", q:"How many nights does the man want the hotel room?", o:["One","Two","Three"], c:1},
+          {type:"mc", q:"How much is the room per night?", o:["Eighty pounds","Eighteen pounds","Eight pounds"], c:0},
+          {type:"mc", q:"What will they buy Grandma?", o:["A book and flowers","A cake","A jacket"], c:0},
+          {type:"mc", q:"When is the next train?", o:["At two o'clock","At half past two","In four minutes"], c:1},
+          {type:"mc", q:"What should the boy take because of the weather?", o:["A jacket and an umbrella","Only a hat","Sunglasses"], c:0},
+          {type:"tf", q:"The girl understands her science homework.", c:false},
+          {type:"tf", q:"The hotel room is for two adults.", c:true},
+          {type:"tf", q:"They will also buy flowers for Grandma.", c:true},
+          {type:"tf", q:"The next train is in forty minutes.", c:true},
+          {type:"tf", q:"It is going to be sunny in the afternoon.", c:false},
+          {type:"inf", q:"How does the girl in conversation one probably feel?", o:["A bit confused now, but hopeful","Very confident","Bored"], c:0},
+          {type:"inf", q:"What can we infer about how they see their teacher?", o:["Helpful","Unfair","Strict"], c:0},
+          {type:"inf", q:"The man and woman who missed the train will probably…", o:["Wait in a café","Go home","Take a taxi"], c:0},
+          {type:"inf", q:"The mother in conversation five is mainly…", o:["Giving advice about the weather","Angry with the boy","Talking about school"], c:0},
+          {type:"seq", q:"In which order did you hear these topics? (1 = first)",
+            items:[
+              "A problem with homework",
+              "Booking a hotel room",
+              "Choosing a birthday present",
+              "Missing the train"
+            ]}
+        ]
+      }
+    ]
+  },
+
+  /* ---------------- B1 — Cambridge PET (B1-calibrated) ---------------- */
+  B1: {
+    label: "B1 — Intermediate",
+    cefr: "Cambridge PET · B1 official",
+    blurb: "Entrevistas y monólogos más extensos.",
+    audios: [
+      {
+        id: "B1-1", title: "Audio 1 · A student environmental project",
+        kind: "tts",
+        intro: "Listen to an interview with Lisa, a 17-year-old student who started an environmental project at her school.",
+        segments: ["Lisa's project interview"],
+        scripts: [
+          "Interviewer: Welcome to the programme. Today we are talking to Lisa, a seventeen-year-old student who has started an environmental project at her school. Lisa, tell us what you have been doing. Lisa: Thank you. Well, it all started about six months ago when I noticed how much food was being wasted in our school canteen. Every lunchtime, huge amounts of perfectly good food were being thrown away. It really upset me. Interviewer: So what did you do? Lisa: First, I talked to the head teacher about it. She was really supportive, and helped me set up a team of volunteers. We started by measuring exactly how much food was being wasted each day. The results were shocking. We were throwing away nearly fifty kilos of food every week. Interviewer: That is a lot. How did you reduce it? Lisa: We introduced a system where students could choose smaller portions if they wanted. We also started a composting programme, so any food waste that could not be avoided was turned into compost for the school garden. We even set up a sharing table where students could leave food they did not want, for others to take. Interviewer: Has it made a difference? Lisa: Definitely. After three months, we reduced food waste by sixty percent. Other schools have contacted us to ask how they can do the same thing. I am really proud of what we have achieved."
+        ],
+        questions: [
+          {type:"mc", q:"How old is Lisa?", o:["Fourteen","Fifteen","Seventeen"], c:2},
+          {type:"mc", q:"Where did Lisa first notice food waste?", o:["At home","At her school canteen","At a restaurant"], c:1},
+          {type:"mc", q:"Who did Lisa talk to first about the problem?", o:["The school chef","The head teacher","Her parents"], c:1},
+          {type:"mc", q:"How much food was being thrown away each week before the project?", o:["About five kilos","About twenty kilos","Nearly fifty kilos"], c:2},
+          {type:"mc", q:"What happens to food waste that cannot be avoided?", o:["It goes to the bin","It becomes compost for the school garden","It is sold"], c:1},
+          {type:"mc", q:"By what percentage did they reduce food waste after three months?", o:["Twenty percent","Forty percent","Sixty percent"], c:2},
+          {type:"mc", q:"What have other schools done?", o:["Criticised Lisa's project","Contacted her to learn how to do the same","Refused to participate"], c:1},
+          {type:"tf", q:"Lisa started the project completely alone, with no help.", c:false},
+          {type:"tf", q:"The head teacher refused to support Lisa.", c:false},
+          {type:"tf", q:"One solution was offering students the choice of smaller portions.", c:true},
+          {type:"tf", q:"The 'sharing table' lets students leave food for others to take.", c:true},
+          {type:"tf", q:"Other schools were uninterested in the project.", c:false},
+          {type:"inf", q:"Lisa's attitude toward her project is best described as…", o:["Indifferent","Disappointed","Passionate and proud"], c:2},
+          {type:"inf", q:"What can we infer about the head teacher?", o:["She does not care about the environment","She values student initiative","She made the project compulsory"], c:1},
+          {type:"inf", q:"Why does the interviewer say 'That is a lot'?", o:["To congratulate Lisa","To express surprise at the amount of waste","To change the topic"], c:1},
+          {type:"inf", q:"What does the project's impact beyond Lisa's school suggest?", o:["It is limited to one school","Its model is starting to spread","It was quickly forgotten"], c:1},
+          {type:"seq", q:"Put the steps of Lisa's project in order (1 = first):",
+            items:[
+              "Lisa notices food being wasted in the canteen",
+              "Lisa talks to the head teacher",
+              "The team measures exactly how much food is wasted",
+              "They introduce smaller portions and composting"
+            ]}
+        ]
+      },
+      {
+        id: "B1-2", title: "Audio 2 · An Italian student studying in England",
+        kind: "tts",
+        intro: "Listen to an interview with Marco, a student from Italy who is studying business in England.",
+        segments: ["Marco's experience"],
+        scripts: [
+          "Interviewer: Today we are talking to Marco, a student from Italy who is studying in England. Marco, how is your experience going? Marco: It has been amazing so far. I arrived in September, and I am studying business at the University of Leeds. Interviewer: Why did you decide to study in England? Marco: Well, I wanted to improve my English, and I thought the best way to do that was to live in an English-speaking country. I also heard that British universities have a very good reputation for business courses. My father studied here too, about twenty years ago, and he always told me it was the best experience of his life. Interviewer: Has anything been difficult? Marco: The weather was a shock at first. I come from Sicily, where it is sunny most of the year. But honestly, the hardest thing was understanding different accents. In my English classes back home, everyone spoke quite slowly and clearly. Here, people speak much faster, and there are so many different regional accents. It took me a few weeks to get used to it. Interviewer: What do you enjoy most? Marco: The social life is brilliant. I have joined several clubs. I play in the university football team, and I am also in the film society. I have made friends from all over the world. We cook meals together and share food from our different countries. I have learned to make Korean and Indian dishes. Interviewer: Would you recommend studying abroad? Marco: One hundred percent. It has made me more independent and more open-minded."
+        ],
+        questions: [
+          {type:"mc", q:"Where is Marco originally from?", o:["Italy (Sicily)","Spain","Greece"], c:0},
+          {type:"mc", q:"What is Marco studying?", o:["Engineering","Business","Medicine"], c:1},
+          {type:"mc", q:"At which university?", o:["Cambridge","Oxford","Leeds"], c:2},
+          {type:"mc", q:"When did Marco arrive in England?", o:["September","December","March"], c:0},
+          {type:"mc", q:"Who else in Marco's family studied in England?", o:["His mother","His father","His brother"], c:1},
+          {type:"mc", q:"What was the hardest thing for Marco?", o:["The food","Understanding different regional accents","Making friends"], c:1},
+          {type:"mc", q:"Which sport does Marco play at university?", o:["Basketball","Football","Tennis"], c:1},
+          {type:"tf", q:"Marco came to England mainly to study Italian literature.", c:false},
+          {type:"tf", q:"The weather in Leeds is similar to Sicily's.", c:false},
+          {type:"tf", q:"Marco joined more than one club.", c:true},
+          {type:"tf", q:"All of Marco's friends are British.", c:false},
+          {type:"tf", q:"Marco strongly recommends studying abroad.", c:true},
+          {type:"inf", q:"Marco's father probably thinks studying in England was…", o:["A bad idea","A great experience","A waste of time"], c:1},
+          {type:"inf", q:"Marco's attitude toward the difficulties is best described as…", o:["Defeated","Resilient and adaptive","Angry"], c:1},
+          {type:"inf", q:"What does Marco's comment about his English classes back home suggest?", o:["He was used to slower, clearer English","He could already understand fast British speech","He spoke no English at all"], c:0},
+          {type:"inf", q:"Marco cooking meals with friends from many countries suggests he…", o:["Prefers to eat alone","Is curious about other cultures","Dislikes Italian food"], c:1},
+          {type:"seq", q:"Put events of Marco's experience in order (1 = first):",
+            items:[
+              "Marco decides to study in England to improve his English",
+              "Marco arrives at the University of Leeds in September",
+              "Marco struggles with British accents in his first weeks",
+              "Marco joins clubs and makes international friends"
+            ]}
+        ]
+      },
+      {
+        id: "B1-3", title: "Audio 3 · A racing driver interview",
+        kind: "file", file: "ObjPET_AUD_PracticeTestTrack2.mp3",
+        intro: "A Cambridge PET radio interview with Simon Webster, a young racing driver, on the programme Sporting World.",
+        questions: [
+          {type:"mc", q:"How old is Simon Webster?", o:["18","21","25","30"], c:1},
+          {type:"mc", q:"Why does Simon talk to more experienced drivers?", o:["To make friends","To get information before racing on a new track","To find a job","To borrow equipment"], c:1},
+          {type:"mc", q:"In which months does Simon race?", o:["All year round","Only in winter","From April to October","Only at weekends in winter"], c:2},
+          {type:"mc", q:"What mistake does Simon say he always makes before a race?", o:["He eats too much","He trains too much instead of resting","He arrives late","He forgets his equipment"], c:1},
+          {type:"mc", q:"According to Simon, who checks the car?", o:["Simon himself","Other people","The interviewer","His dad"], c:1},
+          {type:"mc", q:"How did Simon first get interested in racing?", o:["From watching TV","Through his father, who did some racing","From his school friends","From a magazine"], c:1},
+          {type:"mc", q:"What advice does Simon give young drivers about other sports?", o:["Play as many as possible","Avoid them because of the injury risk","Only play football","Play them at university"], c:1},
+          {type:"tf", q:"Simon races every weekend with no breaks.", c:false},
+          {type:"tf", q:"Simon finds it difficult to take time off.", c:true},
+          {type:"tf", q:"Simon thinks being a little frightened helps him concentrate.", c:true},
+          {type:"tf", q:"Simon watched a lot of racing on TV as a child.", c:false},
+          {type:"tf", q:"Simon recommends going to university before becoming a racing driver.", c:false},
+          {type:"inf", q:"What can be inferred about Simon's attitude to training?", o:["He believes more training is always better","He knows over-training before a race harms his performance","He never trains at all","He only trains in winter"], c:1},
+          {type:"inf", q:"Why does Simon mention that his friends preferred football?", o:["To show his route into racing was unusual","To say he dislikes football","To recommend football","Because he played football too"], c:0},
+          {type:"inf", q:"Simon's view of his own ability is that he…", o:["Has reached his limit","Can still continue to improve","Is already the best driver","Wants to stop racing"], c:1},
+          {type:"inf", q:"The interview is mainly about…", o:["How to buy a racing car","Simon's life and advice as a racing driver","The history of motor racing","One particular race"], c:1},
+          {type:"seq", q:"Order the topics as they are discussed (1 = first):",
+            items:[
+              "Talking to more experienced drivers",
+              "His racing schedule through the year",
+              "The hardest part: taking time off",
+              "Advice for young racing drivers"
+            ]}
+        ]
+      },
+      {
+        id: "B1-4", title: "Audio 4 · A new sports centre",
+        kind: "file", file: "ObjPET_AUD_PracticeTestTrack3.mp3",
+        intro: "A Cambridge PET radio talk: Judy, the new manager, gives information about Wemport's new sports centre.",
+        questions: [
+          {type:"mc", q:"Why did the sports centre's opening change to 12th May?", o:["A problem with the roof","Not enough members","Bad weather","A staff shortage"], c:0},
+          {type:"mc", q:"When is the opening party?", o:["5th May","12th May","Saturday 14th May","Sunday 14th May"], c:2},
+          {type:"mc", q:"Where is the new sports centre?", o:["Next to the supermarket","On the other side of the road from the station","Inside the old hotel","Next to the old sports centre"], c:1},
+          {type:"mc", q:"What is the name of the side road for the car park entrance?", o:["Station Road","Fortescue Road","Supermarket Road","Wemport Road"], c:1},
+          {type:"mc", q:"How much does a year's membership cost?", o:["£9.50","£40","£450","£14"], c:2},
+          {type:"mc", q:"What do members NOT need to bring?", o:["Trainers","Suitable clothes","A towel","A membership card"], c:2},
+          {type:"mc", q:"What time are the daily dance classes?", o:["2.00","5.30","9.50","Not decided yet"], c:1},
+          {type:"tf", q:"The new sports centre is on the same site as the old one.", c:false},
+          {type:"tf", q:"There used to be a hotel where the new centre is.", c:true},
+          {type:"tf", q:"Paying for a whole year saves money compared with paying weekly.", c:true},
+          {type:"tf", q:"The times of the yoga and exercise classes are already fixed.", c:false},
+          {type:"tf", q:"Members are allowed to park in the road outside the centre.", c:false},
+          {type:"inf", q:"Why does Judy spell out 'Fortescue'?", o:["It is a difficult name listeners need to find the car park","It is her surname","It is the centre's name","It is the name of a class"], c:0},
+          {type:"inf", q:"What is the main purpose of Judy's talk?", o:["To complain about the roof","To give information about the new sports centre","To sell sports equipment","To describe only a party"], c:1},
+          {type:"inf", q:"Judy suggests that the best-value membership is…", o:["Weekly","Monthly","Yearly","Daily"], c:2},
+          {type:"inf", q:"Why do members not need to bring a towel?", o:["Towels are banned","It saves carrying a heavy bag","There are no showers","Towels are sold there"], c:1},
+          {type:"seq", q:"Order the information as Judy gives it (1 = first):",
+            items:[
+              "The new opening date and the party",
+              "Where the centre is and how to park",
+              "Membership prices",
+              "Classes and the dance teacher"
+            ]}
+        ]
+      },
+      {
+        id: "B1-5", title: "Audio 5 · Planning a birthday party",
+        kind: "file", file: "ObjPET_AUD_PracticeTestTrack4.mp3",
+        intro: "A Cambridge PET conversation between Oliver and Hannah, who is deciding what to do for her birthday.",
+        questions: [
+          {type:"mc", q:"Whose party did Oliver attend in the summer?", o:["Hannah's","Hannah's sister's","Oliver's own","A friend's"], c:1},
+          {type:"mc", q:"When is Hannah's birthday?", o:["In summer","In spring, very soon","In winter","In three months"], c:1},
+          {type:"mc", q:"Why doesn't Hannah want another barbecue?", o:["It was too expensive","It was hard work and some food got burnt","Nobody danced","It rained"], c:1},
+          {type:"mc", q:"Where was the summer party held?", o:["At a restaurant","At Hannah's grandmother's","At the school canteen","In Hannah's garden"], c:1},
+          {type:"mc", q:"What food does Oliver like best?", o:["Chinese","Italian","Indian","Pizza"], c:2},
+          {type:"mc", q:"What does Oliver finally suggest?", o:["An Indian restaurant","Hiring the school canteen with everyone bringing food","Another barbecue","A party at his grandmother's"], c:1},
+          {type:"mc", q:"What does Hannah have to do before deciding on the canteen?", o:["Ask her grandmother","Ask her mum and dad","Ask her sister","Ask the school"], c:1},
+          {type:"tf", q:"Hannah and her sister have birthdays in the same month.", c:false},
+          {type:"tf", q:"Hannah's grandmother was angry about the broken things.", c:false},
+          {type:"tf", q:"Oliver would feel comfortable having a party at his grandmother's flat.", c:false},
+          {type:"tf", q:"Most of Hannah's friends would prefer Italian food.", c:true},
+          {type:"tf", q:"Hannah likes the idea of having music at the canteen party.", c:true},
+          {type:"inf", q:"Why can't Hannah easily share a party with her sister?", o:["They have different friends","Their birthdays are three months apart","Her sister doesn't want to","They live apart"], c:1},
+          {type:"inf", q:"Why does the restaurant idea not work well?", o:["It is too far away","Her friends have very different food preferences and needs","Restaurants are closed","Oliver dislikes restaurants"], c:1},
+          {type:"inf", q:"What can be inferred about the canteen idea?", o:["It pleases everyone because the food would be mixed","It is the most expensive option","Hannah dislikes it","It needs no permission"], c:0},
+          {type:"inf", q:"Oliver's role in the conversation is mainly to…", o:["Complain about parties","Offer suggestions to help Hannah decide","Organise the party himself","Refuse to help"], c:1},
+          {type:"seq", q:"Order the options they discuss (1 = first):",
+            items:[
+              "Having another barbecue like last summer",
+              "A party at the grandmother's house",
+              "Going out to a restaurant",
+              "Hiring the school canteen"
+            ]}
+        ]
+      }
+    ]
+  },
+
+  /* ---------------- B2 — TOEFL real audio (upper-intermediate) ---------------- */
+  B2: {
+    label: "B2 — Upper-Intermediate",
+    cefr: "TOEFL listening · B2/C1",
+    blurb: "Lecturas académicas con vocabulario técnico.",
+    audios: [
+      {
+        id: "B2-1", title: "Audio 1 · 'Safe yield' and water management",
+        kind: "file", file: "Test_1_014.mp3",
+        intro: "A lecture in an environmental science class about how we manage underground water resources.",
+        questions: [
+          {type:"mc", q:"What is the main topic?", o:["Ocean currents","Underground water management","Rain patterns","Cleaning lakes"], c:1},
+          {type:"mc", q:"What is the principle described called?", o:["Fair yield","Safe yield","Good yield","Quick yield"], c:1},
+          {type:"mc", q:"According to 'safe yield', how much water can you pump out?", o:["As much as you want","As much as naturally recharges","Never any","Half of the supply"], c:1},
+          {type:"mc", q:"What is the main problem with the 'safe yield' approach?", o:["It ignores water that naturally flows out of the system","It is too expensive","It is illegal","It is too new"], c:0},
+          {type:"mc", q:"Which US state is mentioned as currently using safe yield?", o:["California","Texas","Arizona","Florida"], c:2},
+          {type:"mc", q:"What eventually dries up because of safe yield?", o:["Ocean shores","Discharge points feeding lakes and streams","City pipes","Trees"], c:1},
+          {type:"mc", q:"How does the professor define sustainability?", o:["Spending less","Asking permission","Meeting present needs without compromising the future","Using fast solutions"], c:2},
+          {type:"tf", q:"In a natural system, water only enters underground and never leaves.", c:false},
+          {type:"tf", q:"Pumping at the recharge rate keeps underground water levels exactly stable.", c:false},
+          {type:"tf", q:"The professor thinks 'safe yield' is fully compatible with sustainability.", c:false},
+          {type:"tf", q:"Reducing underground water can also reduce surface water in lakes and streams.", c:true},
+          {type:"tf", q:"The professor approves of Arizona's water management policy.", c:false},
+          {type:"inf", q:"The professor's tone toward 'safe yield' is best described as…", o:["Enthusiastic","Approving","Critical","Neutral"], c:2},
+          {type:"inf", q:"Why does the professor mention 'kids and kids' kids'?", o:["To remind students about homework","To make students care about long-term effects","To joke","To tell a story"], c:1},
+          {type:"inf", q:"What is implied about water systems managed by 'safe yield'?", o:["They are sustainable in the long term","They are not sustainable","They have unlimited water","They are temporary fixes"], c:1},
+          {type:"inf", q:"The professor implies good resource policy must consider…", o:["Only humans","All systems dependent on the resource","Only money","Only the current year"], c:1},
+          {type:"seq", q:"Order the professor's main ideas (1 = first):",
+            items:[
+              "Definition of 'safe yield'",
+              "Hidden problem: ignoring natural outflow",
+              "Long-term effect on lakes and streams",
+              "Comparison with sustainability"
+            ]}
+        ]
+      },
+      {
+        id: "B2-2", title: "Audio 2 · Rye plants and root systems",
+        kind: "file", file: "Test_1_019.mp3",
+        intro: "A botany lecture about an experiment that grew a rye plant in water to measure its complete root system.",
+        questions: [
+          {type:"mc", q:"What is the main topic of the lecture?", o:["Growing food in water","The size of root systems","Soil chemistry","Fertilizer types"], c:1},
+          {type:"mc", q:"Why did the scientist grow rye in water?", o:["To clean the water","To feed people","To see the entire root system","To save space"], c:2},
+          {type:"mc", q:"What must be bubbled through the water?", o:["Carbon dioxide","Nitrogen","Gas (so roots get oxygen to breathe)","Hydrogen"], c:2},
+          {type:"mc", q:"Why do houseplants die when overwatered?", o:["Too much sun","Not enough oxygen for the roots","Not enough light","Too many leaves"], c:1},
+          {type:"mc", q:"How many shoots came from one rye seed in the experiment?", o:["8","18","80","800"], c:2},
+          {type:"mc", q:"About what was the shoot surface area?", o:["1 sq m","About 5 sq m","About 50 sq m","About 200 sq m"], c:1},
+          {type:"mc", q:"About what was the root surface area?", o:["About 5 sq m","About 50 sq m","More than 200 sq m","Exactly 1,000 sq m"], c:2},
+          {type:"tf", q:"Plant roots respire only at night.", c:false},
+          {type:"tf", q:"Rye is a type of grass.", c:true},
+          {type:"tf", q:"The professor's least favorite grass is crabgrass.", c:true},
+          {type:"tf", q:"Root hairs explain the huge extra surface area of the roots.", c:true},
+          {type:"tf", q:"Root hairs are not important for absorbing minerals.", c:false},
+          {type:"inf", q:"Why does the professor at first doubt the figure '1,000 km of roots'?", o:["It sounds too small","It sounds incredibly large","She has no source","No scientists agree on it"], c:1},
+          {type:"inf", q:"Why does the professor mention overwatered houseplants?", o:["To remind students to water more","To explain why bubbling gas is necessary","To change topics","Just to talk about hobbies"], c:1},
+          {type:"inf", q:"The professor saying 'I'm sorry, you must bubble GAS through it' shows that she…", o:["Corrects a slip of the tongue","Apologizes for the topic","Doesn't know the answer","Forgot the experiment"], c:0},
+          {type:"inf", q:"The crabgrass comparison helps students understand…", o:["That grasses can grow many shoots from one seed","How to remove weeds","Why rye is bad","Scientific writing"], c:0},
+          {type:"seq", q:"Order the experiment's discoveries (1 = first):",
+            items:[
+              "Scientist plants a rye seed in water",
+              "The plant produces about 80 shoots",
+              "Shoot surface area is measured at about 5 sq m",
+              "Root surface area is measured at more than 200 sq m"
+            ]}
+        ]
+      },
+      {
+        id: "B2-3", title: "Audio 3 · Choosing a language course",
+        kind: "file", file: "test_13_globe_trotters.mp3",
+        intro: "A four-part recording: a phone call about language classes, a philosophy tutor, two new students, and a talk about Canada.",
+        questions: [
+          {type:"mc", q:"What does the man want to study?", o:["Beginner Japanese","Advanced Chinese","Intermediate French","Advanced Japanese"], c:0},
+          {type:"mc", q:"Why can't he take the advanced Chinese class?", o:["It is full","It meets on Wednesday and Friday evenings, when he works","It is too expensive","It is only for residents"], c:1},
+          {type:"mc", q:"Which option does the man finally pay for?", o:["One week at a time","The four-week course","The six-week course","Two levels together (12 weeks)"], c:2},
+          {type:"mc", q:"How can he register for the course?", o:["By phone","Only in person at the office with a cheque and photo ID","By email","Online only"], c:1},
+          {type:"mc", q:"Who should he ask for at the school office?", o:["Dr. Russell","Mr. Lindsay","Ben","The director"], c:1},
+          {type:"mc", q:"According to Dr. Russell, what was the single most annoying thing for students?", o:["Too much reading","People arriving late","Boring lectures","Difficult exams"], c:1},
+          {type:"mc", q:"In the talk on Canada, Montreal is described as…", o:["The capital of Canada","The second-largest French-speaking city in the world","A city in British Columbia","The coldest city in Canada"], c:1},
+          {type:"tf", q:"The man is a complete beginner in Japanese.", c:true},
+          {type:"tf", q:"Tutorial attendance with Dr. Russell is compulsory.", c:false},
+          {type:"tf", q:"Mini presentations and lecture discussions are graded for continuous assessment.", c:false},
+          {type:"tf", q:"Ben plans to become an architect.", c:true},
+          {type:"tf", q:"Sally finally decided to study economics.", c:false},
+          {type:"inf", q:"Why does the man choose a morning class?", o:["He simply prefers mornings","The beginner Japanese class he needs only meets in the mornings","Mornings are cheaper","The school is closed in the afternoon"], c:1},
+          {type:"inf", q:"What can be inferred about Ben's study approach compared with Sally's?", o:["He is more selective and organised about reading and notes","He reads far more than Sally","He is not interested in the course","He refuses to use the library"], c:0},
+          {type:"inf", q:"The talk on Canada mainly aims to…", o:["Promote tourism in Canada","Correct common misconceptions about Canada","Teach exam facts about Canada","Compare Canada with the USA"], c:1},
+          {type:"inf", q:"Dr. Russell suggests that for personal problems students should…", o:["Wait until the problem becomes serious","Contact other university support services such as counselling","Email the philosophy department","Solve them on their own"], c:1},
+          {type:"seq", q:"Order the four parts of the recording (1 = first):",
+            items:[
+              "A phone call about language classes",
+              "A philosophy tutor explaining tutorials",
+              "Two new students talking about college",
+              "A talk about Canada"
+            ]}
+        ]
+      },
+      {
+        id: "B2-4", title: "Audio 4 · A study-abroad convention",
+        kind: "file", file: "Test_12_event_description.mp3",
+        intro: "A four-part recording: directions at a study-abroad convention, a recorded city-tour message, a film-festival committee, and a talk on nanotechnology.",
+        questions: [
+          {type:"mc", q:"Where does the presentation 'How to prepare for University studies' take place?", o:["The conference room","The Blue Room","The banquet hall","The booking office"], c:1},
+          {type:"mc", q:"How are the booths in the conference room arranged?", o:["Alphabetically by school","By region/country","By subject","Randomly"], c:1},
+          {type:"mc", q:"Which section do visitors see first when entering the conference room?", o:["Europe","Australia","Refreshments","England"], c:1},
+          {type:"mc", q:"Where is the main boat booking office?", o:["Stop A (Green Banks)","Stop B (City Bridge)","Stop C (Roman Landing)","Stop D (Newtown)"], c:0},
+          {type:"mc", q:"The Number One Sightseeing Tour offers commentary in…", o:["English only","Eight languages","Four languages","No commentary"], c:1},
+          {type:"mc", q:"Who is in charge of the film-festival committee this year?", o:["Anna","Veronica","Chris","The student council"], c:2},
+          {type:"mc", q:"According to the nanotechnology speaker, future computers could be…", o:["The size of a sugar cube with a million times more memory","Larger but slower","Powered only by gas","Unable to store memory"], c:0},
+          {type:"tf", q:"There are no events scheduled in the banquet hall that day.", c:true},
+          {type:"tf", q:"The last sightseeing boat leaves at 6:30 p.m.", c:true},
+          {type:"tf", q:"The film festival is completely free to attend.", c:false},
+          {type:"tf", q:"The film festival made a large profit last year.", c:false},
+          {type:"tf", q:"The nanotechnology speaker wants all nanotech research stopped.", c:false},
+          {type:"inf", q:"Why does the speaker mention science-fiction books and movies about nanotechnology?", o:["To recommend them to students","To explain why people have the wrong idea and fears about it","To say they are scientifically accurate","Just to entertain the students"], c:1},
+          {type:"inf", q:"What is the speaker's overall attitude to nanotechnology?", o:["Fearful","Strongly opposed","Optimistic but aware of concerns","Indifferent"], c:2},
+          {type:"inf", q:"What can be inferred about how the festival films are chosen?", o:["They are picked at random","They are deliberately linked by a theme or type","They must all be in English","They are chosen by the student council"], c:1},
+          {type:"inf", q:"The recorded tourist message is mainly intended to…", o:["Sell boat tickets only","Suggest different ways of getting around the city","Describe the city's history","Advertise restaurants"], c:1},
+          {type:"seq", q:"Order the recording's four parts (1 = first):",
+            items:[
+              "Directions and layout of a study-abroad convention",
+              "A recorded message about city boat and bus tours",
+              "A committee discussing the film festival",
+              "A talk on nanotechnology"
+            ]}
+        ]
+      },
+      {
+        id: "B2-5", title: "Audio 5 · Planning a club trip to Tidborough",
+        kind: "file", file: "Test_27_tidborough.mp3",
+        intro: "A four-part recording: a tourist-office phone call, a welcome talk to new shop staff, students discussing a marine-studies assignment, and a talk on careers with horses.",
+        questions: [
+          {type:"mc", q:"How far is the youth hostel from the town centre?", o:["1 km","2 km","5 km","Right next to the station"], c:1},
+          {type:"mc", q:"What happens on the 22nd of March?", o:["A natural-history exhibition opens","The street festival","The sports centre reopens","The beach express stops running"], c:1},
+          {type:"mc", q:"By what time does Derek advise getting to the station for the beach express?", o:["9:00","No later than 9:15","9:30","10:00"], c:1},
+          {type:"mc", q:"What discount do students get on beach-express tickets?", o:["10%","15%","20%","No discount"], c:2},
+          {type:"mc", q:"At Hawkins, who should staff get to deal with a customer complaint?", o:["A colleague","The staff member themselves","Their line manager","The HR office"], c:2},
+          {type:"mc", q:"According to Paul, which is the noisiest sea creature?", o:["The dolphin","The snapping shrimp","The seahorse","The whale"], c:1},
+          {type:"mc", q:"For specialised equine health and research, employers now require…", o:["No qualifications","A college certificate","A bachelor's degree","Postgraduate or PhD qualifications"], c:3},
+          {type:"tf", q:"The youth hostel is described as cheap and comfortable.", c:true},
+          {type:"tf", q:"The sports centre will be open throughout March.", c:false},
+          {type:"tf", q:"At Hawkins, progress meetings with the section supervisor are held every Thursday.", c:true},
+          {type:"tf", q:"Paul's first written assignment is worth 40% of the grade.", c:false},
+          {type:"tf", q:"The speaker says anyone can work in horse training without qualifications.", c:false},
+          {type:"inf", q:"Why does Derek suggest buying beach-express tickets beforehand from the tourist office?", o:["They are cheaper there","The station may be crowded","The train may be cancelled","Tickets sell out a month ahead"], c:1},
+          {type:"inf", q:"What is the main purpose of the Hawkins talk?", o:["To sell products to staff","To welcome and brief new temporary staff","To announce job cuts","To describe the company's history only"], c:1},
+          {type:"inf", q:"What can be inferred about ocean exploration before the 20th century?", o:["People believed the ocean was silent","People had detailed sound recordings","People knew shrimp were noisy","People already used hydrophones"], c:0},
+          {type:"inf", q:"The equine speaker implies that career success increasingly depends on…", o:["Family connections","Formal qualifications and practical experience","Luck","Living in the Middle East"], c:1},
+          {type:"seq", q:"Order the four sections (1 = first):",
+            items:[
+              "A phone call to a tourist office about a club trip",
+              "A welcome talk to new shop staff",
+              "Students discussing a marine-studies assignment",
+              "A talk about careers in the horse industry"
+            ]}
+        ]
+      }
+    ]
+  },
+
+  /* ---------------- C1 — TOEFL real audio (advanced) ---------------- */
+  C1: {
+    label: "C1 — Advanced",
+    cefr: "TOEFL listening · C1",
+    blurb: "Lecturas universitarias largas. Inferencia y matiz.",
+    audios: [
+      {
+        id: "C1-1", title: "Audio 1 · The changing view of Mars",
+        kind: "file", file: "Test_2_050.mp3",
+        intro: "An astronomy lecture about how scientific knowledge of Mars has evolved from the 1960s to today.",
+        questions: [
+          {type:"mc", q:"What is the lecture mainly about?", o:["The chemistry of Mars","The development of views about the nature of Mars","Confirmed life on Mars","Mars's moons"], c:1},
+          {type:"mc", q:"After the 1965 flyby, scientists concluded that Mars was…", o:["Very similar to Earth","A dead, cratered place much like our Moon","Covered in oceans","Full of vegetation"], c:1},
+          {type:"mc", q:"What is Mars's atmosphere mostly made of?", o:["Oxygen","Nitrogen","Carbon dioxide","Methane"], c:2},
+          {type:"mc", q:"What did the 1970s missions reveal?", o:["Ancient cities","Volcanoes, deep canyons, dried-up riverbeds","Active oceans","Forests"], c:1},
+          {type:"mc", q:"For surface water to have existed in the past, Mars likely needed…", o:["Less gravity","Warmer temperatures AND a thicker atmosphere","A second moon","Only a magnetic field"], c:1},
+          {type:"mc", q:"Which feature is now used as possible evidence of water on Mars?", o:["Gullies","Mountains","Craters","Clouds"], c:0},
+          {type:"mc", q:"The professor compares Mars to Earth in that it may have…", o:["No atmosphere at all","Active oceans today","Long cycles similar to ice ages","Volcanic chains exactly like Earth's"], c:2},
+          {type:"tf", q:"Early science fiction usually portrayed Mars realistically.", c:false},
+          {type:"tf", q:"The professor confirms there is liquid water on Mars's surface right now.", c:false},
+          {type:"tf", q:"The 1970s missions included landers and orbiters, not just flybys.", c:true},
+          {type:"tf", q:"Modern instruments are less advanced than those of the 1970s.", c:false},
+          {type:"tf", q:"The professor calls Mars 'a fascinating fossil'.", c:true},
+          {type:"inf", q:"The professor's overall position is that our view of Mars has…", o:["Stayed the same","Been wrong from the start","Been progressively refined as evidence accumulates","Been irrelevant to science"], c:2},
+          {type:"inf", q:"By calling Mars a 'fossil', the professor implies it…", o:["Never existed","Was once dynamic and alive in some sense","Is dying","Is fake"], c:1},
+          {type:"inf", q:"The male student's 'What were they thinking?' expresses…", o:["Admiration for old movies","Criticism of the old movies' inaccuracy","A genuine question to the professor","Approval of the era"], c:1},
+          {type:"inf", q:"'If we could only get a lander there…' suggests that…", o:["Gullies are inaccessible to current landers","Landers are forbidden on Mars","Mars is hidden from us","All current data is fake"], c:0},
+          {type:"seq", q:"Order the historical views of Mars in the lecture (1 = first):",
+            items:[
+              "Mars as imagined in early science fiction (red planet, green people)",
+              "1965 flyby: dead, Moon-like, cratered planet",
+              "1970s missions: volcanoes, canyons, dried riverbeds — possibility of past water",
+              "Recent observations: gullies, possible current water cycles"
+            ]}
+        ]
+      },
+      {
+        id: "C1-2", title: "Audio 2 · Colossal statues as symbols",
+        kind: "file", file: "Test_2_053.mp3",
+        intro: "An art history lecture on modern colossal statues — Mount Rushmore and the Statue of Liberty.",
+        questions: [
+          {type:"mc", q:"What does the professor mainly discuss?", o:["The design of the Statue of Liberty","The purpose and symbolism of colossal statues","The creators of two statues","Costs in ancient vs modern times"], c:1},
+          {type:"mc", q:"What does the term 'colossus' originally mean?", o:["A king","A giant, larger-than-life statue","A tomb","A hero"], c:1},
+          {type:"mc", q:"About how high are the faces on Mount Rushmore?", o:["6 feet","16 feet","60 feet","600 feet"], c:2},
+          {type:"mc", q:"In what period was Mount Rushmore carved?", o:["The Civil War","The Great Depression","World War I","The Cold War"], c:1},
+          {type:"mc", q:"What did South Dakota originally want Mount Rushmore to be?", o:["A presidential memorial","A tourist attraction","A religious site","A military fort"], c:1},
+          {type:"mc", q:"Who designed the Statue of Liberty?", o:["An American sculptor","A French sculptor","A British architect","An Italian artist"], c:1},
+          {type:"mc", q:"What does Emma Lazarus's poem describe the Statue of Liberty as?", o:["A warning to enemies","A welcome to the tired and poor of the world","A French symbol only","A monument to soldiers"], c:1},
+          {type:"tf", q:"The professor thinks the original symbolism of these monuments has never changed.", c:false},
+          {type:"tf", q:"Mount Rushmore was carved in less than a year.", c:false},
+          {type:"tf", q:"The Statue of Liberty was first intended to symbolize French-U.S. friendship.", c:true},
+          {type:"tf", q:"The Emma Lazarus poem was placed on the pedestal in the early 1900s.", c:true},
+          {type:"tf", q:"Modern colossal statues are funded by ancient kings.", c:false},
+          {type:"inf", q:"What evidence does the professor give that modern statues are social/political symbols?", o:["They are very costly and require public agreement to build","They are very beautiful","They are visible from space","They are always made of marble"], c:0},
+          {type:"inf", q:"Why does the professor say 'so on and so forth' after quoting the poem?", o:["He has forgotten the rest","He assumes the students already know the poem","The poem ends there","He is unsure of the date"], c:1},
+          {type:"inf", q:"What is the professor's main point about the meaning of monuments?", o:["Their meaning is permanent","Their meaning can shift over time","Only sculptors decide meaning","Meaning does not matter"], c:1},
+          {type:"inf", q:"Why does the professor mention the Great Depression?", o:["To say monuments waste money","To show people want symbols of strength in hard times","To explain immigration","To criticize Roosevelt"], c:1},
+          {type:"seq", q:"Order the ideas in the lecture (1 = first):",
+            items:[
+              "Definition of 'colossus' and ancient examples",
+              "Mount Rushmore: originally a tourist project",
+              "Mount Rushmore: reframed as a symbol of national endurance",
+              "Statue of Liberty: shift from friendship symbol to welcome to immigrants"
+            ]}
+        ]
+      },
+      {
+        id: "C1-3", title: "Audio 3 · Conservation and the cat family",
+        kind: "file", file: "test_15_radio_show.mp3",
+        intro: "A four-part recording: a radio interview on big-cat conservation, a campus orientation, students planning social activities, and a talk on the history of tea.",
+        questions: [
+          {type:"mc", q:"Which member of the cat family is Professor Ripley's personal favourite?", o:["The jaguar","The lion","The tiger","The snow leopard"], c:1},
+          {type:"mc", q:"Roughly how many tigers does the professor say live in the wild?", o:["Fewer than 6,000","About 30,000","About 50,000","About 100,000"], c:0},
+          {type:"mc", q:"What is described as the main problem for the snow leopard?", o:["Poaching","Loss of high-altitude habitat to agriculture","Disease","Warming of the oceans"], c:1},
+          {type:"mc", q:"On which campus are history and architecture taught?", o:["Dinglewood","Churchdown","Trailway (southern)","Block 39"], c:2},
+          {type:"mc", q:"Which film do Wolfgang and Mary plan to see?", o:["A film with Richard Dreyfuss","Rocky, with Sylvester Stallone","An international students' film","A BBC documentary"], c:1},
+          {type:"mc", q:"Who is credited with introducing the small four o'clock meal with tea?", o:["Thomas Twining","Richard Twining","The Duchess of Bedford","William Pitt"], c:2},
+          {type:"mc", q:"Tea was first regarded in Britain as…", o:["A woman's drink","A man's drink enjoyed at coffee houses","A cheap everyday drink","A type of medicine"], c:1},
+          {type:"tf", q:"The professor finds it easy to measure the African lion population accurately.", c:false},
+          {type:"tf", q:"Tiger body parts have been used in medicines in the Far East.", c:true},
+          {type:"tf", q:"Students need their ID pass to buy things in the campus shop and cafeteria.", c:true},
+          {type:"tf", q:"The trip to Stratford-on-Avon takes place on Friday.", c:false},
+          {type:"tf", q:"Twining still has a shop on The Strand today.", c:true},
+          {type:"inf", q:"Why are many lions moved to protected areas?", o:["To increase tourism","To protect them from poachers and maintain the population","Because they prefer it there","To study their social behaviour"], c:1},
+          {type:"inf", q:"What is the professor's overall message about the cat family?", o:["They are thriving","Several species are endangered, mainly because of human activity","Only the lion is at risk","Conservation has already solved the problem"], c:1},
+          {type:"inf", q:"Why does Dr. Donovan warn that the campus will be noisy?", o:["Because of student parties","Because the gardens are being extended and a fountain installed","Because a new block is being built","Because of heavy traffic"], c:1},
+          {type:"inf", q:"The talk on tea mainly traces…", o:["How tea is grown","How tea-drinking became an established British custom","Why tea is unhealthy","Only the Twining family business"], c:1},
+          {type:"seq", q:"Order the recording's four sections (1 = first):",
+            items:[
+              "An interview about conservation of the cat family",
+              "A university campus orientation talk",
+              "Two students planning social activities",
+              "A talk on the history of tea in Britain"
+            ]}
+        ]
+      },
+      {
+        id: "C1-4", title: "Audio 4 · Using the city archives",
+        kind: "file", file: "test_14_city_archives.mp3",
+        intro: "A four-part recording: a student learning to use the city archives, a stationery order, a lecture on restoration ecology, and a lecture on the Irish Great Famine.",
+        questions: [
+          {type:"mc", q:"How can the student use the archives free of charge?", o:["By paying an annual fee","By showing a current University ID card","By getting permission from the director","By living in the city"], c:1},
+          {type:"mc", q:"Which day are the archives closed?", o:["Sunday","Saturday","Monday","They never close"], c:2},
+          {type:"mc", q:"Where are the 19th-century photographs kept?", o:["The ground floor","The basement (photography collection)","The second floor","The fifth floor"], c:1},
+          {type:"mc", q:"On which floor are the newspapers kept?", o:["Ground floor","First floor","Second floor","Third floor"], c:2},
+          {type:"mc", q:"What is Jackson's company called?", o:["Rainbow Computer","Rainbow Communications","Clean-it","Globetrotters"], c:1},
+          {type:"mc", q:"According to Aldo Leopold, land should be regarded as…", o:["A commodity","A community of interdependent parts","Private property","A source of profit"], c:1},
+          {type:"mc", q:"By 1851, how many people had died or left Ireland because of the famine?", o:["One million","Two million","Eight million","Half a million"], c:1},
+          {type:"tf", q:"City residents can use the archives free of charge.", c:false},
+          {type:"tf", q:"Visitors can usually only see photographic reproductions of the very old maps.", c:true},
+          {type:"tf", q:"The recycled photocopy paper is white and cheaper than the normal paper.", c:false},
+          {type:"tf", q:"The restoration ecology program combines formal science with practical applications.", c:true},
+          {type:"tf", q:"The Irish population began to recover immediately after 1851.", c:false},
+          {type:"inf", q:"Why does the librarian give the student a map of the archives?", o:["Because the student is lost","So the student can find the collections on each floor","Because the maps are kept on the third floor","To replace the photographs"], c:1},
+          {type:"inf", q:"What can be inferred about Ogden's Woolen Mill?", o:["It was unimportant to the city","It played a major role in the city's 19th-century growth","It is still operating today","It owns the archives"], c:1},
+          {type:"inf", q:"Why does the lecturer mention Edmund Moukala?", o:["To criticise his research","As an example of the program's varied, real-world research","Because he failed the program","To discuss Congo politics"], c:1},
+          {type:"inf", q:"The lecture on the Great Famine suggests that its effects on Ireland were…", o:["Brief and minor","Long-lasting, shaping society for over a century","Purely economic","Limited to 1845–1848"], c:1},
+          {type:"seq", q:"Order the four parts (1 = first):",
+            items:[
+              "A student asking how to use the city archives",
+              "A telephone stationery order",
+              "A lecture on restoration ecology",
+              "A lecture on the Irish Great Famine"
+            ]}
+        ]
+      },
+      {
+        id: "C1-5", title: "Audio 5 · An after-sales customer survey",
+        kind: "file", file: "Test_29_cleanit_customer_survey.mp3",
+        intro: "A four-part recording: an after-sales customer survey, an interview about a Sahara trek, students discussing a presentation, and a lecture on balloons and airships.",
+        questions: [
+          {type:"mc", q:"Which model did Mr. Sergeant buy?", o:["The super cleaner","The easy clean","The Mr Tidy","The Johnson"], c:0},
+          {type:"mc", q:"Which salesperson did Mr. Sergeant praise?", o:["Tom","Jim","Daisy","Colin"], c:1},
+          {type:"mc", q:"How long did Colin Clark's Sahara trek take?", o:["3 days","8 days","14 days","20 days"], c:2},
+          {type:"mc", q:"On the river, Colin mostly travelled by…", o:["Four-wheel drive","A pirro (canoe)","A ferry","A pinissee"], c:1},
+          {type:"mc", q:"In the study Joe describes, brand names were recognised more readily when shown…", o:["In lowercase","In capital letters","In colour only","Very slowly"], c:1},
+          {type:"mc", q:"Where did the first balloon flight take place?", o:["The United States","France","Britain","Germany"], c:1},
+          {type:"mc", q:"Why did the airship programme largely end in the 1930s?", o:["Lack of public interest","Faster airliners and an alarming number of crashes","Government bans","A shortage of materials"], c:1},
+          {type:"tf", q:"Mr. Sergeant had no problems with the cleanit products.", c:true},
+          {type:"tf", q:"It rained every day during Colin's Sahara trek.", c:false},
+          {type:"tf", q:"Colin found the four-wheel drive very comfortable.", c:false},
+          {type:"tf", q:"Modern hot air balloons are cheaper and safer than gas balloons.", c:true},
+          {type:"tf", q:"Airships are no longer built by any country.", c:false},
+          {type:"inf", q:"What is the main purpose of Tom's phone call?", o:["To sell a new vacuum","To check customer satisfaction after a purchase","To complain about a product","To arrange a delivery"], c:1},
+          {type:"inf", q:"What can be inferred about the pirros used on the river?", o:["They are always safely loaded","They are often dangerously overloaded","They never have motors","They are only used for cargo"], c:1},
+          {type:"inf", q:"Why does Joe consider including brand names in a presentation on names?", o:["Because it is unrelated to names","Because research suggests brand names are processed in a special way in the brain","Because Angela insisted on it","To talk only about business studies"], c:1},
+          {type:"inf", q:"The lecture suggests balloons and airships are worth studying because they…", o:["Are no longer used at all","Were humans' first flight successes and are still used today","Are faster than modern planes","Were never actually successful"], c:1},
+          {type:"seq", q:"Order the recording's four sections (1 = first):",
+            items:[
+              "An after-sales customer satisfaction survey",
+              "An interview about a Sahara desert trek",
+              "Students discussing a presentation on names",
+              "A lecture on balloons and airships"
+            ]}
+        ]
+      }
+    ]
+  }
+};
+
+/* ========================================================================
+   TTS engine — Web Speech API
+   Prefers Microsoft Edge Neural voices ("Online (Natural)") when available.
+   Parses dialog scripts and uses different voices per speaker (Woman/Man,
+   Lisa/Interviewer, etc.) for natural two-voice playback.
+   ======================================================================== */
+const TTS = {
+  synth: window.speechSynthesis,
+  voices: [],
+  femaleVoice: null,
+  maleVoice: null,
+  rate: 0.95,
+  cancelled: false,
+  isReady: false,
+  _readyCallbacks: [],
+
+  init(){
+    if(!('speechSynthesis' in window)) return false;
+    const load = ()=>{
+      this.voices = this.synth.getVoices();
+      if(this.voices.length > 0){
+        this.selectBestVoices();
+        if(!this.isReady){
+          this.isReady = true;
+          this._readyCallbacks.splice(0).forEach(cb=>cb());
+        }
+      }
+    };
+    load();
+    this.synth.onvoiceschanged = load;
+    return true;
+  },
+
+  onReady(cb){
+    if(this.isReady) cb();
+    else this._readyCallbacks.push(cb);
+  },
+
+  selectBestVoices(){
+    const v = this.voices;
+    const isNeural = name => /Online \(Natural\)/i.test(name);
+    // Edge Neural female names (en-US first preference)
+    const femName = /\b(Aria|Jenny|Michelle|Ana|Emma|Sonia|Libby|Olivia|Maisie)\b/i;
+    const maleName = /\b(Guy|Christopher|Eric|Roger|Steffan|Ryan|Tony|Brian|Andrew|Jacob|William)\b/i;
+
+    // FEMALE priority chain: Neural en-US → Neural en-GB → Neural any en → standard Zira → any en-US → any en
+    this.femaleVoice =
+         v.find(x => isNeural(x.name) && x.lang.startsWith('en-US') && femName.test(x.name))
+      || v.find(x => isNeural(x.name) && x.lang.startsWith('en-GB') && femName.test(x.name))
+      || v.find(x => isNeural(x.name) && x.lang.startsWith('en') && femName.test(x.name))
+      || v.find(x => isNeural(x.name) && x.lang.startsWith('en'))
+      || v.find(x => /Zira/i.test(x.name) && x.lang.startsWith('en'))
+      || v.find(x => /Hazel|Susan|Catherine/i.test(x.name) && x.lang.startsWith('en'))
+      || v.find(x => x.lang.startsWith('en-US'))
+      || v.find(x => x.lang.startsWith('en'))
+      || v[0] || null;
+
+    // MALE priority chain
+    this.maleVoice =
+         v.find(x => isNeural(x.name) && x.lang.startsWith('en-US') && maleName.test(x.name))
+      || v.find(x => isNeural(x.name) && x.lang.startsWith('en-GB') && maleName.test(x.name))
+      || v.find(x => isNeural(x.name) && x.lang.startsWith('en') && maleName.test(x.name))
+      || v.find(x => /David|Mark/i.test(x.name) && x.lang.startsWith('en'))
+      || v.find(x => /George|Daniel|James/i.test(x.name) && x.lang.startsWith('en'))
+      || v.find(x => x.lang.startsWith('en-US') && x !== this.femaleVoice)
+      || v.find(x => x.lang.startsWith('en') && x !== this.femaleVoice)
+      || this.femaleVoice;
+  },
+
+  voiceLabel(voice){
+    if(!voice) return 'default';
+    const m = voice.name.match(/Microsoft\s+(\w+)/);
+    const base = m ? m[1] : voice.name.split(' ')[0];
+    const neural = /Online \(Natural\)/i.test(voice.name) ? ' Neural' : '';
+    const lang = voice.lang ? ` ${voice.lang}` : '';
+    return base + neural + lang;
+  },
+
+  status(){
+    return {
+      ready: this.isReady,
+      female: this.voiceLabel(this.femaleVoice),
+      male: this.voiceLabel(this.maleVoice),
+      distinct: !!(this.femaleVoice && this.maleVoice && this.femaleVoice !== this.maleVoice),
+      neural: /Online \(Natural\)/i.test((this.femaleVoice && this.femaleVoice.name)||'')
+           && /Online \(Natural\)/i.test((this.maleVoice && this.maleVoice.name)||'')
+    };
+  },
+
+  // Parse script into segments by speaker label
+  parseDialog(text){
+    const re = /\b([A-Z][a-zA-Z.]+(?:\s[A-Z][a-zA-Z.]+){0,2}?):\s+/g;
+    const matches = [];
+    let m;
+    while((m = re.exec(text)) !== null){
+      matches.push({ idx: m.index, label: m[1].trim(), endIdx: m.index + m[0].length });
+    }
+    if(matches.length === 0) return [{ speaker: null, text }];
+    const segments = [];
+    if(matches[0].idx > 0){
+      const prefix = text.slice(0, matches[0].idx).trim();
+      if(prefix) segments.push({ speaker: null, text: prefix });
+    }
+    for(let i=0; i<matches.length; i++){
+      const cur = matches[i];
+      const next = matches[i+1];
+      const end = next ? next.idx : text.length;
+      const segText = text.slice(cur.endIdx, end).trim();
+      if(segText) segments.push({ speaker: cur.label, text: segText });
+    }
+    return segments;
+  },
+
+  // Build a speaker -> voice profile map for ONE script.
+  // Guarantees the two main speakers always sound different:
+  // distinct voices when available, or pitch-shifted fallback when the
+  // system only has one English voice installed.
+  assignVoices(speakers){
+    const twoVoices = !!(this.femaleVoice && this.maleVoice && this.femaleVoice !== this.maleVoice);
+    const profA = twoVoices ? {voice:this.femaleVoice, pitch:1.0, rateMul:1.0}
+                            : {voice:this.femaleVoice, pitch:1.22, rateMul:1.0};
+    const profB = twoVoices ? {voice:this.maleVoice,   pitch:1.0, rateMul:1.0}
+                            : {voice:this.femaleVoice, pitch:0.74, rateMul:0.97};
+    const femRe = /(^|\b)(woman|girl|female|she|her|lisa|emma|kate|sarah|sandy|maria|sonia|jenny|mia|amy|chloe|olivia|yuki|hannah|mum|mother|female student|female narrator)(\b|$)/i;
+    const malRe = /(^|\b)(man|boy|male|he|his|jake|marco|tom|sam|david|mark|alex|daniel|nico|jim|brian|jacob|professor|father|dad|male student|male narrator)(\b|$)/i;
+    const map = {};
+
+    // Interview pattern: Interviewer + one guest -> always opposite voices
+    const interviewer = speakers.find(s=>/interviewer|host|presenter|reporter/i.test(s));
+    if(interviewer && speakers.length === 2){
+      const guest = speakers.find(s=>s!==interviewer);
+      const guestFemale = femRe.test(guest) && !malRe.test(guest);
+      map[guest] = guestFemale ? profA : profB;
+      map[interviewer] = guestFemale ? profB : profA;
+    } else {
+      speakers.forEach((sp,idx)=>{
+        if(femRe.test(sp) && !malRe.test(sp)) map[sp] = profA;
+        else if(malRe.test(sp)) map[sp] = profB;
+        else map[sp] = (idx % 2 === 0) ? profA : profB;
+      });
+      // Safety net: exactly 2 speakers must never share a voice
+      if(speakers.length === 2 && map[speakers[0]] === map[speakers[1]]){
+        map[speakers[1]] = (map[speakers[0]] === profA) ? profB : profA;
+      }
+    }
+    map._narrator = profA;
+    return map;
+  },
+
+  speak(text, profile, onEnd){
+    const u = new SpeechSynthesisUtterance(text);
+    const voice = profile && profile.voice;
+    u.lang = (voice && voice.lang) || 'en-US';
+    u.rate = Math.max(0.5, Math.min(1.5, this.rate * ((profile && profile.rateMul) || 1)));
+    u.pitch = (profile && profile.pitch) || 1;
+    u.volume = 1;
+    if(voice) u.voice = voice;
+    u.onend = ()=>{ if(onEnd) onEnd(); };
+    u.onerror = ()=>{ if(onEnd) onEnd(); };
+    this.synth.speak(u);
+  },
+
+  playScript(script, onDone){
+    const segments = this.parseDialog(script);
+    const speakers = [...new Set(segments.map(s=>s.speaker).filter(Boolean))];
+    const vmap = this.assignVoices(speakers);
+    let i = 0;
+    const next = ()=>{
+      if(this.cancelled || i >= segments.length){ if(onDone) onDone(); return; }
+      const seg = segments[i++];
+      const profile = seg.speaker ? (vmap[seg.speaker] || vmap._narrator) : vmap._narrator;
+      this.speak(seg.text, profile, next);
+    };
+    next();
+  },
+
+  speakSequence(scripts, {onSegment, onDone, gap=1800}={}){
+    this.cancelled = false;
+    let i = 0;
+    const next = ()=>{
+      if(this.cancelled || i >= scripts.length){ if(onDone) onDone(); return; }
+      const idx = i++;
+      if(onSegment) onSegment(idx);
+      this.playScript(scripts[idx], ()=>setTimeout(next, gap));
+    };
+    next();
+  },
+
+  pause(){ if(this.synth.speaking && !this.synth.paused) this.synth.pause(); },
+  resume(){ if(this.synth.paused) this.synth.resume(); },
+  stop(){ this.cancelled = true; this.synth.cancel(); }
+};
+TTS.init();
+
+/* ========================================================================
+   APP STATE
+   ======================================================================== */
+const state = {
+  name: "",
+  klass: "",
+  level: null,
+  startTime: null,
+  answers: {},
+  seqOrder: {}
+};
+
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const hdrRight = $("#hdrRight");
+
+function shuffle(a){
+  const b = a.slice();
+  for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
+  return b;
+}
+
+/* ---------- VIEW: Welcome ---------- */
+function viewWelcome(){
+  TTS.stop();
+  hdrRight.innerHTML = "";
+  app.innerHTML = `
+    <div class="card">
+      <h1>Listening Quiz 🎧</h1>
+      <p style="margin:6px 0 12px">
+        <a class="btn small secondary" style="text-decoration:none" href="reading-quiz.html">📖 Ir al Reading Quiz</a>
+        <a class="btn small ghost" style="text-decoration:none" href="quizzes.html">⌂ Inicio</a>
+      </p>
+      <p>Vas a escuchar audios y responder <b>40 preguntas</b> de comprensión, verdadero/falso, inferencia y secuencia. Tus respuestas se guardan automáticamente al terminar.</p>
+      <div class="row" style="margin-top:10px">
+        <div>
+          <label>Tu nombre completo</label>
+          <input id="iName" type="text" placeholder="Ej: Andrés Pérez Castro" autocomplete="name">
+        </div>
+        <div>
+          <label>Grado / sección</label>
+          <input id="iClass" type="text" placeholder="Ej: G10 - A" autocomplete="off" value="${CONFIG.CLASS_LABEL}">
+        </div>
+      </div>
+      <h3 style="margin-top:18px">Elige tu nivel</h3>
+      <div class="levels" id="levels"></div>
+      <p class="hint">Los niveles A2 y B1 usan la voz del navegador (Cambridge KET/PET). B2 y C1 usan audio TOEFL real.</p>
+    </div>
+    <div class="footer">NIS English · 2026</div>
+  `;
+  const levels = $("#levels");
+  Object.keys(QUIZ).forEach(k=>{
+    const el = document.createElement("div");
+    el.className = "level";
+    el.innerHTML = `
+      <div class="tag">${k}</div>
+      <div class="name">${QUIZ[k].label.replace(/^[A-C]\d ?[—-] ?/,'')}</div>
+      <div class="cef">${QUIZ[k].cefr||''}</div>
+    `;
+    el.onclick = ()=>{
+      const nm = $("#iName").value.trim();
+      const kl = $("#iClass").value.trim();
+      if(!nm){ alert("Por favor escribe tu nombre."); return; }
+      state.name = nm; state.klass = kl || CONFIG.CLASS_LABEL;
+      state.level = k; state.startTime = Date.now();
+      state.answers = {}; state.seqOrder = {};
+      viewQuiz();
+    };
+    levels.appendChild(el);
+  });
+}
+
+/* ---------- VIEW: Quiz ---------- */
+function viewQuiz(){
+  const lev = QUIZ[state.level];
+  hdrRight.innerHTML = `<span class="badge-level">${state.level}</span>`;
+  app.innerHTML = `
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap">
+        <div>
+          <h2>${lev.label}</h2>
+          <div class="hint">${lev.blurb} · <b>${state.name}</b> · ${state.klass}</div>
+        </div>
+        <div class="right">
+          <button class="btn ghost" id="btnBack">← Cambiar nivel</button>
+        </div>
+      </div>
+      <div class="progress"><div id="bar"></div></div>
+      <div class="hint" id="bartxt">0 ítems respondidos</div>
+    </div>
+    <div id="audios"></div>
+    <div class="card">
+      <div class="warn">
+        Verifica tus respuestas antes de enviar. Una vez enviadas, no se pueden modificar.
+      </div>
+      <div class="toolbar">
+        <button class="btn" id="btnSubmit">📤 Enviar respuestas</button>
+        <button class="btn ghost" id="btnSaveLocal">💾 Solo guardar copia local</button>
+      </div>
+    </div>
+  `;
+  $("#btnBack").onclick = ()=>{ if(confirm("¿Volver al inicio? Perderás tus respuestas actuales.")) { TTS.stop(); viewWelcome(); } };
+  $("#btnSubmit").onclick = onSubmit;
+  $("#btnSaveLocal").onclick = ()=>saveLocal();
+
+  const cont = $("#audios");
+  lev.audios.forEach((audio)=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    let playerHTML;
+    if(audio.kind === "tts"){
+      playerHTML = renderTTSPlayer(audio);
+    } else {
+      playerHTML = `
+        <div class="audioblock">
+          <audio controls preload="none" src="${CONFIG.AUDIO_BASE}${audio.file}"></audio>
+          <div class="hint">Archivo: <code>${audio.file}</code></div>
+        </div>`;
+    }
+    card.innerHTML = `
+      <h2>${audio.title}</h2>
+      <div class="hint">${audio.intro}</div>
+      ${playerHTML}
+      <div id="qs-${audio.id}"></div>
+    `;
+    cont.appendChild(card);
+    if(audio.kind === "tts") bindTTSPlayer(audio);
+    renderQuestions(audio, $(`#qs-${audio.id}`));
+  });
+  updateProgress();
+}
+
+function renderTTSPlayer(audio){
+  const isMulti = audio.scripts.length > 1;
+  return `
+    <div class="audioblock" data-audio="${audio.id}">
+      <div class="tts-controls">
+        <button class="btn small" data-act="play">▶ Play</button>
+        <button class="btn small secondary" data-act="pause">⏸ Pause</button>
+        <button class="btn small secondary" data-act="resume">▶ Resume</button>
+        <button class="btn small ghost" data-act="stop">⏹ Stop</button>
+        <div class="speed">
+          <span>Speed</span>
+          <input type="range" data-act="speed" min="0.7" max="1.1" step="0.05" value="0.95">
+          <span data-out="speed">0.95×</span>
+        </div>
+      </div>
+      <div class="seg-list" data-segs>
+        ${(audio.segments||[]).map((s,i)=>`<span class="seg" data-seg="${i}">${i+1}. ${s}</span>`).join("")}
+      </div>
+      <div class="tts-status" data-status>Listo. Click <b>Play</b> para empezar.</div>
+      <div class="hint" data-voiceinfo style="display:none">🔊 Cargando voces…</div>
+      <div class="hint">${isMulti ? "Vas a oír "+audio.scripts.length+" conversaciones cortas con una pausa entre cada una." : "Audio de unos 90 segundos. Puedes pausar y continuar."}</div>
+    </div>`;
+}
+
+function bindTTSPlayer(audio){
+  const root = document.querySelector(`[data-audio="${audio.id}"]`);
+  if(!root) return;
+  const status = root.querySelector('[data-status]');
+  const segs = root.querySelectorAll('[data-seg]');
+  const voiceInfo = root.querySelector('[data-voiceinfo]');
+  TTS.onReady(()=>{
+    if(!voiceInfo) return;
+    // Teacher-only debug indicator. Hidden from students.
+    // Reveal by adding ?debug to the URL (e.g. ...listening-quiz.html?debug)
+    const teacherMode = /[?&](debug|teacher|voz)\b/i.test(location.search);
+    if(!teacherMode){ voiceInfo.style.display = 'none'; return; }
+    voiceInfo.style.display = '';
+    const s = TTS.status();
+    const badge = s.neural
+      ? '<span style="background:#dcfce7;color:#166534;padding:1px 8px;border-radius:999px;font-weight:700">🌟 Edge Neural</span>'
+      : '<span style="background:#fef3c7;color:#92400e;padding:1px 8px;border-radius:999px;font-weight:700">Standard voice</span>';
+    const mode = s.distinct
+      ? `🗣️ Diálogo a 2 personas: ♀ <b>${s.female}</b> · ♂ <b>${s.male}</b>`
+      : `🗣️ Diálogo a 2 personas (1 voz, tono diferenciado: ♀ agudo / ♂ grave) — <b>${s.female}</b>`;
+    voiceInfo.innerHTML = `${mode} &nbsp; ${badge}`;
+    if(!s.neural){
+      voiceInfo.innerHTML += `<br><span style="color:#92400e">💡 Para 2 voces reales y mejor calidad, abre en <b>Microsoft Edge</b> con internet (Aria + Guy Neural).</span>`;
+    }
+  });
+  const setSeg = (i, cls)=>{
+    segs.forEach(s=>s.classList.remove('playing'));
+    if(cls === 'playing'){
+      const s = root.querySelector(`[data-seg="${i}"]`);
+      if(s){ s.classList.add('playing'); }
+    }
+  };
+  const markDone = (i)=>{
+    const s = root.querySelector(`[data-seg="${i}"]`);
+    if(s){ s.classList.remove('playing'); s.classList.add('done'); }
+  };
+  root.querySelector('[data-act="play"]').onclick = ()=>{
+    TTS.stop();
+    segs.forEach(s=>{s.classList.remove('playing'); s.classList.remove('done');});
+    status.textContent = "Reproduciendo…";
+    TTS.speakSequence(audio.scripts, {
+      onSegment:(i)=>{
+        setSeg(i,'playing');
+        if(audio.scripts.length>1) status.textContent = `Conversación ${i+1} de ${audio.scripts.length}: ${audio.segments[i]||''}`;
+      },
+      onDone:()=>{ status.textContent = "✅ Reproducción terminada."; segs.forEach(s=>{s.classList.remove('playing'); s.classList.add('done');}); }
+    });
+  };
+  root.querySelector('[data-act="pause"]').onclick = ()=>{ TTS.pause(); status.textContent = "⏸ Pausado."; };
+  root.querySelector('[data-act="resume"]').onclick = ()=>{ TTS.resume(); status.textContent = "▶ Reproduciendo…"; };
+  root.querySelector('[data-act="stop"]').onclick = ()=>{ TTS.stop(); status.textContent = "⏹ Detenido."; segs.forEach(s=>s.classList.remove('playing')); };
+  const speed = root.querySelector('[data-act="speed"]');
+  const speedOut = root.querySelector('[data-out="speed"]');
+  speed.oninput = ()=>{ TTS.rate = parseFloat(speed.value); speedOut.textContent = TTS.rate.toFixed(2)+"×"; };
+}
+
+function renderQuestions(audio, container){
+  audio.questions.forEach((q, qi)=>{
+    const key = `${audio.id}__${qi}`;
+    const el = document.createElement("div");
+    el.className = "q";
+    let typePill = `<span class="pill">Comprensión</span>`;
+    if(q.type==="tf") typePill = `<span class="pill tf">Verdadero / Falso</span>`;
+    if(q.type==="inf") typePill = `<span class="pill inf">Inferencia</span>`;
+    if(q.type==="seq") typePill = `<span class="pill seq">Secuencia</span>`;
+
+    if(q.type==="mc" || q.type==="inf"){
+      el.innerHTML = `
+        <div class="meta">${typePill} <span>Pregunta ${qi+1}</span></div>
+        <div class="stem">${q.q}</div>
+        <div class="opts" data-key="${key}">
+          ${q.o.map((opt,oi)=>`
+            <label class="opt"><input type="radio" name="${key}" value="${oi}"> <span>${opt}</span></label>
+          `).join("")}
+        </div>`;
+    }
+    else if(q.type==="tf"){
+      el.innerHTML = `
+        <div class="meta">${typePill} <span>Pregunta ${qi+1}</span></div>
+        <div class="stem">${q.q}</div>
+        <div class="opts" data-key="${key}">
+          <label class="opt"><input type="radio" name="${key}" value="true"> <span>True (Verdadero)</span></label>
+          <label class="opt"><input type="radio" name="${key}" value="false"> <span>False (Falso)</span></label>
+        </div>`;
+    }
+    else if(q.type==="seq"){
+      const shuffled = shuffle(q.items.map((it,idx)=>({it,idx})));
+      state.seqOrder[key] = shuffled.map(s=>s.idx);
+      el.innerHTML = `
+        <div class="meta">${typePill} <span>Pregunta ${qi+1}</span></div>
+        <div class="stem">${q.q}</div>
+        <div class="seqlist" data-key="${key}">
+          ${shuffled.map((s,si)=>`
+            <div class="seqitem">
+              <select data-pos="${si}">
+                <option value="">—</option>
+                ${q.items.map((_,oi)=>`<option value="${oi+1}">${oi+1}</option>`).join("")}
+              </select>
+              <span>${s.it}</span>
+            </div>
+          `).join("")}
+        </div>
+        <div class="hint">Asigna 1, 2, 3, 4 según el orden en que ocurrieron.</div>`;
+    }
+    container.appendChild(el);
+  });
+
+  container.querySelectorAll('.opts').forEach(o=>{
+    const key = o.dataset.key;
+    o.addEventListener("change", e=>{
+      if(e.target.type === "radio"){
+        const v = e.target.value;
+        if(v==="true") state.answers[key]=true;
+        else if(v==="false") state.answers[key]=false;
+        else state.answers[key] = parseInt(v,10);
+        updateProgress();
+      }
+    });
+  });
+  container.querySelectorAll('.seqlist').forEach(o=>{
+    const key = o.dataset.key;
+    o.addEventListener("change", ()=>{
+      const ans = {};
+      o.querySelectorAll('select').forEach(sel=>{
+        const pos = parseInt(sel.dataset.pos, 10);
+        const v = sel.value ? parseInt(sel.value, 10) : null;
+        ans[pos] = v;
+      });
+      state.answers[key] = ans;
+      updateProgress();
+    });
+  });
+}
+
+function updateProgress(){
+  const lev = QUIZ[state.level];
+  let pointsAnswered = 0;
+  let pointsTotal = 0;
+  lev.audios.forEach(a=>{
+    a.questions.forEach((q,qi)=>{
+      const key = `${a.id}__${qi}`;
+      if(q.type==="seq"){
+        pointsTotal += q.items.length;
+        const ans = state.answers[key];
+        if(ans){
+          Object.values(ans).forEach(v=>{ if(v!=null) pointsAnswered++; });
+        }
+      } else {
+        pointsTotal++;
+        if(state.answers[key]!==undefined) pointsAnswered++;
+      }
+    });
+  });
+  const pct = pointsTotal? Math.round(100*pointsAnswered/pointsTotal):0;
+  const bar = $("#bar"); const txt = $("#bartxt");
+  if(bar) bar.style.width = pct + "%";
+  if(txt) txt.textContent = `${pointsAnswered} / ${pointsTotal} ítems respondidos`;
+}
+
+/* ---------- SCORING ---------- */
+function computeScore(){
+  const lev = QUIZ[state.level];
+  let total = 0, correct = 0;
+  const breakdown = [];
+  lev.audios.forEach(a=>{
+    a.questions.forEach((q, qi)=>{
+      const key = `${a.id}__${qi}`;
+      if(q.type==="mc" || q.type==="inf"){
+        total++;
+        const given = state.answers[key];
+        const ok = given === q.c;
+        if(ok) correct++;
+        breakdown.push({audio:a.title, type:q.type, q:q.q, given:given==null?"(sin responder)":q.o[given], correct:q.o[q.c], ok});
+      }
+      else if(q.type==="tf"){
+        total++;
+        const given = state.answers[key];
+        const ok = given === q.c;
+        if(ok) correct++;
+        breakdown.push({audio:a.title, type:q.type, q:q.q, given:given==null?"(sin responder)":(given?"True":"False"), correct:q.c?"True":"False", ok});
+      }
+      else if(q.type==="seq"){
+        const shown = state.seqOrder[key] || [];
+        const ans = state.answers[key] || {};
+        shown.forEach((origIdx, pos)=>{
+          total++;
+          const correctNumber = origIdx + 1;
+          const givenNumber = ans[pos];
+          const ok = givenNumber === correctNumber;
+          if(ok) correct++;
+          breakdown.push({audio:a.title, type:"seq", q:`${q.q} → "${q.items[origIdx]}"`, given:givenNumber==null?"(sin responder)":String(givenNumber), correct:String(correctNumber), ok});
+        });
+      }
+    });
+  });
+  return {total, correct, breakdown};
+}
+
+/* ---------- SUBMIT ---------- */
+function onSubmit(){
+  const lev = QUIZ[state.level];
+  let unanswered = 0;
+  lev.audios.forEach(a=>a.questions.forEach((q,qi)=>{
+    const key = `${a.id}__${qi}`;
+    if(q.type==="seq"){
+      const ans = state.answers[key] || {};
+      const shown = state.seqOrder[key] || [];
+      shown.forEach((_,pos)=>{ if(ans[pos]==null) unanswered++; });
+    } else if(state.answers[key]===undefined) unanswered++;
+  }));
+  if(unanswered>0){
+    if(!confirm(`Tienes ${unanswered} ítems sin responder. ¿Enviar de todas formas?`)) return;
+  }
+  TTS.stop();
+  const score = computeScore();
+  const elapsedMin = Math.round((Date.now()-state.startTime)/60000);
+  const payload = {
+    name: state.name,
+    klass: state.klass,
+    level: state.level,
+    score: score.correct,
+    total: score.total,
+    elapsed_min: elapsedMin,
+    when: new Date().toISOString(),
+    answers: state.answers,
+    breakdown: score.breakdown
+  };
+
+  saveLocal(payload);
+
+  let sent = false;
+  if(CONFIG.APPS_SCRIPT_URL && !CONFIG.APPS_SCRIPT_URL.startsWith("PEGA_AQUI")){
+    try {
+      const f = document.createElement("form");
+      f.method = "POST";
+      f.action = CONFIG.APPS_SCRIPT_URL;
+      f.target = "submit_frame";
+      const i = document.createElement("input");
+      i.type = "hidden"; i.name = "data"; i.value = JSON.stringify(payload);
+      f.appendChild(i);
+      let fr = document.querySelector('iframe[name=submit_frame]');
+      if(!fr){
+        fr = document.createElement("iframe");
+        fr.name = "submit_frame"; fr.style.display="none";
+        document.body.appendChild(fr);
+      }
+      document.body.appendChild(f);
+      f.submit();
+      sent = true;
+    } catch(e){ console.warn(e); }
+  }
+
+  viewResult(payload, sent);
+}
+
+function saveLocal(prefilled){
+  const score = prefilled || (function(){
+    const s = computeScore();
+    return {
+      name: state.name, klass: state.klass, level: state.level,
+      score: s.correct, total: s.total,
+      when: new Date().toISOString(), answers: state.answers, breakdown: s.breakdown
+    };
+  })();
+  const blob = new Blob([JSON.stringify(score,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const safeName = (state.name||"alumno").replace(/[^a-z0-9]+/gi,"_");
+  a.href = url; a.download = `listening_${state.level}_${safeName}.json`;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 200);
+}
+
+/* ---------- VIEW: Result ---------- */
+function viewResult(payload, sent){
+  const pct = Math.round(100 * payload.score / payload.total);
+  const verdict = pct>=85?"Excellent":pct>=70?"Good":pct>=50?"Keep practicing":"Needs review";
+  hdrRight.innerHTML = `<span class="badge-level">${payload.level}</span>`;
+  app.innerHTML = `
+    <div class="card">
+      <h1>¡Listo, ${payload.name}! 🎉</h1>
+      <p>Nivel: <b>${payload.level}</b> · Tiempo: <b>${payload.elapsed_min} min</b></p>
+      <div class="score"><span class="${pct>=70?'ok':'bad'}">${payload.score} / ${payload.total}</span> · ${pct}% · <span style="font-size:18px">${verdict}</span></div>
+      ${sent
+        ? `<div class="reveal correct">✅ Respuestas enviadas a tu profesor.</div>`
+        : `<div class="reveal wrong">⚠ No se pudo enviar automáticamente. Se descargó una copia local — entrégala al profesor.</div>`
+      }
+      <div class="toolbar">
+        <button class="btn" id="btnEmailAns">📧 Enviar por email al profesor</button>
+        <button class="btn secondary" id="btnReviewAns">Ver mis respuestas</button>
+        <button class="btn ghost" id="btnAgain">Hacer otro nivel</button>
+      </div>
+      <div class="hint" style="margin-top:8px">Si el envío automático falla, usa el botón <b>Email</b> — abre tu correo con todas tus respuestas listas para mandar.</div>
+    </div>
+    <div class="card">
+      <details>
+        <summary>Detalle pregunta por pregunta</summary>
+        <div id="bdown"></div>
+      </details>
+    </div>
+    <div class="footer">NIS English · 2026</div>
+  `;
+  const bd = $("#bdown");
+  payload.breakdown.forEach((b)=>{
+    const row = document.createElement("div");
+    row.className = "q";
+    row.innerHTML = `
+      <div class="meta"><span class="pill ${b.type==='tf'?'tf':b.type==='inf'?'inf':b.type==='seq'?'seq':''}">${b.type.toUpperCase()}</span> <span>${b.audio}</span></div>
+      <div class="stem">${b.q}</div>
+      <div class="reveal ${b.ok?'correct':'wrong'}">
+        Tu respuesta: <b>${b.given}</b> · Correcta: <b>${b.correct}</b> ${b.ok?'✓':'✗'}
+      </div>`;
+    bd.appendChild(row);
+  });
+  $("#btnAgain").onclick = viewWelcome;
+  $("#btnReviewAns").onclick = ()=>document.querySelector("details").open = true;
+  $("#btnEmailAns").onclick = ()=>sendByEmail(payload);
+}
+
+function sendByEmail(payload){
+  const pct = Math.round(100*payload.score/payload.total);
+  const byType = {mc:[0,0], tf:[0,0], inf:[0,0], seq:[0,0]};
+  payload.breakdown.forEach(b=>{
+    if(byType[b.type]){
+      byType[b.type][1]++;
+      if(b.ok) byType[b.type][0]++;
+    }
+  });
+  const summary = [
+    `=== LISTENING QUIZ — RESULTADOS ===`,
+    ``,
+    `Alumno: ${payload.name}`,
+    `Grado: ${payload.klass}`,
+    `Nivel: ${payload.level}`,
+    `Score: ${payload.score} / ${payload.total} (${pct}%)`,
+    `Tiempo: ${payload.elapsed_min} min`,
+    `Fecha: ${new Date(payload.when).toLocaleString()}`,
+    ``,
+    `--- Por tipo de pregunta ---`,
+    `Comprensión MC: ${byType.mc[0]}/${byType.mc[1]}`,
+    `Verdadero/Falso: ${byType.tf[0]}/${byType.tf[1]}`,
+    `Inferencia: ${byType.inf[0]}/${byType.inf[1]}`,
+    `Secuencia: ${byType.seq[0]}/${byType.seq[1]}`,
+    ``,
+    `--- Detalle pregunta por pregunta ---`,
+    ...payload.breakdown.map((b,i)=>`${i+1}. [${b.type.toUpperCase()}] ${b.q.replace(/<[^>]+>/g,'')}\n   Mi respuesta: ${b.given}\n   Correcta: ${b.correct}\n   Resultado: ${b.ok?'✓ correcto':'✗ incorrecto'}`)
+  ];
+  const body = summary.join('\n');
+  const subject = `Listening Quiz · ${payload.name} · ${payload.level} · ${payload.score}/${payload.total} (${pct}%)`;
+  const mailto = `mailto:${CONFIG.TEACHER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // Some mailto bodies are too long; trim if needed
+  if(mailto.length > 7800){
+    const shortBody = summary.slice(0,16).join('\n') + '\n\n(Detalle completo en el archivo JSON descargado.)';
+    window.location.href = `mailto:${CONFIG.TEACHER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shortBody)}`;
+  } else {
+    window.location.href = mailto;
+  }
+}
+
+/* ---------- START ---------- */
+viewWelcome();
+</script>
+</body>
+</html>
