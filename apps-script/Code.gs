@@ -1,31 +1,34 @@
 /**
  * NIS English Quizzes — Google Apps Script Web App (doPost endpoint)
  * ------------------------------------------------------------------
- * Receives the JSON each quiz POSTs on submit and stores it in the bound
- * Google Sheet, using a SEPARATE TAB per skill:
+ * ONE script for all three quizzes. It auto-detects the input format and the
+ * skill, then stores each submission in a SEPARATE TAB:
  *   • "Reading"   — auto-marked reading score + every answer
  *   • "Listening" — auto-marked listening score + every answer
  *   • "Writing"   — one row per writing task (full text + word count + provisional ref)
  *
- * Reading exams that include A2 Writing Parts 6/7 write the score to the
+ * It handles BOTH ways the quizzes send data:
+ *   • Reading / Writing → fetch() with a JSON body  (e.postData.contents)
+ *   • Listening         → hidden-form POST           (e.parameter.data)
+ *
+ * A Reading exam that includes A2 Writing Parts 6/7 writes the score to the
  * "Reading" tab AND the writing answers to the "Writing" tab automatically.
  *
- * DEPLOY (do this once per spreadsheet):
- *   1. Open your Google Sheet → Extensions → Apps Script.
+ * DEPLOY (once per spreadsheet — do it on BOTH the Reading/Writing sheet and the
+ * Listening sheet, since each quiz family points at its own Web App URL):
+ *   1. Open the Google Sheet → Extensions → Apps Script.
  *   2. Replace the code with this file, Save.
- *   3. Deploy → Manage deployments → edit your existing Web App deployment
- *      → Version: "New version" → Deploy.  (Keeps the SAME /exec URL, so you
- *      do NOT need to change anything in the quiz pages.)
- *   4. Execute as: Me.  Who has access: Anyone.
+ *   3. Deploy → Manage deployments → edit the existing Web App deployment →
+ *      Version: "New version" → Deploy.  (Same /exec URL — nothing to change in
+ *      the quiz pages.)  Execute as: Me.  Who has access: Anyone.
  *
- * The reading + writing quizzes share one Web App URL → paste this into THAT
- * spreadsheet's script (you'll get Reading + Writing tabs). The listening quiz
- * uses its own URL → paste the same script into that spreadsheet too.
+ * Because you open Apps Script FROM the sheet, the script is bound to it and
+ * SPREADSHEET_ID can stay ''.
  */
 
 var TEACHER_EMAIL  = 'pbaca@nordic-school.edu.pe'; // set '' to disable emails
 var SEND_EMAIL     = true;
-var SPREADSHEET_ID = '';   // leave '' if this script is bound to the Sheet; otherwise paste the Sheet ID
+var SPREADSHEET_ID = '';   // leave '' when the script is bound to the Sheet
 
 function doGet() {
   return ContentService
@@ -35,17 +38,15 @@ function doGet() {
 
 function doPost(e) {
   try {
-    var data = JSON.parse(e.postData.contents);
-    var ss   = SPREADSHEET_ID ? SpreadsheetApp.openById(SPREADSHEET_ID)
-                              : SpreadsheetApp.getActiveSpreadsheet();
-    var skill = (data.skill || 'Other');
+    var data  = parseInput_(e);
+    var ss    = SPREADSHEET_ID ? SpreadsheetApp.openById(SPREADSHEET_ID)
+                               : SpreadsheetApp.getActiveSpreadsheet();
+    var skill = data.skill || (data.breakdown ? 'Listening' : 'Reading');
 
     if (skill === 'Writing') {
       writeWritingRows_(ss, data, 'Writing Quiz');
     } else {
-      // Reading or Listening: score row to the skill tab
       writeScoreRow_(ss, skill, data);
-      // If this exam also carried writing answers (A2), log them on the Writing tab
       var w = data.writingEvaluation || data.writingAnswers || [];
       if (w.length) writeWritingRows_(ss, data, skill + ' (Parts 6–7)');
     }
@@ -60,33 +61,58 @@ function doPost(e) {
   }
 }
 
+/* Accept JSON body (fetch) OR form field "data" (hidden-form POST). */
+function parseInput_(e) {
+  if (e && e.postData && e.postData.contents) {
+    try { return JSON.parse(e.postData.contents); } catch (_) {}
+  }
+  if (e && e.parameter && e.parameter.data) {
+    try { return JSON.parse(e.parameter.data); } catch (_) {}
+  }
+  return {};
+}
+
 /* ---------- Reading / Listening: one row with score + all answers ---------- */
 function writeScoreRow_(ss, skill, d) {
-  var headers = ['Timestamp', 'Name', 'Grade', 'Email', 'Level', 'Exam',
+  var headers = ['Timestamp', 'Name', 'Grade/Class', 'Email', 'Level', 'Exam',
                  'Score', 'Total', 'Percent', 'CEFR', 'Minutes', 'Tab switches', 'Answers'];
   var sheet = getOrCreateTab_(ss, skill, headers);
-  var answers = (d.detail || []).map(function (q) {
-    var u = stripHtml_(q.user), c = stripHtml_(q.correctAns);
-    return 'Q' + q.q + ': ' + u + ' (correct: ' + c + ') ' + (q.ok ? '✓' : '✗');
-  }).join('  |  ');
+
+  var grade   = d.grade || d.klass || '';
+  var minutes = d.durationMinutes || d.elapsed_min || '';
+  var pct     = (d.percent != null) ? d.percent
+              : (d.total ? Math.round(d.score / d.total * 100) : '');
+
+  var answers = '';
+  if (d.detail && d.detail.length) {                 // Reading quiz format
+    answers = d.detail.map(function (q) {
+      return 'Q' + q.q + ': ' + stripHtml_(q.user) +
+             ' (correct: ' + stripHtml_(q.correctAns) + ') ' + (q.ok ? '✓' : '✗');
+    }).join('  |  ');
+  } else if (d.answers) {                            // Listening quiz format (object)
+    answers = JSON.stringify(d.answers);
+  }
+
   sheet.appendRow([
-    new Date(), d.name || '', d.grade || '', d.email || '', d.level || '', d.examTitle || d.examType || '',
-    d.score, d.total, (d.percent != null ? d.percent + '%' : ''), d.cefrLabel || '',
-    d.durationMinutes || '', d.tabSwitches || 0, answers
+    new Date(), d.name || '', grade, d.email || '', d.level || '',
+    d.examTitle || d.examType || skill,
+    d.score, d.total, (pct !== '' ? pct + '%' : ''), d.cefrLabel || '',
+    minutes, d.tabSwitches || 0, answers
   ]);
 }
 
 /* ---------- Writing: one row per task (full text persisted) ---------- */
 function writeWritingRows_(ss, d, sourceLabel) {
-  var headers = ['Timestamp', 'Name', 'Grade', 'Email', 'Level', 'Source',
+  var headers = ['Timestamp', 'Name', 'Grade/Class', 'Email', 'Level', 'Source',
                  'Task', 'Words', 'Answer', 'Provisional band (auto — verify by hand)', 'Auto notes'];
   var sheet = getOrCreateTab_(ss, 'Writing', headers);
+  var grade = d.grade || d.klass || '';
   var tasks = d.writingEvaluation || d.writingAnswers || [];
   tasks.forEach(function (t) {
     var band = (t.provisionalBand != null ? t.provisionalBand
               : t.band != null ? t.band : '');
     sheet.appendRow([
-      new Date(), d.name || '', d.grade || '', d.email || '', d.level || '', sourceLabel,
+      new Date(), d.name || '', grade, d.email || '', d.level || '', sourceLabel,
       t.part || t.label || t.prompt || '', t.wordCount || '',
       (t.text || ''), (band !== '' ? band + ' / 5' : ''), (t.feedback || '')
     ]);
@@ -110,15 +136,16 @@ function stripHtml_(s) {
 }
 
 function sendEmail_(skill, d) {
+  var grade = d.grade || d.klass || '';
   var subject = '[NIS ' + skill + '] ' + (d.name || 'Student') + ' — ' + (d.level || '');
   var lines = [
     'Student: ' + (d.name || ''),
-    'Grade: '   + (d.grade || ''),
-    'Level: '   + (d.level || ''),
-    'Exam: '    + (d.examTitle || d.examType || skill)
+    'Grade/Class: ' + grade,
+    'Level: ' + (d.level || ''),
+    'Exam: '  + (d.examTitle || d.examType || skill)
   ];
-  if (skill !== 'Writing') {
-    lines.push('Score: ' + d.score + ' / ' + d.total + ' (' + d.percent + '%)');
+  if (skill !== 'Writing' && d.score != null) {
+    lines.push('Score: ' + d.score + ' / ' + d.total);
   }
   var tasks = d.writingEvaluation || d.writingAnswers || [];
   if (tasks.length) {
