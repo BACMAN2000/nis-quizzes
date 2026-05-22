@@ -189,192 +189,84 @@ const QUIZ = {
   /* ---------------- A2 — Cambridge KET (A2-calibrated) ---------------- */
   A2: {
     label: "A2 — Elementary",
-    cefr: "Cambridge KET · A2 official",
-    blurb: "Conversaciones muy cortas y claras de la vida diaria.",
+    cefr: "Cambridge KET · A2 official format",
+    blurb: "5 partes, 25 preguntas: imágenes, completar, opción múltiple y emparejar.",
     audios: [
       {
-        id: "A2-1", title: "Audio set 1 · Daily situations", kind: "tts",
-        intro: "You will hear five short conversations. Listen carefully and answer the questions below.",
-        segments: ["Train to London","Buying apples","Last weekend","Directions to a supermarket","The English test"],
+        id: "A2-P1", title: "Part 1 · Questions 1–5", kind: "tts",
+        intro: "For each question, choose the correct answer (A, B or C). You will hear five short conversations.",
+        segments: ["A birthday present","Meeting on Saturday","The weather","A lost thing","The film time"],
         scripts: [
-          "Conversation one. Woman: What time does the train to London leave? Man: Let me check. There is one at quarter past nine, and another at ten thirty. Woman: I will take the earlier one, please.",
-          "Conversation two. Man: How much are the apples? Woman: They are one pound fifty for a bag. Man: OK, I will take two bags, please. Woman: That is three pounds.",
-          "Conversation three. Girl: What did you do last weekend? Boy: I wanted to play football, but it rained all day Saturday, so I stayed home and watched a film. On Sunday, I went shopping with my mum.",
-          "Conversation four. Woman: Excuse me, is there a supermarket near here? Man: Yes, go straight ahead, then turn left at the traffic lights. It is on the right, next to the bank.",
-          "Conversation five. Teacher: Do not forget, the English test is on Thursday this week, not Friday. Student: Oh! I thought it was Friday. Teacher: No, we changed it because Friday is a holiday."
+          "Question one. Girl: What did you get Mum for her birthday? Boy: I wanted to buy her a book, but in the end I made her a chocolate cake. She loved it.",
+          "Question two. Boy: Shall we meet at the café on Saturday? Girl: It's a lovely day — let's meet in the park instead. Boy: OK, the park it is.",
+          "Question three. Woman: Do you want to walk to the shops? Man: Have you looked outside? It's raining really hard. Woman: Oh, then let's wait.",
+          "Question four. Mum: What's the matter? Girl: I can't find my phone anywhere. I think I left it on the bus. Mum: Don't worry, we'll call it.",
+          "Question five. Boy: What time does the film start? Girl: At half past eight, not eight o'clock. Boy: Good, then we have time for dinner first."
         ],
         questions: [
-          {type:"mc", q:"What time train does the woman want?", o:["Quarter past nine (9:15)","Half past nine (9:30)","Ten thirty (10:30)"], c:0},
-          {type:"mc", q:"How much does the man pay for the apples in total?", o:["One pound fifty","Two pounds","Three pounds"], c:2},
-          {type:"mc", q:"What did the boy do on Saturday?", o:["Played football","Watched a film at home","Went shopping"], c:1},
-          {type:"mc", q:"Where exactly is the supermarket?", o:["Next to the bank, on the right","Behind the traffic lights","Opposite the bank"], c:0},
-          {type:"mc", q:"When is the English test?", o:["Wednesday","Thursday","Friday"], c:1},
-          {type:"mc", q:"Why is the test NOT on Friday?", o:["It rained","Friday is a holiday","The teacher is sick"], c:1},
-          {type:"mc", q:"How many bags of apples does the man buy?", o:["One","Two","Three"], c:1},
-          {type:"tf", q:"The train at ten thirty leaves earlier than the one at quarter past nine.", c:false},
-          {type:"tf", q:"The boy went shopping with his mum on Sunday.", c:true},
-          {type:"tf", q:"The supermarket is on the left after the traffic lights.", c:false},
-          {type:"tf", q:"Apples cost one pound fifty for ONE apple.", c:false},
-          {type:"tf", q:"The student thought the test was on Friday.", c:true},
-          {type:"inf", q:"The woman who asks about the train probably prefers to…", o:["Arrive earlier","Arrive later","Not travel today"], c:0},
-          {type:"inf", q:"How did the boy probably feel about the rain on Saturday?", o:["Disappointed","Excited","Surprised"], c:0},
-          {type:"inf", q:"The man asking for the supermarket is probably…", o:["A local resident","A tourist or new to the area","Driving a taxi"], c:1},
-          {type:"inf", q:"The student in the test conversation probably feels…", o:["Relieved","Worried because of the new date","Angry with the teacher"], c:1},
-          {type:"seq", q:"In which order did you hear these topics? (1 = first)",
-            items:[
-              "Asking about a train to London",
-              "Buying apples in a shop",
-              "Talking about the weekend",
-              "Asking for directions to a supermarket"
-            ]}
+          {type:"pic", q:"What did the boy give his mum?", imgs:["book","ball","cake"], c:2},
+          {type:"pic", q:"Where will they meet on Saturday?", imgs:["park","cafe","library"], c:0},
+          {type:"pic", q:"What's the weather like now?", imgs:["sunny","rainy","snowy"], c:1},
+          {type:"pic", q:"What did the girl lose?", imgs:["keys","phone","umbrella"], c:1},
+          {type:"pic", q:"What time does the film start?", imgs:["clock8","clock830","clock9"], c:1}
         ]
       },
       {
-        id: "A2-2", title: "Audio set 2 · At school and around town", kind: "tts",
-        intro: "You will hear five more short conversations. Listen and answer.",
-        segments: ["Cinema tickets","A new teacher","Ordering a drink","First time at the gym","A birthday wish"],
+        id: "A2-P2", title: "Part 2 · Questions 6–10", kind: "tts",
+        intro: "You will hear a teacher telling students about a class trip. For each question, write the correct answer in the gap. Write one word or a number or a date or a time.",
         scripts: [
-          "Conversation one. Man: I would like a ticket for the film at seven o'clock, please. Woman: I am sorry, that showing is full. We have seats at eight fifteen. Man: OK, that is fine.",
-          "Conversation two. Girl: What is your new teacher like? Boy: She is great! She is very friendly, and she explains things clearly. She is much better than our old teacher.",
-          "Conversation three. Woman: Would you like tea or coffee? Man: Actually, could I just have a glass of water? I am really thirsty. Woman: Of course! With or without ice? Man: Without, please.",
-          "Conversation four. Man: I went to the gym yesterday for the first time. Woman: How was it? Man: It was hard! I am so tired today. My legs hurt. But I want to go again next week.",
-          "Conversation five. Boy: Mum, can I have a dog for my birthday? Woman: We already have two cats. I do not think we need another pet. Boy: Please! I will take care of it every day. Woman: Let me talk to your father about it."
+          "Listen to your teacher talking about the class trip. Teacher: Here are the details for our class trip to the city farm. The trip costs eight pounds. Please give your money to Mr Davies before Wednesday. We will leave school at nine o'clock in the morning, so don't be late. We are going to travel by train. Everyone must bring a packed lunch, and please wear warm clothes."
         ],
+        gapTitle: "Class Trip to the City Farm",
         questions: [
-          {type:"mc", q:"What time will the man see the film?", o:["Seven o'clock","Seven thirty","Eight fifteen"], c:2},
-          {type:"mc", q:"Why can't the man see the seven o'clock showing?", o:["It is too expensive","It is full","It is closed"], c:1},
-          {type:"mc", q:"What does the boy think of his new teacher?", o:["She is boring","She is strict","She is great and very good"], c:2},
-          {type:"mc", q:"What does the man want to drink?", o:["Tea","Coffee","A glass of water"], c:2},
-          {type:"mc", q:"How does the man feel today after the gym?", o:["Energetic","Tired with sore legs","Sick"], c:1},
-          {type:"mc", q:"What pets does the family already have?", o:["A dog","Two cats","A bird"], c:1},
-          {type:"mc", q:"Who will help decide about the dog?", o:["Only the mother","The father (mum will ask him)","The boy alone"], c:1},
-          {type:"tf", q:"The man originally wanted to see the film at seven o'clock.", c:true},
-          {type:"tf", q:"The boy thinks his new teacher is worse than the old one.", c:false},
-          {type:"tf", q:"The man asks for water without ice.", c:true},
-          {type:"tf", q:"The man does not want to go to the gym again.", c:false},
-          {type:"tf", q:"The boy promises to take care of the dog every day.", c:true},
-          {type:"inf", q:"Why is the seven o'clock showing probably full?", o:["The film is popular","The cinema is closed","Nobody likes the film"], c:0},
-          {type:"inf", q:"What can we infer about the boy at school?", o:["He probably enjoys his lessons more now","He wants to change schools","He hates the new teacher"], c:0},
-          {type:"inf", q:"At the gym, the man probably exercised…", o:["His legs (because they hurt)","His arms","His back"], c:0},
-          {type:"inf", q:"The mother's reaction to the dog is best described as…", o:["Excited and supportive","Hesitant but open to discussion","Completely against any pets"], c:1},
-          {type:"seq", q:"Put the topics in the order you heard them (1 = first):",
-            items:[
-              "Buying a cinema ticket",
-              "Talking about a new teacher",
-              "Choosing a drink",
-              "Talking about going to the gym"
-            ]}
+          {type:"gap", label:"Cost of trip: £ ____", accept:["8","eight"]},
+          {type:"gap", label:"Give money to: Mr ____", accept:["davies"]},
+          {type:"gap", label:"Leave school at: ____ a.m.", accept:["9","nine","9:00","9.00","9 o'clock","nine o'clock"]},
+          {type:"gap", label:"Travel by: ____", accept:["train","the train"]},
+          {type:"gap", label:"Bring: a packed ____", accept:["lunch"]}
         ]
       },
       {
-        id: "A2-3", title: "Audio set 3 · Shopping and free time", kind: "tts",
-        intro: "You will hear five short conversations. Listen carefully and answer the questions below.",
-        segments: ["Buying a T-shirt","A phone call","At the library","Weekend plans","Lost keys"],
+        id: "A2-P3", title: "Part 3 · Questions 11–15", kind: "tts",
+        intro: "You will hear Sara talking to her friend Leo about a trip to the beach. For each question, choose the correct answer (A, B or C).",
         scripts: [
-          "Conversation one. Woman: Can I help you? Man: Yes, I would like this T-shirt, but in blue. Woman: What size? Man: Medium, please. Woman: Here you are. That is ten pounds.",
-          "Conversation two. Girl: Hello? Boy: Hi, it's Tom. Do you want to play tennis this afternoon? Girl: Sorry, I can't. I have to study for my maths exam. Maybe tomorrow. Boy: OK, see you tomorrow.",
-          "Conversation three. Man: Excuse me, can I take these three books? Librarian: Yes, but you must bring them back in two weeks. Man: OK. Can I use the computer too? Librarian: Yes, the computers are upstairs.",
-          "Conversation four. Woman: What are you doing this weekend? Man: On Saturday I'm visiting my grandparents. On Sunday I want to go to the beach if the weather is good. Woman: That sounds nice.",
-          "Conversation five. Boy: Mum, I can't find my keys! Woman: Did you look in your school bag? Boy: Yes, they're not there. Woman: Look on the kitchen table. Boy: Oh, here they are! Thanks."
+          "Sara: Hi Leo, are you coming to the beach on Saturday? Leo: I'd love to, but I have a guitar lesson at ten o'clock. Maybe in the afternoon? Sara: Great, we'll go after lunch. How will you get there? Leo: My dad said he'll drive us. Sara: Perfect. Don't forget to bring sun cream — it's going to be really hot. Leo: I will. Should I bring some food too? Sara: No, my mum is making sandwiches for everyone."
         ],
         questions: [
-          {type:"mc", q:"What colour T-shirt does the man want?", o:["Red","Blue","Green"], c:1},
-          {type:"mc", q:"How much does the T-shirt cost?", o:["Five pounds","Ten pounds","Fifteen pounds"], c:1},
-          {type:"mc", q:"Why can't the girl play tennis this afternoon?", o:["She is tired","She has to study for an exam","She doesn't like tennis"], c:1},
-          {type:"mc", q:"How long can the man keep the library books?", o:["One week","Two weeks","One month"], c:1},
-          {type:"mc", q:"What is the man doing on Saturday?", o:["Going to the beach","Visiting his grandparents","Studying"], c:1},
-          {type:"mc", q:"Where are the boy's keys?", o:["In the school bag","On the kitchen table","In the bedroom"], c:1},
-          {type:"mc", q:"Where are the library computers?", o:["Upstairs","Downstairs","Outside"], c:0},
-          {type:"tf", q:"The man wants a small T-shirt.", c:false},
-          {type:"tf", q:"The boy and girl will maybe play tennis tomorrow.", c:true},
-          {type:"tf", q:"The man wants to go to the beach on Saturday.", c:false},
-          {type:"tf", q:"The boy found his keys in his school bag.", c:false},
-          {type:"tf", q:"The man can use a computer at the library.", c:true},
-          {type:"inf", q:"How does the girl probably feel about her exam?", o:["Relaxed","A little worried and busy","Bored"], c:1},
-          {type:"inf", q:"What can we infer about the man's weekend?", o:["He has plans for both days","He has no plans","He is working all weekend"], c:0},
-          {type:"inf", q:"How does the boy probably feel when he finds the keys?", o:["Happy and relieved","Angry","Sad"], c:0},
-          {type:"inf", q:"The man in the first conversation is probably…", o:["A customer","The shop owner","A librarian"], c:0},
-          {type:"seq", q:"In which order did you hear these topics? (1 = first)",
-            items:[
-              "Buying a T-shirt",
-              "A phone call about tennis",
-              "At the library",
-              "Talking about the weekend"
-            ]}
+          {type:"mc", q:"When will Leo go to the beach?", o:["In the morning","In the afternoon","On Sunday"], c:1},
+          {type:"mc", q:"Why can't Leo go earlier?", o:["He has a guitar lesson","He has to work","He feels ill"], c:0},
+          {type:"mc", q:"How will they travel to the beach?", o:["By bus","By car","By bike"], c:1},
+          {type:"mc", q:"What does Sara tell Leo to bring?", o:["Some food","Sun cream","A towel"], c:1},
+          {type:"mc", q:"Who is making the food?", o:["Sara's mum","Leo's dad","Nobody"], c:0}
         ]
       },
       {
-        id: "A2-4", title: "Audio set 4 · Around town and at home", kind: "tts",
-        intro: "You will hear five short conversations. Listen and answer the questions.",
-        segments: ["At the café","Asking the time","A doctor's appointment","Feeding the cat","Bus to the museum"],
+        id: "A2-P4", title: "Part 4 · Questions 16–20", kind: "tts",
+        intro: "You will hear a boy called Tom talking about his swimming club. For each question, choose the correct answer (A, B or C).",
         scripts: [
-          "Conversation one. Waiter: What would you like? Woman: A coffee and a piece of chocolate cake, please. Waiter: Anything else? Woman: No, thank you. How much is that? Waiter: Four pounds fifty.",
-          "Conversation two. Boy: Excuse me, what time is it? Man: It's half past three. Boy: Oh no, my bus leaves at twenty to four! Man: Don't worry, the bus stop is very near. You have time.",
-          "Conversation three. Receptionist: Good morning, Dr. Smith's clinic. Woman: Hello, I'd like an appointment, please. Receptionist: Can you come on Wednesday at four o'clock? Woman: Yes, that's fine. Thank you.",
-          "Conversation four. Man: Did you feed the cat this morning? Girl: No, I forgot. I was late for school. Man: That's OK, I'll do it now. Please remember tomorrow. Girl: Sorry, Dad. I will.",
-          "Conversation five. Woman: Which bus goes to the museum? Man: Take the number eight. It stops right in front of the museum. Woman: How long does it take? Man: About fifteen minutes."
+          "Tom: I joined the swimming club three months ago. At first it was difficult because I couldn't swim very well, but my coach is really patient, and now I love it. We train on Tuesdays and Thursdays after school. The best part is meeting new friends. My parents were worried it would take too much time, but my school marks are still good. Next month there's a competition, and I'm a bit nervous, but my coach says I'm ready."
         ],
         questions: [
-          {type:"mc", q:"What does the woman order at the café?", o:["Tea and cake","Coffee and chocolate cake","Coffee only"], c:1},
-          {type:"mc", q:"How much does she pay?", o:["Four pounds","Four pounds fifty","Five pounds"], c:1},
-          {type:"mc", q:"What time is it in conversation two?", o:["Half past three","Twenty to four","Four o'clock"], c:0},
-          {type:"mc", q:"When is the woman's doctor's appointment?", o:["Wednesday at four o'clock","Tuesday at four o'clock","Wednesday at three o'clock"], c:0},
-          {type:"mc", q:"Why didn't the girl feed the cat?", o:["She forgot because she was late","She doesn't like the cat","The cat wasn't hungry"], c:0},
-          {type:"mc", q:"Which bus goes to the museum?", o:["Number four","Number eight","Number fifteen"], c:1},
-          {type:"mc", q:"How long does the bus take to the museum?", o:["Five minutes","Fifteen minutes","Fifty minutes"], c:1},
-          {type:"tf", q:"The woman wants something else after the cake.", c:false},
-          {type:"tf", q:"The boy's bus leaves at twenty to four.", c:true},
-          {type:"tf", q:"The woman's appointment is on Wednesday.", c:true},
-          {type:"tf", q:"The father will feed the cat now.", c:true},
-          {type:"tf", q:"The bus stops far from the museum.", c:false},
-          {type:"inf", q:"How does the boy in conversation two probably feel?", o:["Worried at first, then calmer","Very happy","Angry"], c:0},
-          {type:"inf", q:"What can we infer about the girl in conversation four?", o:["She was in a hurry this morning","She hates the cat","She is never late"], c:0},
-          {type:"inf", q:"The woman calling the clinic probably…", o:["Is not feeling well or needs a check-up","Wants a job","Is the doctor"], c:0},
-          {type:"inf", q:"The man giving bus information is probably…", o:["Helpful and knows the area","Lost","The bus driver"], c:0},
-          {type:"seq", q:"Put the topics in the order you heard them (1 = first):",
-            items:[
-              "Ordering at a café",
-              "Asking the time",
-              "Making a doctor's appointment",
-              "Talking about feeding the cat"
-            ]}
+          {type:"mc", q:"How long ago did Tom join the club?", o:["One month","Three months","One year"], c:1},
+          {type:"mc", q:"What does Tom say about the beginning?", o:["It was easy","It was difficult","It was boring"], c:1},
+          {type:"mc", q:"When does the club train?", o:["Mondays and Fridays","Tuesdays and Thursdays","Every day"], c:1},
+          {type:"mc", q:"What does Tom like best?", o:["Winning races","Meeting new friends","The warm pool"], c:1},
+          {type:"mc", q:"How does Tom feel about the competition?", o:["Very confident","A bit nervous","Not interested"], c:1}
         ]
       },
       {
-        id: "A2-5", title: "Audio set 5 · School and travel", kind: "tts",
-        intro: "You will hear five short conversations. Listen and answer the questions.",
-        segments: ["Homework problem","Booking a hotel room","A birthday present","Missing the train","Weather and clothes"],
+        id: "A2-P5", title: "Part 5 · Questions 21–25", kind: "tts",
+        intro: "You will hear Mia talking to a friend about a class party. What will each person bring? For each question, choose the correct answer.",
+        bank: ["cake","drinks","music","decorations","plates","games","balloons"],
         scripts: [
-          "Conversation one. Girl: I don't understand this homework. Boy: Which subject? Girl: Science. Question four is very difficult. Boy: Ask the teacher tomorrow. She always explains things well. Girl: Good idea.",
-          "Conversation two. Receptionist: Sunshine Hotel, can I help you? Man: Yes, I'd like a room for two nights, please. Receptionist: For how many people? Man: Two adults. Receptionist: That is eighty pounds a night.",
-          "Conversation three. Woman: It's Grandma's birthday next week. What can we buy her? Girl: She loves reading. Let's buy her a book. Woman: Good idea. And some flowers too. Girl: She'll be very happy.",
-          "Conversation four. Man: We missed the train! Woman: What time is the next one? Man: In forty minutes, at half past two. Woman: Let's get a coffee while we wait. Man: OK, there's a café over there.",
-          "Conversation five. Boy: Is it cold outside? Mum: Yes, and it's going to rain this afternoon. Take your jacket and an umbrella. Boy: OK. Can I wear my new boots? Mum: Yes, that's a good idea."
+          "Mia: Everyone is helping with our class party. Anna is bringing the music, because she has really good speakers. Ben said he'll make a big cake. Carla is going to bring the drinks. David is great at art, so he's making the decorations. And Emma will bring some games, so nobody gets bored."
         ],
         questions: [
-          {type:"mc", q:"Which subject is the girl's difficult homework?", o:["Maths","Science","English"], c:1},
-          {type:"mc", q:"What does the boy suggest?", o:["Ask the teacher tomorrow","Copy his homework","Forget about it"], c:0},
-          {type:"mc", q:"How many nights does the man want the hotel room?", o:["One","Two","Three"], c:1},
-          {type:"mc", q:"How much is the room per night?", o:["Eighty pounds","Eighteen pounds","Eight pounds"], c:0},
-          {type:"mc", q:"What will they buy Grandma?", o:["A book and flowers","A cake","A jacket"], c:0},
-          {type:"mc", q:"When is the next train?", o:["At two o'clock","At half past two","In four minutes"], c:1},
-          {type:"mc", q:"What should the boy take because of the weather?", o:["A jacket and an umbrella","Only a hat","Sunglasses"], c:0},
-          {type:"tf", q:"The girl understands her science homework.", c:false},
-          {type:"tf", q:"The hotel room is for two adults.", c:true},
-          {type:"tf", q:"They will also buy flowers for Grandma.", c:true},
-          {type:"tf", q:"The next train is in forty minutes.", c:true},
-          {type:"tf", q:"It is going to be sunny in the afternoon.", c:false},
-          {type:"inf", q:"How does the girl in conversation one probably feel?", o:["A bit confused now, but hopeful","Very confident","Bored"], c:0},
-          {type:"inf", q:"What can we infer about how they see their teacher?", o:["Helpful","Unfair","Strict"], c:0},
-          {type:"inf", q:"The man and woman who missed the train will probably…", o:["Wait in a café","Go home","Take a taxi"], c:0},
-          {type:"inf", q:"The mother in conversation five is mainly…", o:["Giving advice about the weather","Angry with the boy","Talking about school"], c:0},
-          {type:"seq", q:"In which order did you hear these topics? (1 = first)",
-            items:[
-              "A problem with homework",
-              "Booking a hotel room",
-              "Choosing a birthday present",
-              "Missing the train"
-            ]}
+          {type:"match", person:"Anna", c:"music"},
+          {type:"match", person:"Ben", c:"cake"},
+          {type:"match", person:"Carla", c:"drinks"},
+          {type:"match", person:"David", c:"decorations"},
+          {type:"match", person:"Emma", c:"games"}
         ]
       }
     ]
