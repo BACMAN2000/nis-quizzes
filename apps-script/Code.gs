@@ -1,170 +1,155 @@
 /**
  * NIS English Quizzes — Google Apps Script Web App (doPost endpoint)
  * ------------------------------------------------------------------
- * ONE script for all three quizzes. It auto-detects the input format and the
- * skill, then stores each submission in a SEPARATE TAB:
- *   • "Reading"   — auto-marked reading score + every answer
- *   • "Listening" — auto-marked listening score + every answer
- *   • "Writing"   — one row per writing task (full text + word count + provisional ref)
+ * Drop-in replacement for the existing "Reading Test" script. It keeps your
+ * current columns and adds two things you asked for:
+ *   1) an "Answers" column (every answer the student gave), and
+ *   2) a separate "Writing" tab (full writing text + word count + a provisional
+ *      auto-estimate you verify by hand).
  *
- * It handles BOTH ways the quizzes send data:
- *   • Reading / Writing → fetch() with a JSON body  (e.postData.contents)
- *   • Listening         → hidden-form POST           (e.parameter.data)
+ * Tabs created automatically:
+ *   • "Reading"   — score + stats (Strongest/Weakest/Verdict) + Answers
+ *   • "Listening" — same layout (if you also paste this in the Listening sheet)
+ *   • "Writing"   — one row per writing task
  *
- * A Reading exam that includes A2 Writing Parts 6/7 writes the score to the
- * "Reading" tab AND the writing answers to the "Writing" tab automatically.
+ * Works with BOTH ways the quizzes send data:
+ *   • Reading / Writing → fetch() JSON body  (e.postData.contents)
+ *   • Listening         → hidden-form POST    (e.parameter.data)
  *
- * DEPLOY (once per spreadsheet — do it on BOTH the Reading/Writing sheet and the
- * Listening sheet, since each quiz family points at its own Web App URL):
- *   1. Open the Google Sheet → Extensions → Apps Script.
- *   2. Replace the code with this file, Save.
- *   3. Deploy → Manage deployments → edit the existing Web App deployment →
- *      Version: "New version" → Deploy.  (Same /exec URL — nothing to change in
- *      the quiz pages.)  Execute as: Me.  Who has access: Anyone.
+ * NOTE on tabs: your old data stays in the "Resultados" tab untouched. New
+ * Reading submissions go to the new "Reading" tab (with the Answers column).
+ * If you'd rather keep writing into "Resultados", change READING_TAB below to
+ * "Resultados" (but then add an "Answers" header to that sheet yourself).
  *
- * Because you open Apps Script FROM the sheet, the script is bound to it and
- * SPREADSHEET_ID can stay ''.
+ * DEPLOY: paste this over Código.gs → Save → Implementar (Deploy) →
+ * Administrar implementaciones → edit the Web App → Nueva versión → Implementar.
+ * Same /exec URL, so nothing changes in the quiz pages.
  */
 
-var TEACHER_EMAIL  = 'pbaca@nordic-school.edu.pe'; // set '' to disable emails
-var SEND_EMAIL     = true;
-var SPREADSHEET_ID = '';   // leave '' when the script is bound to the Sheet
+var TEACHER_EMAIL = 'pbaca@nordic-school.edu.pe';  // '' to disable emails
+var SCHOOL_NAME   = 'NIS English';
+var SEND_EMAIL    = true;
+
+var READING_TAB   = 'Reading';
+var LISTENING_TAB = 'Listening';
+var WRITING_TAB   = 'Writing';
 
 function doGet() {
-  return ContentService
-    .createTextOutput(JSON.stringify({ ok: true, service: 'NIS Quizzes endpoint' }))
-    .setMimeType(ContentService.MimeType.JSON);
+  return json_({ ok: true, service: 'NIS Quizzes endpoint' });
 }
 
 function doPost(e) {
   try {
     var data  = parseInput_(e);
-    var ss    = SPREADSHEET_ID ? SpreadsheetApp.openById(SPREADSHEET_ID)
-                               : SpreadsheetApp.getActiveSpreadsheet();
     var skill = data.skill || (data.breakdown ? 'Listening' : 'Reading');
 
     if (skill === 'Writing') {
-      writeWritingRows_(ss, data, 'Writing Quiz');
+      writeWritingRows_(data, 'Writing Quiz');
     } else {
-      writeScoreRow_(ss, skill, data);
+      writeScoreRow_(skill === 'Listening' ? LISTENING_TAB : READING_TAB, data);
       var w = data.writingEvaluation || data.writingAnswers || [];
-      if (w.length) writeWritingRows_(ss, data, skill + ' (Parts 6–7)');
+      if (w.length) writeWritingRows_(data, skill + ' (Parts 6–7)');  // A2 reading has writing
     }
 
-    if (SEND_EMAIL && TEACHER_EMAIL) { try { sendEmail_(skill, data); } catch (_) {} }
-
-    return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-      .setMimeType(ContentService.MimeType.JSON);
+    if (SEND_EMAIL && TEACHER_EMAIL) { try { sendEmails(data, skill); } catch (_) {} }
+    return json_({ ok: true });
   } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return json_({ ok: false, error: String(err && err.message || err) });
   }
 }
 
-/* Accept JSON body (fetch) OR form field "data" (hidden-form POST). */
+/* Accept a JSON body (fetch) OR a form field "data" (hidden-form POST). */
 function parseInput_(e) {
-  if (e && e.postData && e.postData.contents) {
-    try { return JSON.parse(e.postData.contents); } catch (_) {}
-  }
-  if (e && e.parameter && e.parameter.data) {
-    try { return JSON.parse(e.parameter.data); } catch (_) {}
-  }
+  if (e && e.postData && e.postData.contents) { try { return JSON.parse(e.postData.contents); } catch (_) {} }
+  if (e && e.parameter && e.parameter.data)   { try { return JSON.parse(e.parameter.data); } catch (_) {} }
   return {};
 }
 
-/* ---------- Reading / Listening: one row with score, stats AND all answers ---------- */
-function writeScoreRow_(ss, skill, d) {
-  var headers = ['Timestamp', 'Name', 'Grade/Class', 'Email', 'Level', 'Exam',
-                 'Score', 'Total', 'Percent', 'CEFR', 'Minutes', 'Tab switches',
-                 'By part', 'Strong (≥75%)', 'Weak (<50%)', 'Answers'];
-  var sheet = getOrCreateTab_(ss, skill, headers);
+/* ---------- Reading / Listening: keeps your columns, adds Answers ---------- */
+function writeScoreRow_(tabName, d) {
+  var headers = ['Timestamp', 'Student', 'Email', 'Grade', 'Level', 'Level name',
+                 'Exam', 'Score', 'Total', '%', 'CEFR', 'Duration (min)',
+                 'Strongest', 'Weakest', 'Verdict', 'Answers'];
+  var sh = getSheet_(tabName, headers);
 
-  var grade   = d.grade || d.klass || '';
-  var minutes = d.durationMinutes || d.elapsed_min || '';
-  var pct     = (d.percent != null) ? d.percent
-              : (d.total ? Math.round(d.score / d.total * 100) : '');
+  var grade    = d.grade || d.klass || '';
+  var minutes  = d.durationMinutes || d.elapsed_min || '';
+  var pct      = (d.percent != null) ? d.percent : (d.total ? Math.round(d.score / d.total * 100) : '');
 
-  // Per-part stats + strengths / weaknesses (from the "parts" array)
-  var byPart = '', strong = '', weak = '';
+  // Strongest / Weakest single part (by %), from the parts array
+  var strongest = '', weakest = '';
   if (d.parts && d.parts.length) {
-    byPart = d.parts.map(function (p) { return p.name + ': ' + p.pct + '%'; }).join('  |  ');
-    strong = d.parts.filter(function (p) { return p.pct >= 75; }).map(function (p) { return p.name; }).join(', ');
-    weak   = d.parts.filter(function (p) { return p.pct < 50;  }).map(function (p) { return p.name; }).join(', ');
-  } else if (d.breakdown) {
-    byPart = JSON.stringify(d.breakdown);
+    var sorted = d.parts.slice().sort(function (a, b) { return b.pct - a.pct; });
+    strongest = sorted[0].name + ' (' + sorted[0].pct + '%)';
+    weakest   = sorted[sorted.length - 1].name + ' (' + sorted[sorted.length - 1].pct + '%)';
   }
 
-  // Every answer the student gave
+  // Every answer
   var answers = '';
-  if (d.detail && d.detail.length) {                 // Reading quiz format
+  if (d.detail && d.detail.length) {
     answers = d.detail.map(function (q) {
       return 'Q' + q.q + ': ' + stripHtml_(q.user) +
              ' (correct: ' + stripHtml_(q.correctAns) + ') ' + (q.ok ? '✓' : '✗');
     }).join('  |  ');
-  } else if (d.answers) {                            // Listening quiz format (object)
-    answers = JSON.stringify(d.answers);
+  } else if (d.answers) {
+    answers = JSON.stringify(d.answers);  // listening stores its answers object
   }
 
-  sheet.appendRow([
-    new Date(), d.name || '', grade, d.email || '', d.level || '',
-    d.examTitle || d.examType || skill,
-    d.score, d.total, (pct !== '' ? pct + '%' : ''), d.cefrLabel || '',
-    minutes, d.tabSwitches || 0, byPart, strong, weak, answers
+  sh.appendRow([
+    new Date(), d.name || '', d.email || '', grade, d.level || '', d.levelName || '',
+    d.examTitle || d.examType || tabName, d.score, d.total,
+    (pct !== '' ? pct + '%' : ''), d.cefrLabel || '', minutes,
+    strongest, weakest, d.verdict || '', answers
   ]);
 }
 
-/* ---------- Writing: one row per task (full text persisted) ---------- */
-function writeWritingRows_(ss, d, sourceLabel) {
-  var headers = ['Timestamp', 'Name', 'Grade/Class', 'Email', 'Level', 'Source',
+/* ---------- Writing: one row per task, full text persisted ---------- */
+function writeWritingRows_(d, sourceLabel) {
+  var headers = ['Timestamp', 'Student', 'Email', 'Grade', 'Level', 'Source',
                  'Task', 'Words', 'Answer', 'Provisional band (auto — verify by hand)', 'Auto notes'];
-  var sheet = getOrCreateTab_(ss, 'Writing', headers);
+  var sh = getSheet_(WRITING_TAB, headers);
   var grade = d.grade || d.klass || '';
   var tasks = d.writingEvaluation || d.writingAnswers || [];
   tasks.forEach(function (t) {
-    var band = (t.provisionalBand != null ? t.provisionalBand
-              : t.band != null ? t.band : '');
-    sheet.appendRow([
-      new Date(), d.name || '', grade, d.email || '', d.level || '', sourceLabel,
+    var band = (t.provisionalBand != null ? t.provisionalBand : t.band != null ? t.band : '');
+    sh.appendRow([
+      new Date(), d.name || '', d.email || '', grade, d.level || '', sourceLabel,
       t.part || t.label || t.prompt || '', t.wordCount || '',
       (t.text || ''), (band !== '' ? band + ' / 5' : ''), (t.feedback || '')
     ]);
   });
 }
 
-/* ---------- helpers ---------- */
-function getOrCreateTab_(ss, name, headers) {
-  var sheet = ss.getSheetByName(name);
-  if (!sheet) {
-    sheet = ss.insertSheet(name);
-    sheet.appendRow(headers);
-    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-    sheet.setFrozenRows(1);
-  }
-  return sheet;
-}
-
-function stripHtml_(s) {
-  return String(s == null ? '' : s).replace(/<[^>]*>/g, '').trim();
-}
-
-function sendEmail_(skill, d) {
+/* ---------- email (teacher) ---------- */
+function sendEmails(d, skill) {
   var grade = d.grade || d.klass || '';
-  var subject = '[NIS ' + skill + '] ' + (d.name || 'Student') + ' — ' + (d.level || '');
-  var lines = [
-    'Student: ' + (d.name || ''),
-    'Grade/Class: ' + grade,
-    'Level: ' + (d.level || ''),
-    'Exam: '  + (d.examTitle || d.examType || skill)
-  ];
-  if (skill !== 'Writing' && d.score != null) {
-    lines.push('Score: ' + d.score + ' / ' + d.total);
-  }
+  var subject = '[' + SCHOOL_NAME + ' · ' + skill + '] ' + (d.name || 'Student') + ' — ' + (d.level || '');
+  var lines = ['Student: ' + (d.name || ''), 'Grade: ' + grade, 'Level: ' + (d.level || ''),
+               'Exam: ' + (d.examTitle || d.examType || skill)];
+  if (skill !== 'Writing' && d.score != null) lines.push('Score: ' + d.score + ' / ' + d.total);
   var tasks = d.writingEvaluation || d.writingAnswers || [];
   if (tasks.length) {
     lines.push('', '--- Writing (mark by hand) ---');
     tasks.forEach(function (t) {
-      lines.push('', (t.part || t.label || '') + '  [' + (t.wordCount || 0) + ' words]:', (t.text || '(blank)'));
+      lines.push('', (t.part || t.label || '') + ' [' + (t.wordCount || 0) + ' words]:', (t.text || '(blank)'));
     });
   }
   MailApp.sendEmail(TEACHER_EMAIL, subject, lines.join('\n'));
+}
+
+/* ---------- helpers ---------- */
+function getSheet_(name, headers) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(name);
+  if (!sh) {
+    sh = ss.insertSheet(name);
+    sh.getRange(1, 1, 1, headers.length).setValues([headers])
+      .setBackground('#0f766e').setFontColor('#ffffff').setFontWeight('bold').setHorizontalAlignment('center');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+function stripHtml_(s) { return String(s == null ? '' : s).replace(/<[^>]*>/g, '').trim(); }
+function json_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
