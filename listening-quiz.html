@@ -96,6 +96,15 @@
   }
   .opt:hover{background:var(--soft)}
   .opt input{margin-top:3px}
+  /* Part 1 picture options (choose the correct image) */
+  .pic-opts{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+  .pic-opt{flex-direction:column; align-items:center; gap:8px; text-align:center}
+  .pic-opt .pic{display:block; width:100%}
+  .pic-opt .pic svg{width:100%; height:auto; background:#fff; border-radius:8px}
+  @media(max-width:560px){.pic-opts{grid-template-columns:1fr}}
+  /* Gap-fill input + matching select */
+  .gapinput{width:100%; max-width:340px; padding:9px 12px; border:1px solid var(--line); border-radius:10px; font-size:1rem}
+  .matchsel{padding:9px 12px; border:1px solid var(--line); border-radius:10px; font-size:1rem; min-width:200px}
   .seqlist{display:grid; gap:6px}
   .seqitem{display:flex; gap:10px; align-items:center; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:#fff}
   .seqitem select{padding:6px 10px; border:1px solid var(--line); border-radius:8px; font:inherit}
@@ -150,6 +159,31 @@ const CONFIG = {
             KET = A2 official, PET = B1 official. No mp3 file needed.
    B2 & C1: real TOEFL mp3 audio files in ./mp3/
    ======================================================================== */
+
+/* Simple original SVG icons for A2/B1 Part 1 "choose the picture" questions.
+   Self-contained (no external/licensed images). Swap for nicer art anytime. */
+const LPIC_WRAP = (inner) => `<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" stroke="#1f2937" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+function clockFace_(hx, hy, mx, my){ return LPIC_WRAP(`<circle cx="60" cy="50" r="34"/><circle cx="60" cy="50" r="2.5" fill="#1f2937"/><line x1="60" y1="50" x2="${hx}" y2="${hy}"/><line x1="60" y1="50" x2="${mx}" y2="${my}"/>`); }
+const LPICS = {
+  book:    LPIC_WRAP(`<path d="M30 28 q30 -8 60 0 v44 q-30 -8 -60 0 z"/><line x1="60" y1="24" x2="60" y2="72"/>`),
+  ball:    LPIC_WRAP(`<circle cx="60" cy="52" r="26"/><path d="M40 44 q20 12 40 0"/><path d="M44 66 q16 -10 32 0"/>`),
+  cake:    LPIC_WRAP(`<rect x="36" y="46" width="48" height="28" rx="3"/><path d="M36 56 q12 8 24 0 q12 8 24 0"/><line x1="60" y1="30" x2="60" y2="46"/><circle cx="60" cy="28" r="3" fill="#f59e0b" stroke="none"/>`),
+  park:    LPIC_WRAP(`<line x1="20" y1="78" x2="100" y2="78"/><polygon points="42,40 30,66 54,66" fill="#dcfce7"/><line x1="42" y1="66" x2="42" y2="78"/><circle cx="78" cy="44" r="12" fill="#dcfce7"/><line x1="78" y1="56" x2="78" y2="78"/>`),
+  cafe:    LPIC_WRAP(`<path d="M38 46 h34 v14 a17 17 0 0 1 -34 0 z"/><path d="M72 50 h8 a6 6 0 0 1 0 12 h-8"/><line x1="44" y1="34" x2="44" y2="42"/><line x1="56" y1="34" x2="56" y2="42"/>`),
+  library: LPIC_WRAP(`<rect x="34" y="34" width="9" height="40"/><rect x="45" y="34" width="9" height="40"/><rect x="58" y="38" width="9" height="36"/><rect x="70" y="34" width="14" height="40"/><line x1="72" y1="34" x2="78" y2="40"/>`),
+  sunny:   LPIC_WRAP(`<circle cx="60" cy="50" r="16" fill="#fde68a"/><g><line x1="60" y1="20" x2="60" y2="28"/><line x1="60" y1="72" x2="60" y2="80"/><line x1="30" y1="50" x2="38" y2="50"/><line x1="82" y1="50" x2="90" y2="50"/><line x1="39" y1="29" x2="44" y2="34"/><line x1="76" y1="66" x2="81" y2="71"/><line x1="81" y1="29" x2="76" y2="34"/><line x1="44" y1="66" x2="39" y2="71"/></g>`),
+  rainy:   LPIC_WRAP(`<path d="M40 50 a14 14 0 0 1 28 -4 a11 11 0 0 1 4 21 h-30 a11 11 0 0 1 -2 -17" fill="#e0f2fe"/><line x1="44" y1="74" x2="40" y2="84"/><line x1="58" y1="74" x2="54" y2="84"/><line x1="72" y1="74" x2="68" y2="84"/>`),
+  snowy:   LPIC_WRAP(`<path d="M40 50 a14 14 0 0 1 28 -4 a11 11 0 0 1 4 21 h-30 a11 11 0 0 1 -2 -17" fill="#eef6ff"/><circle cx="44" cy="80" r="2" fill="#1f2937" stroke="none"/><circle cx="58" cy="80" r="2" fill="#1f2937" stroke="none"/><circle cx="72" cy="80" r="2" fill="#1f2937" stroke="none"/>`),
+  keys:    LPIC_WRAP(`<circle cx="46" cy="44" r="12"/><line x1="54" y1="52" x2="80" y2="78"/><line x1="70" y1="68" x2="78" y2="60"/><line x1="76" y1="74" x2="84" y2="66"/>`),
+  phone:   LPIC_WRAP(`<rect x="46" y="26" width="28" height="48" rx="5"/><line x1="46" y1="36" x2="74" y2="36"/><line x1="46" y1="64" x2="74" y2="64"/><circle cx="60" cy="69" r="1.6" fill="#1f2937" stroke="none"/>`),
+  umbrella:LPIC_WRAP(`<path d="M34 52 a26 26 0 0 1 52 0 z" fill="#e0f2fe"/><line x1="60" y1="52" x2="60" y2="80"/><path d="M60 80 q0 8 8 8"/>`),
+  clock8:   clockFace_(60, 32, 42, 60),   // ~8:00
+  clock830: clockFace_(48, 50, 60, 72),   // ~8:30
+  clock9:   clockFace_(60, 32, 78, 50)    // ~9:00
+};
+// Normalize a free-text gap answer for comparison
+function gapNorm_(s){ return String(s == null ? '' : s).toLowerCase().trim().replace(/[.,;:!?'"]/g, '').replace(/\s+/g, ' '); }
+
 const QUIZ = {
 
   /* ---------------- A2 — Cambridge KET (A2-calibrated) ---------------- */
@@ -1286,6 +1320,27 @@ function renderQuestions(audio, container){
         </div>
         <div class="hint">Asigna 1, 2, 3, 4 según el orden en que ocurrieron.</div>`;
     }
+    else if(q.type==="pic"){
+      el.innerHTML = `
+        <div class="meta"><span class="pill">Imagen</span> <span>Pregunta ${qi+1}</span></div>
+        <div class="stem">${q.q}</div>
+        <div class="opts pic-opts" data-key="${key}">
+          ${q.imgs.map((k,oi)=>`<label class="opt pic-opt"><input type="radio" name="${key}" value="${oi}"><span class="pic">${LPICS[k]||''}</span></label>`).join("")}
+        </div>`;
+    }
+    else if(q.type==="gap"){
+      el.innerHTML = `
+        <div class="meta"><span class="pill">Completar</span> <span>Pregunta ${qi+1}</span></div>
+        <div class="stem">${q.label||q.q||""}</div>
+        <div class="gapwrap" data-key="${key}"><input type="text" class="gapinput" autocomplete="off" placeholder="una palabra, número, fecha u hora"></div>`;
+    }
+    else if(q.type==="match"){
+      const bank = audio.bank || [];
+      el.innerHTML = `
+        <div class="meta"><span class="pill">Emparejar</span> <span>Pregunta ${qi+1}</span></div>
+        <div class="stem">${q.person}</div>
+        <select class="matchsel" data-key="${key}"><option value="">— elige —</option>${bank.map(b=>`<option value="${b}">${b}</option>`).join("")}</select>`;
+    }
     container.appendChild(el);
   });
 
@@ -1314,6 +1369,14 @@ function renderQuestions(audio, container){
       updateProgress();
     });
   });
+  container.querySelectorAll('.gapwrap input').forEach(inp=>{
+    const key = inp.closest('.gapwrap').dataset.key;
+    inp.addEventListener("input", ()=>{ state.answers[key] = inp.value; updateProgress(); });
+  });
+  container.querySelectorAll('.matchsel').forEach(sel=>{
+    const key = sel.dataset.key;
+    sel.addEventListener("change", ()=>{ state.answers[key] = sel.value; updateProgress(); });
+  });
 }
 
 function updateProgress(){
@@ -1331,7 +1394,8 @@ function updateProgress(){
         }
       } else {
         pointsTotal++;
-        if(state.answers[key]!==undefined) pointsAnswered++;
+        var _av = state.answers[key];
+        if(_av!==undefined && _av!=="") pointsAnswered++;
       }
     });
   });
@@ -1375,6 +1439,27 @@ function computeScore(){
           breakdown.push({audio:a.title, type:"seq", q:`${q.q} → "${q.items[origIdx]}"`, given:givenNumber==null?"(sin responder)":String(givenNumber), correct:String(correctNumber), ok});
         });
       }
+      else if(q.type==="pic"){
+        total++;
+        const given = state.answers[key];
+        const ok = given === q.c;
+        if(ok) correct++;
+        breakdown.push({audio:a.title, type:"pic", q:q.q, given:given==null?"(sin responder)":("Imagen "+(given+1)), correct:"Imagen "+(q.c+1), ok});
+      }
+      else if(q.type==="gap"){
+        total++;
+        const given = state.answers[key];
+        const ok = (q.accept||[]).some(x=>gapNorm_(x)===gapNorm_(given));
+        if(ok) correct++;
+        breakdown.push({audio:a.title, type:"gap", q:q.label||q.q||"", given:(given==null||given==="")?"(sin responder)":given, correct:(q.accept||[]).join(" / "), ok});
+      }
+      else if(q.type==="match"){
+        total++;
+        const given = state.answers[key];
+        const ok = given === q.c;
+        if(ok) correct++;
+        breakdown.push({audio:a.title, type:"match", q:q.person, given:(given==null||given==="")?"(sin responder)":given, correct:q.c, ok});
+      }
     });
   });
   return {total, correct, breakdown};
@@ -1390,7 +1475,7 @@ function onSubmit(){
       const ans = state.answers[key] || {};
       const shown = state.seqOrder[key] || [];
       shown.forEach((_,pos)=>{ if(ans[pos]==null) unanswered++; });
-    } else if(state.answers[key]===undefined) unanswered++;
+    } else { var _v = state.answers[key]; if(_v===undefined || _v==="") unanswered++; }
   }));
   if(unanswered>0){
     if(!confirm(`Tienes ${unanswered} ítems sin responder. ¿Enviar de todas formas?`)) return;
