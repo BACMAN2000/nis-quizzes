@@ -120,6 +120,10 @@
   .ins-arrows button{background:#4987c6; color:#fff; border:none; padding:9px 16px; border-radius:8px; font-weight:700; cursor:pointer; min-width:46px}
   .ins-arrows button:disabled{background:#cbd5e1; cursor:not-allowed}
   .ins-content .q{background:#fafafa; border:1px solid #e2e8f0; border-radius:10px; padding:14px 18px; margin:12px 0; border-top:1px solid #e2e8f0}
+  .ins-content .paged-q{display:none}
+  .ins-content .paged-q.show{display:block}
+  .q-audio{margin:0 0 12px}
+  .q-audio audio{width:100%}
   .q-flash{animation:lqflash 1.2s ease}
   @keyframes lqflash{0%{box-shadow:0 0 0 3px #fcd34d}100%{box-shadow:0 0 0 3px transparent}}
   /* ===== Sign-in / level screens (match Reading/Writing) ===== */
@@ -251,8 +255,8 @@ const QUIZ = {
     blurb: "5 partes, 25 preguntas: imágenes, completar, opción múltiple y emparejar.",
     audios: [
       {
-        id: "A2-P1", title: "Part 1 · Questions 1–5", kind: "file", file: "A2/A2-P1.mp3",
-        intro: "For each question, choose the correct answer (A, B or C). You will hear five short conversations.",
+        id: "A2-P1", title: "Part 1 · Questions 1–5", kind: "file", paged: true,
+        intro: "For each question, choose the correct answer (A, B or C). You will hear five short conversations. Use the arrow ▶ or the numbers below to move to the next conversation.",
         segments: ["A birthday present","Meeting on Saturday","The weather","A lost thing","The film time"],
         scripts: [
           "Question one. Girl: What did you get Mum for her birthday? Boy: I wanted to buy her a book, but in the end I made her a chocolate cake. She loved it.",
@@ -262,11 +266,11 @@ const QUIZ = {
           "Question five. Boy: What time does the film start? Girl: At half past eight, not eight o'clock. Boy: Good, then we have time for dinner first."
         ],
         questions: [
-          {type:"pic", q:"What did the boy give his mum?", imgs:["book","ball","cake"], c:2},
-          {type:"pic", q:"Where will they meet on Saturday?", imgs:["park","cafe","library"], c:0},
-          {type:"pic", q:"What's the weather like now?", imgs:["sunny","rainy","snowy"], c:1},
-          {type:"pic", q:"What did the girl lose?", imgs:["keys","phone","umbrella"], c:1},
-          {type:"pic", q:"What time does the film start?", imgs:["clock8","clock830","clock9"], c:1}
+          {type:"pic", q:"What did the boy give his mum?", imgs:["book","ball","cake"], c:2, audio:"A2/A2-P1-q1.mp3"},
+          {type:"pic", q:"Where will they meet on Saturday?", imgs:["park","cafe","library"], c:0, audio:"A2/A2-P1-q2.mp3"},
+          {type:"pic", q:"What's the weather like now?", imgs:["sunny","rainy","snowy"], c:1, audio:"A2/A2-P1-q3.mp3"},
+          {type:"pic", q:"What did the girl lose?", imgs:["keys","phone","umbrella"], c:1, audio:"A2/A2-P1-q4.mp3"},
+          {type:"pic", q:"What time does the film start?", imgs:["clock8","clock830","clock9"], c:1, audio:"A2/A2-P1-q5.mp3"}
         ]
       },
       {
@@ -1108,11 +1112,11 @@ function viewQuiz(){
   const paneHTML = lev.audios.map((a,i)=>{
     const info = pInfo[i];
     const range = info.count>1 ? `${info.start}–${info.start+info.count-1}` : `${info.start}`;
-    const player = (a.kind==='tts') ? renderTTSPlayer(a)
-      : `<audio controls preload="none" src="${CONFIG.AUDIO_BASE}${a.file}"></audio>`;
+    const playerBlock = a.paged ? ''
+      : `<div class="ins-player">${(a.kind==='tts') ? renderTTSPlayer(a) : `<audio controls preload="none" src="${CONFIG.AUDIO_BASE}${a.file}"></audio>`}</div>`;
     return `<section class="ins-pane${i===0?' active':''}" data-part="${i}">
       <div class="ins-instr"><strong>Questions ${range}</strong><p>${a.intro||''}</p></div>
-      <div class="ins-player">${player}</div>
+      ${playerBlock}
       <div class="ins-content" id="qs-${a.id}"></div>
     </section>`;
   }).join('');
@@ -1149,27 +1153,42 @@ function viewQuiz(){
 
   lev.audios.forEach(a=>{ if(a.kind==='tts') bindTTSPlayer(a); renderQuestions(a, $(`#qs-${a.id}`)); });
 
-  window._lShowPart = function(i){
-    const n = lev.audios.length;
-    i = Math.max(0, Math.min(n-1, i)); state.curPart = i;
-    document.querySelectorAll('.ins-pane').forEach((p,k)=>p.classList.toggle('active', k===i));
-    document.querySelectorAll('.ins-tab').forEach((t,k)=>t.classList.toggle('active', k===i));
-    const pv=$('#lprev'), nx=$('#lnext'); if(pv) pv.disabled=(i===0); if(nx) nx.disabled=(i===n-1);
+  // Views: paged parts expose one view per question; other parts one view each.
+  const views = [];
+  lev.audios.forEach((a,pi)=>{ if(a.paged){ a.questions.forEach((q,qi)=>views.push({part:pi,q:qi})); } else views.push({part:pi,q:null}); });
+  state.curView = 0;
+  function pauseAllAudio(){ document.querySelectorAll('.ins-shell audio').forEach(a=>{ try{a.pause();}catch(e){} }); try{ TTS.stop(); }catch(e){} }
+
+  window._lGoView = function(vi, autoplay){
+    const n = views.length; vi = Math.max(0, Math.min(n-1, vi)); state.curView = vi;
+    const v = views[vi], part = v.part;
+    document.querySelectorAll('.ins-pane').forEach((p,k)=>p.classList.toggle('active', k===part));
+    document.querySelectorAll('.ins-tab').forEach((t,k)=>t.classList.toggle('active', k===part));
+    pauseAllAudio();
+    document.querySelectorAll('.lqn.cur').forEach(b=>b.classList.remove('cur'));
+    const pane = document.querySelector('.ins-pane[data-part="'+part+'"]');
+    if(lev.audios[part].paged){
+      const qs = pane.querySelectorAll('.paged-q');
+      qs.forEach((el,qi)=>el.classList.toggle('show', qi===v.q));
+      const btn = document.getElementById('lqn-'+part+'-'+v.q); if(btn) btn.classList.add('cur');
+      if(autoplay){ const cur = qs[v.q]; const au = cur && cur.querySelector('audio'); if(au){ try{ au.currentTime=0; const p=au.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} } }
+    }
+    const pv=$('#lprev'), nx=$('#lnext'); if(pv) pv.disabled=(vi===0); if(nx) nx.disabled=(vi===n-1);
     const m=document.querySelector('.ins-main'); if(m) m.scrollTo({top:0});
-    try{ TTS.stop(); }catch(e){}
   };
-  window._lGoPart = function(i){ window._lShowPart(i); };
+  window._lGoPart = function(i){ window._lGoView(views.findIndex(v=>v.part===i), false); };
   window._lGoQ = function(part, local){
-    window._lShowPart(part);
+    if(lev.audios[part].paged){ window._lGoView(views.findIndex(v=>v.part===part && v.q===local), true); return; }
+    window._lGoView(views.findIndex(v=>v.part===part), false);
     document.querySelectorAll('.lqn.cur').forEach(b=>b.classList.remove('cur'));
     const btn=document.getElementById('lqn-'+part+'-'+local); if(btn) btn.classList.add('cur');
     const a=lev.audios[part]; const el=document.getElementById('lq_'+a.id+'__'+local);
     if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.classList.remove('q-flash'); void el.offsetWidth; el.classList.add('q-flash'); setTimeout(()=>el.classList.remove('q-flash'),1200); }
   };
-  window._lNav = function(d){ window._lShowPart(state.curPart + d); };
+  window._lNav = function(d){ window._lGoView(state.curView + d, true); };
   $('#lprev').onclick=()=>window._lNav(-1);
   $('#lnext').onclick=()=>window._lNav(1);
-  window._lShowPart(0);
+  window._lGoView(0, false);
 
   $('#insExit').onclick=()=>{ if(confirm('¿Salir? Perderás tus respuestas actuales.')){ try{TTS.stop();}catch(e){} document.body.classList.remove('exam-mode'); viewWelcome(); } };
   $('#insSubmit').onclick=onSubmit;
@@ -1261,7 +1280,7 @@ function renderQuestions(audio, container){
   audio.questions.forEach((q, qi)=>{
     const key = `${audio.id}__${qi}`;
     const el = document.createElement("div");
-    el.className = "q";
+    el.className = audio.paged ? "q paged-q" : "q";
     el.id = "lq_" + key;
     let typePill = `<span class="pill">Comprensión</span>`;
     if(q.type==="tf") typePill = `<span class="pill tf">Verdadero / Falso</span>`;
@@ -1326,6 +1345,9 @@ function renderQuestions(audio, container){
         <div class="meta"><span class="pill">Emparejar</span> <span>Pregunta ${qi+1}</span></div>
         <div class="stem">${q.person}</div>
         <select class="matchsel" data-key="${key}"><option value="">— elige —</option>${bank.map(b=>`<option value="${b}">${b}</option>`).join("")}</select>`;
+    }
+    if(audio.paged && q.audio){
+      el.innerHTML = `<div class="q-audio"><audio controls preload="none" src="${CONFIG.AUDIO_BASE}${q.audio}"></audio></div>` + el.innerHTML;
     }
     container.appendChild(el);
   });

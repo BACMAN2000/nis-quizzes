@@ -120,21 +120,39 @@ function writeWritingRows_(d, sourceLabel) {
   });
 }
 
-/* ---------- email (teacher) ---------- */
+/* ---------- email (teacher + student) ---------- */
 function sendEmails(d, skill) {
   var grade = d.grade || d.klass || '';
-  var subject = '[' + SCHOOL_NAME + ' · ' + skill + '] ' + (d.name || 'Student') + ' — ' + (d.level || '');
-  var lines = ['Student: ' + (d.name || ''), 'Grade: ' + grade, 'Level: ' + (d.level || ''),
-               'Exam: ' + (d.examTitle || d.examType || skill)];
-  if (skill !== 'Writing' && d.score != null) lines.push('Score: ' + d.score + ' / ' + d.total);
+  var pct = (d.percent != null) ? d.percent : (d.total ? Math.round(d.score / d.total * 100) : '');
   var tasks = d.writingEvaluation || d.writingAnswers || [];
+
+  // --- Teacher email (full) ---
+  var subject = '[' + SCHOOL_NAME + ' · ' + skill + '] ' + (d.name || 'Student') + ' — ' + (d.level || '');
+  var lines = ['Student: ' + (d.name || ''), 'Grade: ' + grade, 'Email: ' + (d.email || ''),
+               'Level: ' + (d.level || ''), 'Exam: ' + (d.examTitle || d.examType || skill)];
+  if (skill !== 'Writing' && d.score != null) lines.push('Score: ' + d.score + ' / ' + d.total + (pct !== '' ? ' (' + pct + '%)' : ''));
   if (tasks.length) {
     lines.push('', '--- Writing (mark by hand) ---');
-    tasks.forEach(function (t) {
-      lines.push('', (t.part || t.label || '') + ' [' + (t.wordCount || 0) + ' words]:', (t.text || '(blank)'));
-    });
+    tasks.forEach(function (t) { lines.push('', (t.part || t.label || '') + ' [' + (t.wordCount || 0) + ' words]:', (t.text || '(blank)')); });
   }
   MailApp.sendEmail(TEACHER_EMAIL, subject, lines.join('\n'));
+
+  // --- Student email (their own result) ---
+  var sEmail = d.email || '';
+  if (sEmail && /^\S+@\S+\.\S+$/.test(sEmail)) {
+    var body;
+    if (skill === 'Writing') {
+      body = 'Hi ' + (d.name || '') + ',\n\nYour writing (' + (d.level || '') + ') has been submitted to your teacher, who will read it and give you a mark by hand.\n\nThank you!\n— ' + SCHOOL_NAME;
+    } else {
+      body = 'Hi ' + (d.name || '') + ',\n\nHere is your ' + skill + ' result (' + (d.level || '') + '):\n\n' +
+             'Score: ' + d.score + ' / ' + d.total + (pct !== '' ? '  (' + pct + '%)' : '') + '\n';
+      if (d.parts && d.parts.length) {
+        body += '\nBy part:\n' + d.parts.map(function (p) { return '  • ' + p.name + ': ' + p.pct + '%'; }).join('\n') + '\n';
+      }
+      body += '\nWell done — keep practising!\n— ' + SCHOOL_NAME;
+    }
+    MailApp.sendEmail(sEmail, 'Your ' + skill + ' result — ' + SCHOOL_NAME, body);
+  }
 }
 
 /* ---------- helpers ---------- */
