@@ -3,3 +3,11 @@ Thumbs.db
 *.tmp
 .vscode/
 node_modules/
+
+# Secrets — never commit
+A2 Level.txt
+*.key
+.env
+.env.*
+elevenlabs*.txt
+*secret*
