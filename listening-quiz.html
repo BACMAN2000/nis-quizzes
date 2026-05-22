@@ -241,7 +241,16 @@ const LPICS = {
   umbrella:LPIC_WRAP(`<path d="M34 52 a26 26 0 0 1 52 0 z" fill="#e0f2fe"/><line x1="60" y1="52" x2="60" y2="80"/><path d="M60 80 q0 8 8 8"/>`),
   clock8:   clockFace_(60, 32, 42, 60),   // ~8:00
   clock830: clockFace_(48, 50, 60, 72),   // ~8:30
-  clock9:   clockFace_(60, 32, 78, 50)    // ~9:00
+  clock9:   clockFace_(60, 32, 78, 50),   // ~9:00
+  sandwich: LPIC_WRAP(`<polygon points="34,64 60,40 86,64" fill="#fde68a"/><rect x="34" y="64" width="52" height="8" fill="#fcd34d"/><path d="M42 60 q18 -8 36 0" stroke="#16a34a"/>`),
+  pizza:    LPIC_WRAP(`<path d="M60 26 L86 74 H34 Z" fill="#fde68a"/><circle cx="55" cy="58" r="3" fill="#dc2626" stroke="none"/><circle cx="66" cy="60" r="3" fill="#dc2626" stroke="none"/><circle cx="60" cy="48" r="3" fill="#dc2626" stroke="none"/>`),
+  bus:      LPIC_WRAP(`<rect x="26" y="36" width="68" height="34" rx="6" fill="#e0f2fe"/><line x1="26" y1="50" x2="94" y2="50"/><rect x="32" y="40" width="14" height="8"/><rect x="52" y="40" width="14" height="8"/><rect x="72" y="40" width="14" height="8"/><circle cx="40" cy="74" r="5"/><circle cx="80" cy="74" r="5"/>`),
+  bike:     LPIC_WRAP(`<circle cx="40" cy="62" r="14"/><circle cx="82" cy="62" r="14"/><path d="M40 62 L58 42 H72 M58 42 L70 62 M58 42 L40 62"/><line x1="50" y1="42" x2="66" y2="42"/>`),
+  car:      LPIC_WRAP(`<path d="M28 64 L34 48 H86 L92 64 Z" fill="#e0f2fe"/><rect x="40" y="50" width="16" height="12"/><rect x="62" y="50" width="16" height="12"/><circle cx="42" cy="68" r="6"/><circle cx="80" cy="68" r="6"/>`),
+  camera:   LPIC_WRAP(`<rect x="30" y="40" width="60" height="38" rx="5"/><rect x="46" y="34" width="20" height="8"/><circle cx="60" cy="59" r="13"/><circle cx="60" cy="59" r="6"/>`),
+  guitar:   LPIC_WRAP(`<circle cx="50" cy="64" r="18"/><circle cx="50" cy="64" r="6"/><line x1="62" y1="52" x2="88" y2="26"/><line x1="66" y1="56" x2="92" y2="30"/><rect x="84" y="22" width="10" height="10" transform="rotate(45 89 27)"/>`),
+  bag:      LPIC_WRAP(`<rect x="36" y="44" width="48" height="40" rx="5" fill="#e0f2fe"/><path d="M48 44 v-6 a12 12 0 0 1 24 0 v6"/><line x1="36" y1="58" x2="84" y2="58"/>`),
+  hat:      LPIC_WRAP(`<path d="M30 66 q30 -10 60 0" /><path d="M44 64 q16 -34 32 0" fill="#e0f2fe"/><path d="M44 56 q16 -10 32 0"/>`)
 };
 // Normalize a free-text gap answer for comparison
 function gapNorm_(s){ return String(s == null ? '' : s).toLowerCase().trim().replace(/[.,;:!?'"]/g, '').replace(/\s+/g, ' '); }
@@ -337,165 +346,82 @@ const QUIZ = {
   /* ---------------- B1 — Cambridge PET (B1-calibrated) ---------------- */
   B1: {
     label: "B1 — Intermediate",
-    cefr: "Cambridge PET · B1 official",
-    blurb: "Entrevistas y monólogos más extensos.",
+    cefr: "Cambridge PET · B1 official format",
+    blurb: "4 partes, 25 preguntas: imágenes, opción múltiple, completar y entrevista.",
     audios: [
       {
-        id: "B1-1", title: "Audio 1 · A student environmental project",
-        kind: "tts",
-        intro: "Listen to an interview with Lisa, a 17-year-old student who started an environmental project at her school.",
-        segments: ["Lisa's project interview"],
+        id: "B1-P1", title: "Part 1 · Questions 1–7", kind: "file", paged: true,
+        intro: "For each question, choose the correct answer (A, B or C). You will hear seven short recordings. Use the arrow ▶ or the numbers below to move on.",
+        segments: ["Picnic food","Travel to school","The weather","A birthday wish","At the shop","Train time","A lost thing"],
         scripts: [
-          "Interviewer: Welcome to the programme. Today we are talking to Lisa, a seventeen-year-old student who has started an environmental project at her school. Lisa, tell us what you have been doing. Lisa: Thank you. Well, it all started about six months ago when I noticed how much food was being wasted in our school canteen. Every lunchtime, huge amounts of perfectly good food were being thrown away. It really upset me. Interviewer: So what did you do? Lisa: First, I talked to the head teacher about it. She was really supportive, and helped me set up a team of volunteers. We started by measuring exactly how much food was being wasted each day. The results were shocking. We were throwing away nearly fifty kilos of food every week. Interviewer: That is a lot. How did you reduce it? Lisa: We introduced a system where students could choose smaller portions if they wanted. We also started a composting programme, so any food waste that could not be avoided was turned into compost for the school garden. We even set up a sharing table where students could leave food they did not want, for others to take. Interviewer: Has it made a difference? Lisa: Definitely. After three months, we reduced food waste by sixty percent. Other schools have contacted us to ask how they can do the same thing. I am really proud of what we have achieved."
+          "Question one. Boy: Are we taking pizza to the picnic on Sunday? Mum: No, I've already made sandwiches for everyone. Boy: Great, I love your sandwiches.",
+          "Question two. Girl: Are you cycling to school tomorrow, Sam? Boy: My bike has a flat tyre, so my dad's going to drive me. Girl: OK, see you there.",
+          "Question three. Woman: Shall we go for a walk this afternoon? Man: The radio says it's going to rain heavily later. Woman: Then let's just stay in.",
+          "Question four. Boy: What would you like for your birthday, Mia? Girl: I'd really love a camera. I want to take photos of the birds in our garden. Boy: Good idea.",
+          "Question five. Girl: Did you buy that book you wanted, Tom? Boy: They'd sold out, so I bought a new school bag instead. Girl: Oh well, that's useful too.",
+          "Question six. Man: What time does our train leave? Woman: At nine o'clock, not half past eight like yesterday. Man: Good, then we've got time for a coffee.",
+          "Question seven. Mum: What's the matter, Anna? Girl: I've lost my keys somewhere here in the park. Mum: Don't worry, let's go back and look for them."
         ],
         questions: [
-          {type:"mc", q:"How old is Lisa?", o:["Fourteen","Fifteen","Seventeen"], c:2},
-          {type:"mc", q:"Where did Lisa first notice food waste?", o:["At home","At her school canteen","At a restaurant"], c:1},
-          {type:"mc", q:"Who did Lisa talk to first about the problem?", o:["The school chef","The head teacher","Her parents"], c:1},
-          {type:"mc", q:"How much food was being thrown away each week before the project?", o:["About five kilos","About twenty kilos","Nearly fifty kilos"], c:2},
-          {type:"mc", q:"What happens to food waste that cannot be avoided?", o:["It goes to the bin","It becomes compost for the school garden","It is sold"], c:1},
-          {type:"mc", q:"By what percentage did they reduce food waste after three months?", o:["Twenty percent","Forty percent","Sixty percent"], c:2},
-          {type:"mc", q:"What have other schools done?", o:["Criticised Lisa's project","Contacted her to learn how to do the same","Refused to participate"], c:1},
-          {type:"tf", q:"Lisa started the project completely alone, with no help.", c:false},
-          {type:"tf", q:"The head teacher refused to support Lisa.", c:false},
-          {type:"tf", q:"One solution was offering students the choice of smaller portions.", c:true},
-          {type:"tf", q:"The 'sharing table' lets students leave food for others to take.", c:true},
-          {type:"tf", q:"Other schools were uninterested in the project.", c:false},
-          {type:"inf", q:"Lisa's attitude toward her project is best described as…", o:["Indifferent","Disappointed","Passionate and proud"], c:2},
-          {type:"inf", q:"What can we infer about the head teacher?", o:["She does not care about the environment","She values student initiative","She made the project compulsory"], c:1},
-          {type:"inf", q:"Why does the interviewer say 'That is a lot'?", o:["To congratulate Lisa","To express surprise at the amount of waste","To change the topic"], c:1},
-          {type:"inf", q:"What does the project's impact beyond Lisa's school suggest?", o:["It is limited to one school","Its model is starting to spread","It was quickly forgotten"], c:1},
-          {type:"seq", q:"Put the steps of Lisa's project in order (1 = first):",
-            items:[
-              "Lisa notices food being wasted in the canteen",
-              "Lisa talks to the head teacher",
-              "The team measures exactly how much food is wasted",
-              "They introduce smaller portions and composting"
-            ]}
+          {type:"pic", q:"What will the family take to the picnic?", imgs:["sandwich","pizza","cake"], c:0, audio:"B1/B1-P1-q1.mp3"},
+          {type:"pic", q:"How will Sam get to school tomorrow?", imgs:["bus","bike","car"], c:2, audio:"B1/B1-P1-q2.mp3"},
+          {type:"pic", q:"What will the weather be like this afternoon?", imgs:["sunny","rainy","snowy"], c:1, audio:"B1/B1-P1-q3.mp3"},
+          {type:"pic", q:"What does Mia want for her birthday?", imgs:["phone","camera","guitar"], c:1, audio:"B1/B1-P1-q4.mp3"},
+          {type:"pic", q:"What did Tom buy at the shop?", imgs:["book","bag","hat"], c:1, audio:"B1/B1-P1-q5.mp3"},
+          {type:"pic", q:"What time does the train leave?", imgs:["clock8","clock830","clock9"], c:2, audio:"B1/B1-P1-q6.mp3"},
+          {type:"pic", q:"What did Anna lose?", imgs:["keys","umbrella","phone"], c:0, audio:"B1/B1-P1-q7.mp3"}
         ]
       },
       {
-        id: "B1-2", title: "Audio 2 · An Italian student studying in England",
-        kind: "tts",
-        intro: "Listen to an interview with Marco, a student from Italy who is studying business in England.",
-        segments: ["Marco's experience"],
+        id: "B1-P2", title: "Part 2 · Questions 8–13", kind: "file", paged: true,
+        intro: "For each question, choose the correct answer (A, B or C). You will hear six short recordings.",
+        segments: ["School trip","The weekend","A new café","Teacher's advice","A book","Why he's late"],
         scripts: [
-          "Interviewer: Today we are talking to Marco, a student from Italy who is studying in England. Marco, how is your experience going? Marco: It has been amazing so far. I arrived in September, and I am studying business at the University of Leeds. Interviewer: Why did you decide to study in England? Marco: Well, I wanted to improve my English, and I thought the best way to do that was to live in an English-speaking country. I also heard that British universities have a very good reputation for business courses. My father studied here too, about twenty years ago, and he always told me it was the best experience of his life. Interviewer: Has anything been difficult? Marco: The weather was a shock at first. I come from Sicily, where it is sunny most of the year. But honestly, the hardest thing was understanding different accents. In my English classes back home, everyone spoke quite slowly and clearly. Here, people speak much faster, and there are so many different regional accents. It took me a few weeks to get used to it. Interviewer: What do you enjoy most? Marco: The social life is brilliant. I have joined several clubs. I play in the university football team, and I am also in the film society. I have made friends from all over the world. We cook meals together and share food from our different countries. I have learned to make Korean and Indian dishes. Interviewer: Would you recommend studying abroad? Marco: One hundred percent. It has made me more independent and more open-minded."
+          "You will hear a girl talking about a school trip. Girl: The museum was interesting, and lunch by the river was nice, but the best part was definitely the boat ride. I'd never been on a boat before, and the views were amazing.",
+          "You will hear a boy talking about his weekend. Boy: On Saturday I really wanted to play football, but I had a maths test on Monday, so I stayed home and studied all afternoon. I visited my grandparents on Sunday instead.",
+          "You will hear a woman talking about a new café. Woman: It's not the cheapest place in town, and it can get a bit noisy, but honestly the cakes are absolutely delicious. That's why I keep going back.",
+          "You will hear a teacher talking to a student. Teacher: Your essay is well written and you handed it in on time, well done. But your ideas need support, so I'd like you to add a few more examples before I mark it.",
+          "You will hear a girl talking about a book. Girl: I expected a happy ending, so I was completely surprised when the main character moved away. I didn't see it coming at all, but I still enjoyed it.",
+          "You will hear a man explaining why he is late. Man: I'm so sorry. I actually woke up on time, but there was a terrible accident on the main road, so the traffic was awful and I couldn't get here any faster."
         ],
         questions: [
-          {type:"mc", q:"Where is Marco originally from?", o:["Italy (Sicily)","Spain","Greece"], c:0},
-          {type:"mc", q:"What is Marco studying?", o:["Engineering","Business","Medicine"], c:1},
-          {type:"mc", q:"At which university?", o:["Cambridge","Oxford","Leeds"], c:2},
-          {type:"mc", q:"When did Marco arrive in England?", o:["September","December","March"], c:0},
-          {type:"mc", q:"Who else in Marco's family studied in England?", o:["His mother","His father","His brother"], c:1},
-          {type:"mc", q:"What was the hardest thing for Marco?", o:["The food","Understanding different regional accents","Making friends"], c:1},
-          {type:"mc", q:"Which sport does Marco play at university?", o:["Basketball","Football","Tennis"], c:1},
-          {type:"tf", q:"Marco came to England mainly to study Italian literature.", c:false},
-          {type:"tf", q:"The weather in Leeds is similar to Sicily's.", c:false},
-          {type:"tf", q:"Marco joined more than one club.", c:true},
-          {type:"tf", q:"All of Marco's friends are British.", c:false},
-          {type:"tf", q:"Marco strongly recommends studying abroad.", c:true},
-          {type:"inf", q:"Marco's father probably thinks studying in England was…", o:["A bad idea","A great experience","A waste of time"], c:1},
-          {type:"inf", q:"Marco's attitude toward the difficulties is best described as…", o:["Defeated","Resilient and adaptive","Angry"], c:1},
-          {type:"inf", q:"What does Marco's comment about his English classes back home suggest?", o:["He was used to slower, clearer English","He could already understand fast British speech","He spoke no English at all"], c:0},
-          {type:"inf", q:"Marco cooking meals with friends from many countries suggests he…", o:["Prefers to eat alone","Is curious about other cultures","Dislikes Italian food"], c:1},
-          {type:"seq", q:"Put events of Marco's experience in order (1 = first):",
-            items:[
-              "Marco decides to study in England to improve his English",
-              "Marco arrives at the University of Leeds in September",
-              "Marco struggles with British accents in his first weeks",
-              "Marco joins clubs and makes international friends"
-            ]}
+          {type:"mc", q:"What did the girl enjoy most on the school trip?", o:["The museum","The boat ride","The lunch"], c:1, audio:"B1/B1-P2-q1.mp3"},
+          {type:"mc", q:"What did the boy do on Saturday?", o:["Played football","Studied for a test","Visited his grandparents"], c:1, audio:"B1/B1-P2-q2.mp3"},
+          {type:"mc", q:"Why does the woman recommend the café?", o:["It is cheap","The cakes are delicious","It is very quiet"], c:1, audio:"B1/B1-P2-q3.mp3"},
+          {type:"mc", q:"What does the teacher want the student to do?", o:["Rewrite the essay","Hand it in earlier","Add more examples"], c:2, audio:"B1/B1-P2-q4.mp3"},
+          {type:"mc", q:"How did the girl feel about the ending?", o:["Surprised","Disappointed","Bored"], c:0, audio:"B1/B1-P2-q5.mp3"},
+          {type:"mc", q:"Why is the man late?", o:["He overslept","The traffic was bad","He missed the bus"], c:1, audio:"B1/B1-P2-q6.mp3"}
         ]
       },
       {
-        id: "B1-3", title: "Audio 3 · A racing driver interview",
-        kind: "file", file: "B1/ObjPET_AUD_PracticeTestTrack2.mp3",
-        intro: "A Cambridge PET radio interview with Simon Webster, a young racing driver, on the programme Sporting World.",
+        id: "B1-P3", title: "Part 3 · Questions 14–19", kind: "file", file: "B1/B1-P3.mp3",
+        intro: "You will hear a student telling other students about an after-school club. For each question, write the correct answer in the gap. Write one or two words, or a number, a date or a time.",
+        scripts: [
+          "Hello everyone. I'd like to tell you about our after-school Drama Club. The club meets every Thursday in the school hall — that's the big room next to the library. We start at four o'clock and finish at half past five. The cost is twenty pounds for the whole term, and that covers all of the costumes. This term, our first play is going to be a comedy, so it should be really good fun. One last thing: please remember to bring a bottle of water, because the practices can be quite tiring. We hope to see you there!"
+        ],
+        gapTitle: "After-School Drama Club",
         questions: [
-          {type:"mc", q:"How old is Simon Webster?", o:["18","21","25","30"], c:1},
-          {type:"mc", q:"Why does Simon talk to more experienced drivers?", o:["To make friends","To get information before racing on a new track","To find a job","To borrow equipment"], c:1},
-          {type:"mc", q:"In which months does Simon race?", o:["All year round","Only in winter","From April to October","Only at weekends in winter"], c:2},
-          {type:"mc", q:"What mistake does Simon say he always makes before a race?", o:["He eats too much","He trains too much instead of resting","He arrives late","He forgets his equipment"], c:1},
-          {type:"mc", q:"According to Simon, who checks the car?", o:["Simon himself","Other people","The interviewer","His dad"], c:1},
-          {type:"mc", q:"How did Simon first get interested in racing?", o:["From watching TV","Through his father, who did some racing","From his school friends","From a magazine"], c:1},
-          {type:"mc", q:"What advice does Simon give young drivers about other sports?", o:["Play as many as possible","Avoid them because of the injury risk","Only play football","Play them at university"], c:1},
-          {type:"tf", q:"Simon races every weekend with no breaks.", c:false},
-          {type:"tf", q:"Simon finds it difficult to take time off.", c:true},
-          {type:"tf", q:"Simon thinks being a little frightened helps him concentrate.", c:true},
-          {type:"tf", q:"Simon watched a lot of racing on TV as a child.", c:false},
-          {type:"tf", q:"Simon recommends going to university before becoming a racing driver.", c:false},
-          {type:"inf", q:"What can be inferred about Simon's attitude to training?", o:["He believes more training is always better","He knows over-training before a race harms his performance","He never trains at all","He only trains in winter"], c:1},
-          {type:"inf", q:"Why does Simon mention that his friends preferred football?", o:["To show his route into racing was unusual","To say he dislikes football","To recommend football","Because he played football too"], c:0},
-          {type:"inf", q:"Simon's view of his own ability is that he…", o:["Has reached his limit","Can still continue to improve","Is already the best driver","Wants to stop racing"], c:1},
-          {type:"inf", q:"The interview is mainly about…", o:["How to buy a racing car","Simon's life and advice as a racing driver","The history of motor racing","One particular race"], c:1},
-          {type:"seq", q:"Order the topics as they are discussed (1 = first):",
-            items:[
-              "Talking to more experienced drivers",
-              "His racing schedule through the year",
-              "The hardest part: taking time off",
-              "Advice for young racing drivers"
-            ]}
+          {type:"gap", label:"The club meets every: ____", accept:["thursday","thursdays"]},
+          {type:"gap", label:"Where: the school ____", accept:["hall"]},
+          {type:"gap", label:"Starts at: ____ o'clock", accept:["4","four"]},
+          {type:"gap", label:"Cost for the term: £ ____", accept:["20","twenty"]},
+          {type:"gap", label:"The first play is a: ____", accept:["comedy"]},
+          {type:"gap", label:"Remember to bring: a bottle of ____", accept:["water"]}
         ]
       },
       {
-        id: "B1-4", title: "Audio 4 · A new sports centre",
-        kind: "file", file: "B1/ObjPET_AUD_PracticeTestTrack3.mp3",
-        intro: "A Cambridge PET radio talk: Judy, the new manager, gives information about Wemport's new sports centre.",
+        id: "B1-P4", title: "Part 4 · Questions 20–25", kind: "file", file: "B1/B1-P4.mp3",
+        intro: "You will hear an interview with a young photographer called Leo. For each question, choose the correct answer (A, B or C).",
+        scripts: [
+          "Interviewer: Today I'm talking to Leo, a young photographer. Leo, how did you start? Leo: My grandfather gave me his old camera when I was eleven. At first I just took photos of my dog, but I quickly fell in love with it. Interviewer: What do you like photographing most? Leo: People often expect me to say landscapes, but actually I prefer photographing animals, especially birds — they're a real challenge. Interviewer: Is it difficult? Leo: The hardest part isn't the camera, it's the waiting. You sometimes wait hours for the perfect moment, so you need a lot of patience. Interviewer: Have you won any prizes? Leo: I won a small local competition last year, which was a surprise. It gave me the confidence to keep going. Interviewer: What advice would you give beginners? Leo: Don't buy an expensive camera at first. Just practise with what you have and learn to look carefully. Interviewer: And the future? Leo: I'd love to travel and photograph wildlife all over the world one day."
+        ],
         questions: [
-          {type:"mc", q:"Why did the sports centre's opening change to 12th May?", o:["A problem with the roof","Not enough members","Bad weather","A staff shortage"], c:0},
-          {type:"mc", q:"When is the opening party?", o:["5th May","12th May","Saturday 14th May","Sunday 14th May"], c:2},
-          {type:"mc", q:"Where is the new sports centre?", o:["Next to the supermarket","On the other side of the road from the station","Inside the old hotel","Next to the old sports centre"], c:1},
-          {type:"mc", q:"What is the name of the side road for the car park entrance?", o:["Station Road","Fortescue Road","Supermarket Road","Wemport Road"], c:1},
-          {type:"mc", q:"How much does a year's membership cost?", o:["£9.50","£40","£450","£14"], c:2},
-          {type:"mc", q:"What do members NOT need to bring?", o:["Trainers","Suitable clothes","A towel","A membership card"], c:2},
-          {type:"mc", q:"What time are the daily dance classes?", o:["2.00","5.30","9.50","Not decided yet"], c:1},
-          {type:"tf", q:"The new sports centre is on the same site as the old one.", c:false},
-          {type:"tf", q:"There used to be a hotel where the new centre is.", c:true},
-          {type:"tf", q:"Paying for a whole year saves money compared with paying weekly.", c:true},
-          {type:"tf", q:"The times of the yoga and exercise classes are already fixed.", c:false},
-          {type:"tf", q:"Members are allowed to park in the road outside the centre.", c:false},
-          {type:"inf", q:"Why does Judy spell out 'Fortescue'?", o:["It is a difficult name listeners need to find the car park","It is her surname","It is the centre's name","It is the name of a class"], c:0},
-          {type:"inf", q:"What is the main purpose of Judy's talk?", o:["To complain about the roof","To give information about the new sports centre","To sell sports equipment","To describe only a party"], c:1},
-          {type:"inf", q:"Judy suggests that the best-value membership is…", o:["Weekly","Monthly","Yearly","Daily"], c:2},
-          {type:"inf", q:"Why do members not need to bring a towel?", o:["Towels are banned","It saves carrying a heavy bag","There are no showers","Towels are sold there"], c:1},
-          {type:"seq", q:"Order the information as Judy gives it (1 = first):",
-            items:[
-              "The new opening date and the party",
-              "Where the centre is and how to park",
-              "Membership prices",
-              "Classes and the dance teacher"
-            ]}
-        ]
-      },
-      {
-        id: "B1-5", title: "Audio 5 · Planning a birthday party",
-        kind: "file", file: "B1/ObjPET_AUD_PracticeTestTrack4.mp3",
-        intro: "A Cambridge PET conversation between Oliver and Hannah, who is deciding what to do for her birthday.",
-        questions: [
-          {type:"mc", q:"Whose party did Oliver attend in the summer?", o:["Hannah's","Hannah's sister's","Oliver's own","A friend's"], c:1},
-          {type:"mc", q:"When is Hannah's birthday?", o:["In summer","In spring, very soon","In winter","In three months"], c:1},
-          {type:"mc", q:"Why doesn't Hannah want another barbecue?", o:["It was too expensive","It was hard work and some food got burnt","Nobody danced","It rained"], c:1},
-          {type:"mc", q:"Where was the summer party held?", o:["At a restaurant","At Hannah's grandmother's","At the school canteen","In Hannah's garden"], c:1},
-          {type:"mc", q:"What food does Oliver like best?", o:["Chinese","Italian","Indian","Pizza"], c:2},
-          {type:"mc", q:"What does Oliver finally suggest?", o:["An Indian restaurant","Hiring the school canteen with everyone bringing food","Another barbecue","A party at his grandmother's"], c:1},
-          {type:"mc", q:"What does Hannah have to do before deciding on the canteen?", o:["Ask her grandmother","Ask her mum and dad","Ask her sister","Ask the school"], c:1},
-          {type:"tf", q:"Hannah and her sister have birthdays in the same month.", c:false},
-          {type:"tf", q:"Hannah's grandmother was angry about the broken things.", c:false},
-          {type:"tf", q:"Oliver would feel comfortable having a party at his grandmother's flat.", c:false},
-          {type:"tf", q:"Most of Hannah's friends would prefer Italian food.", c:true},
-          {type:"tf", q:"Hannah likes the idea of having music at the canteen party.", c:true},
-          {type:"inf", q:"Why can't Hannah easily share a party with her sister?", o:["They have different friends","Their birthdays are three months apart","Her sister doesn't want to","They live apart"], c:1},
-          {type:"inf", q:"Why does the restaurant idea not work well?", o:["It is too far away","Her friends have very different food preferences and needs","Restaurants are closed","Oliver dislikes restaurants"], c:1},
-          {type:"inf", q:"What can be inferred about the canteen idea?", o:["It pleases everyone because the food would be mixed","It is the most expensive option","Hannah dislikes it","It needs no permission"], c:0},
-          {type:"inf", q:"Oliver's role in the conversation is mainly to…", o:["Complain about parties","Offer suggestions to help Hannah decide","Organise the party himself","Refuse to help"], c:1},
-          {type:"seq", q:"Order the options they discuss (1 = first):",
-            items:[
-              "Having another barbecue like last summer",
-              "A party at the grandmother's house",
-              "Going out to a restaurant",
-              "Hiring the school canteen"
-            ]}
+          {type:"mc", q:"How did Leo get his first camera?", o:["He bought it himself","His grandfather gave it to him","He won it"], c:1, audio:""},
+          {type:"mc", q:"What does Leo most like to photograph?", o:["Landscapes","Animals","People"], c:1},
+          {type:"mc", q:"What does Leo say is the hardest part?", o:["Using the camera","Waiting for the right moment","Choosing a place"], c:1},
+          {type:"mc", q:"How did Leo feel about winning the competition?", o:["Surprised","Disappointed","Worried"], c:0},
+          {type:"mc", q:"What advice does Leo give beginners?", o:["Buy an expensive camera","Practise with what you have","Take a class"], c:1},
+          {type:"mc", q:"What does Leo want to do in the future?", o:["Open a shop","Photograph wildlife around the world","Teach photography"], c:1}
         ]
       }
     ]
