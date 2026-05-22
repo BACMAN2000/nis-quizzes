@@ -473,157 +473,83 @@ const QUIZ = {
   /* ---------------- B2 — TOEFL real audio (upper-intermediate) ---------------- */
   B2: {
     label: "B2 — Upper-Intermediate",
-    cefr: "TOEFL listening · B2/C1",
-    blurb: "Lecturas académicas con vocabulario técnico.",
+    cefr: "Cambridge First (FCE) · B2 official format",
+    blurb: "4 partes, 30 preguntas: opción múltiple, completar, multiple matching y entrevista.",
     audios: [
       {
-        id: "B2-1", title: "Audio 1 · 'Safe yield' and water management",
-        kind: "file", file: "B2/Test_1_014.mp3",
-        intro: "A lecture in an environmental science class about how we manage underground water resources.",
+        id: "B2-P1", title: "Part 1 · Questions 1–8", kind: "file", paged: true,
+        intro: "You will hear people talking in eight different situations. For each question, choose the best answer (A, B or C).",
+        segments: ["A film","A delivery","Exam advice","A new job","A trip","A concert","A match","At a shop"],
+        scripts: [
+          "Question one. Woman: So, what did you think of the film? Man: Honestly, the actors were brilliant and it looked beautiful, but it went on far too long. By the end I just wanted it to finish.",
+          "Question two. Man: Hello, I'm calling about the table I ordered. Woman: Has it not arrived? Man: Oh, it arrived this morning, on time, but one of the legs is badly scratched. I'd like it replaced.",
+          "Question three. Teacher: Right, the exam is on Friday. I'm not going to tell you to study all night, that never helps. The most important thing is to get a good night's sleep, so you can think clearly.",
+          "Question four. Woman: How's the new job going? Girl: Everyone keeps asking if I'm nervous, but I'm not at all. I genuinely can't wait to get started. It's exactly what I've always wanted to do.",
+          "Question five. Man: Shall we go to the mountains this summer? Woman: We did that last year. I'd love to be by the sea this time. Man: You're right, let's book somewhere on the coast.",
+          "Question six. Woman: This is a reminder that Saturday's concert will now take place at the Riverside Hall, not the Town Theatre as printed on your tickets. The date and time are unchanged.",
+          "Question seven. Boy: We lost three nil. Girl: Was it the rain? Boy: No, the pitch was fine. The problem was that our best striker twisted his ankle in the first ten minutes, and after that we couldn't score.",
+          "Question eight. Woman: I bought this jacket last week, but it's too small. Assistant: Would you like a larger size? Woman: Actually, I've changed my mind about it completely, so I'd just like my money back."
+        ],
         questions: [
-          {type:"mc", q:"What is the main topic?", o:["Ocean currents","Underground water management","Rain patterns","Cleaning lakes"], c:1},
-          {type:"mc", q:"What is the principle described called?", o:["Fair yield","Safe yield","Good yield","Quick yield"], c:1},
-          {type:"mc", q:"According to 'safe yield', how much water can you pump out?", o:["As much as you want","As much as naturally recharges","Never any","Half of the supply"], c:1},
-          {type:"mc", q:"What is the main problem with the 'safe yield' approach?", o:["It ignores water that naturally flows out of the system","It is too expensive","It is illegal","It is too new"], c:0},
-          {type:"mc", q:"Which US state is mentioned as currently using safe yield?", o:["California","Texas","Arizona","Florida"], c:2},
-          {type:"mc", q:"What eventually dries up because of safe yield?", o:["Ocean shores","Discharge points feeding lakes and streams","City pipes","Trees"], c:1},
-          {type:"mc", q:"How does the professor define sustainability?", o:["Spending less","Asking permission","Meeting present needs without compromising the future","Using fast solutions"], c:2},
-          {type:"tf", q:"In a natural system, water only enters underground and never leaves.", c:false},
-          {type:"tf", q:"Pumping at the recharge rate keeps underground water levels exactly stable.", c:false},
-          {type:"tf", q:"The professor thinks 'safe yield' is fully compatible with sustainability.", c:false},
-          {type:"tf", q:"Reducing underground water can also reduce surface water in lakes and streams.", c:true},
-          {type:"tf", q:"The professor approves of Arizona's water management policy.", c:false},
-          {type:"inf", q:"The professor's tone toward 'safe yield' is best described as…", o:["Enthusiastic","Approving","Critical","Neutral"], c:2},
-          {type:"inf", q:"Why does the professor mention 'kids and kids' kids'?", o:["To remind students about homework","To make students care about long-term effects","To joke","To tell a story"], c:1},
-          {type:"inf", q:"What is implied about water systems managed by 'safe yield'?", o:["They are sustainable in the long term","They are not sustainable","They have unlimited water","They are temporary fixes"], c:1},
-          {type:"inf", q:"The professor implies good resource policy must consider…", o:["Only humans","All systems dependent on the resource","Only money","Only the current year"], c:1},
-          {type:"seq", q:"Order the professor's main ideas (1 = first):",
-            items:[
-              "Definition of 'safe yield'",
-              "Hidden problem: ignoring natural outflow",
-              "Long-term effect on lakes and streams",
-              "Comparison with sustainability"
-            ]}
+          {type:"mc", q:"What did the woman dislike about the film?", o:["The acting","The length","The way it looked"], c:1, audio:"B2/B2-P1-q1.mp3"},
+          {type:"mc", q:"What is the problem with the delivery?", o:["It arrived late","It is damaged","It is the wrong item"], c:1, audio:"B2/B2-P1-q2.mp3"},
+          {type:"mc", q:"What does the teacher advise students to do?", o:["Study all night","Sleep well","Arrive early"], c:1, audio:"B2/B2-P1-q3.mp3"},
+          {type:"mc", q:"How does the girl feel about her new job?", o:["Nervous","Excited","Disappointed"], c:1, audio:"B2/B2-P1-q4.mp3"},
+          {type:"mc", q:"Where do they decide to go on holiday?", o:["The mountains","The coast","A city"], c:1, audio:"B2/B2-P1-q5.mp3"},
+          {type:"mc", q:"What has changed about the concert?", o:["The date","The place","The price"], c:1, audio:"B2/B2-P1-q6.mp3"},
+          {type:"mc", q:"Why did the boy's team lose?", o:["Bad weather","A player was injured","Poor refereeing"], c:1, audio:"B2/B2-P1-q7.mp3"},
+          {type:"mc", q:"What does the woman want at the shop?", o:["A refund","A larger size","A repair"], c:0, audio:"B2/B2-P1-q8.mp3"}
         ]
       },
       {
-        id: "B2-2", title: "Audio 2 · Rye plants and root systems",
-        kind: "file", file: "B2/Test_1_019.mp3",
-        intro: "A botany lecture about an experiment that grew a rye plant in water to measure its complete root system.",
+        id: "B2-P2", title: "Part 2 · Questions 9–18", kind: "file", file: "B2/B2-P2.mp3",
+        intro: "You will hear a young volunteer called Daniel talking about a city wildlife park. For each question, write the correct answer in the gap. Write one or two words, or a number, a date or a time.",
+        scripts: [
+          "Hi everyone, I'm Daniel and I volunteer at the city wildlife park. The park first opened in nineteen ninety-eight, and today it relies on around fifty volunteers like me. Most of us help mainly with feeding the animals, which is my favourite job. Before you start, the training takes three weeks, so you really learn what you're doing. Without doubt, the most popular animals with visitors are the otters, and we're all very excited because a brand-new reptile section is opening in March. There are a few rules: volunteers must be over sixteen, and because it gets muddy, you have to wear waterproof boots. We don't provide food, so please bring your own lunch. If you'd like to join us, the only thing you need to do is fill in a form on our website. We'd love to have you!"
+        ],
+        gapTitle: "City Wildlife Park — Volunteering",
         questions: [
-          {type:"mc", q:"What is the main topic of the lecture?", o:["Growing food in water","The size of root systems","Soil chemistry","Fertilizer types"], c:1},
-          {type:"mc", q:"Why did the scientist grow rye in water?", o:["To clean the water","To feed people","To see the entire root system","To save space"], c:2},
-          {type:"mc", q:"What must be bubbled through the water?", o:["Carbon dioxide","Nitrogen","Gas (so roots get oxygen to breathe)","Hydrogen"], c:2},
-          {type:"mc", q:"Why do houseplants die when overwatered?", o:["Too much sun","Not enough oxygen for the roots","Not enough light","Too many leaves"], c:1},
-          {type:"mc", q:"How many shoots came from one rye seed in the experiment?", o:["8","18","80","800"], c:2},
-          {type:"mc", q:"About what was the shoot surface area?", o:["1 sq m","About 5 sq m","About 50 sq m","About 200 sq m"], c:1},
-          {type:"mc", q:"About what was the root surface area?", o:["About 5 sq m","About 50 sq m","More than 200 sq m","Exactly 1,000 sq m"], c:2},
-          {type:"tf", q:"Plant roots respire only at night.", c:false},
-          {type:"tf", q:"Rye is a type of grass.", c:true},
-          {type:"tf", q:"The professor's least favorite grass is crabgrass.", c:true},
-          {type:"tf", q:"Root hairs explain the huge extra surface area of the roots.", c:true},
-          {type:"tf", q:"Root hairs are not important for absorbing minerals.", c:false},
-          {type:"inf", q:"Why does the professor at first doubt the figure '1,000 km of roots'?", o:["It sounds too small","It sounds incredibly large","She has no source","No scientists agree on it"], c:1},
-          {type:"inf", q:"Why does the professor mention overwatered houseplants?", o:["To remind students to water more","To explain why bubbling gas is necessary","To change topics","Just to talk about hobbies"], c:1},
-          {type:"inf", q:"The professor saying 'I'm sorry, you must bubble GAS through it' shows that she…", o:["Corrects a slip of the tongue","Apologizes for the topic","Doesn't know the answer","Forgot the experiment"], c:0},
-          {type:"inf", q:"The crabgrass comparison helps students understand…", o:["That grasses can grow many shoots from one seed","How to remove weeds","Why rye is bad","Scientific writing"], c:0},
-          {type:"seq", q:"Order the experiment's discoveries (1 = first):",
-            items:[
-              "Scientist plants a rye seed in water",
-              "The plant produces about 80 shoots",
-              "Shoot surface area is measured at about 5 sq m",
-              "Root surface area is measured at more than 200 sq m"
-            ]}
+          {type:"gap", label:"The park opened in: ____", accept:["1998","nineteen ninety-eight","nineteen ninety eight"]},
+          {type:"gap", label:"Number of volunteers: about ____", accept:["50","fifty"]},
+          {type:"gap", label:"Volunteers mainly help with: ____", accept:["feeding","feeding the animals"]},
+          {type:"gap", label:"Training takes: ____ weeks", accept:["3","three"]},
+          {type:"gap", label:"Most popular animals: the ____", accept:["otters","otter"]},
+          {type:"gap", label:"New section opens in: ____", accept:["march"]},
+          {type:"gap", label:"Volunteers must be over: ____", accept:["16","sixteen"]},
+          {type:"gap", label:"You must wear: ____ boots", accept:["waterproof"]},
+          {type:"gap", label:"Bring your own: ____", accept:["lunch"]},
+          {type:"gap", label:"To join, fill in a: ____", accept:["form"]}
         ]
       },
       {
-        id: "B2-3", title: "Audio 3 · Choosing a language course",
-        kind: "file", file: "B2/test_13_globe_trotters.mp3",
-        intro: "A four-part recording: a phone call about language classes, a philosophy tutor, two new students, and a talk about Canada.",
+        id: "B2-P3", title: "Part 3 · Questions 19–23", kind: "file", file: "B2/B2-P3.mp3",
+        intro: "You will hear five people talking about why they started running. For each speaker, choose from the list (A–H) the reason they give. Use each letter once. There are three extra letters you will not need.",
+        bank: ["to lose weight","to make new friends","to reduce stress","on a doctor's advice","to raise money for charity","to compete in races","to spend time outdoors","to copy a friend"],
+        scripts: [
+          "Speaker one. Woman: I'd been feeling really tense at work for months. A colleague said running might help, and honestly, after a long run my mind feels completely clear. It's the only thing that calms me down. Speaker two. Man: My sister signed up for a marathon to support a hospital, and I didn't want her doing it alone, so I joined her. We collected quite a lot of money in the end. Speaker three. Woman: I spend all day inside, staring at a screen. For me, running isn't really about fitness, it's just the chance to be outside in the fresh air and see the sky. Speaker four. Man: My check-up wasn't great, and the doctor told me very clearly that I needed to start exercising. So really, I had no choice, I started the very next morning. Speaker five. Woman: I was new in town and didn't know anyone. I joined a local running club, and now most of my closest friends are people I met there."
+        ],
         questions: [
-          {type:"mc", q:"What does the man want to study?", o:["Beginner Japanese","Advanced Chinese","Intermediate French","Advanced Japanese"], c:0},
-          {type:"mc", q:"Why can't he take the advanced Chinese class?", o:["It is full","It meets on Wednesday and Friday evenings, when he works","It is too expensive","It is only for residents"], c:1},
-          {type:"mc", q:"Which option does the man finally pay for?", o:["One week at a time","The four-week course","The six-week course","Two levels together (12 weeks)"], c:2},
-          {type:"mc", q:"How can he register for the course?", o:["By phone","Only in person at the office with a cheque and photo ID","By email","Online only"], c:1},
-          {type:"mc", q:"Who should he ask for at the school office?", o:["Dr. Russell","Mr. Lindsay","Ben","The director"], c:1},
-          {type:"mc", q:"According to Dr. Russell, what was the single most annoying thing for students?", o:["Too much reading","People arriving late","Boring lectures","Difficult exams"], c:1},
-          {type:"mc", q:"In the talk on Canada, Montreal is described as…", o:["The capital of Canada","The second-largest French-speaking city in the world","A city in British Columbia","The coldest city in Canada"], c:1},
-          {type:"tf", q:"The man is a complete beginner in Japanese.", c:true},
-          {type:"tf", q:"Tutorial attendance with Dr. Russell is compulsory.", c:false},
-          {type:"tf", q:"Mini presentations and lecture discussions are graded for continuous assessment.", c:false},
-          {type:"tf", q:"Ben plans to become an architect.", c:true},
-          {type:"tf", q:"Sally finally decided to study economics.", c:false},
-          {type:"inf", q:"Why does the man choose a morning class?", o:["He simply prefers mornings","The beginner Japanese class he needs only meets in the mornings","Mornings are cheaper","The school is closed in the afternoon"], c:1},
-          {type:"inf", q:"What can be inferred about Ben's study approach compared with Sally's?", o:["He is more selective and organised about reading and notes","He reads far more than Sally","He is not interested in the course","He refuses to use the library"], c:0},
-          {type:"inf", q:"The talk on Canada mainly aims to…", o:["Promote tourism in Canada","Correct common misconceptions about Canada","Teach exam facts about Canada","Compare Canada with the USA"], c:1},
-          {type:"inf", q:"Dr. Russell suggests that for personal problems students should…", o:["Wait until the problem becomes serious","Contact other university support services such as counselling","Email the philosophy department","Solve them on their own"], c:1},
-          {type:"seq", q:"Order the four parts of the recording (1 = first):",
-            items:[
-              "A phone call about language classes",
-              "A philosophy tutor explaining tutorials",
-              "Two new students talking about college",
-              "A talk about Canada"
-            ]}
+          {type:"match", person:"Speaker 1", c:"to reduce stress"},
+          {type:"match", person:"Speaker 2", c:"to raise money for charity"},
+          {type:"match", person:"Speaker 3", c:"to spend time outdoors"},
+          {type:"match", person:"Speaker 4", c:"on a doctor's advice"},
+          {type:"match", person:"Speaker 5", c:"to make new friends"}
         ]
       },
       {
-        id: "B2-4", title: "Audio 4 · A study-abroad convention",
-        kind: "file", file: "B2/Test_12_event_description.mp3",
-        intro: "A four-part recording: directions at a study-abroad convention, a recorded city-tour message, a film-festival committee, and a talk on nanotechnology.",
+        id: "B2-P4", title: "Part 4 · Questions 24–30", kind: "file", file: "B2/B2-P4.mp3",
+        intro: "You will hear an interview with a young woman called Sofia, who runs a popular food blog. For each question, choose the best answer (A, B or C).",
+        scripts: [
+          "Interviewer: Sofia, welcome. How did your food blog begin? Sofia: It was a complete accident, really. I posted a photo of a cake I'd made for friends, and so many people asked for the recipe that I decided to start writing them down. Interviewer: Did you study cooking? Sofia: No, that surprises people. I actually studied business at university, and I think that's helped me more than any cooking course would have. Interviewer: What's the hardest part of running the blog? Sofia: People assume it's the cooking, but the truth is, photographing the food takes the most time. A single photo can take an hour. Interviewer: Where do your ideas come from? Sofia: Mostly from travelling. I get far more inspiration from markets abroad than from cookbooks. Interviewer: What mistake do beginners make? Sofia: They try to make everything look perfect. My advice is to keep it simple, because readers trust honest, simple recipes. Interviewer: And what's next? Sofia: I've been offered the chance to write a book, but for now I want to focus on filming short videos instead. Interviewer: Sofia, thank you."
+        ],
         questions: [
-          {type:"mc", q:"Where does the presentation 'How to prepare for University studies' take place?", o:["The conference room","The Blue Room","The banquet hall","The booking office"], c:1},
-          {type:"mc", q:"How are the booths in the conference room arranged?", o:["Alphabetically by school","By region/country","By subject","Randomly"], c:1},
-          {type:"mc", q:"Which section do visitors see first when entering the conference room?", o:["Europe","Australia","Refreshments","England"], c:1},
-          {type:"mc", q:"Where is the main boat booking office?", o:["Stop A (Green Banks)","Stop B (City Bridge)","Stop C (Roman Landing)","Stop D (Newtown)"], c:0},
-          {type:"mc", q:"The Number One Sightseeing Tour offers commentary in…", o:["English only","Eight languages","Four languages","No commentary"], c:1},
-          {type:"mc", q:"Who is in charge of the film-festival committee this year?", o:["Anna","Veronica","Chris","The student council"], c:2},
-          {type:"mc", q:"According to the nanotechnology speaker, future computers could be…", o:["The size of a sugar cube with a million times more memory","Larger but slower","Powered only by gas","Unable to store memory"], c:0},
-          {type:"tf", q:"There are no events scheduled in the banquet hall that day.", c:true},
-          {type:"tf", q:"The last sightseeing boat leaves at 6:30 p.m.", c:true},
-          {type:"tf", q:"The film festival is completely free to attend.", c:false},
-          {type:"tf", q:"The film festival made a large profit last year.", c:false},
-          {type:"tf", q:"The nanotechnology speaker wants all nanotech research stopped.", c:false},
-          {type:"inf", q:"Why does the speaker mention science-fiction books and movies about nanotechnology?", o:["To recommend them to students","To explain why people have the wrong idea and fears about it","To say they are scientifically accurate","Just to entertain the students"], c:1},
-          {type:"inf", q:"What is the speaker's overall attitude to nanotechnology?", o:["Fearful","Strongly opposed","Optimistic but aware of concerns","Indifferent"], c:2},
-          {type:"inf", q:"What can be inferred about how the festival films are chosen?", o:["They are picked at random","They are deliberately linked by a theme or type","They must all be in English","They are chosen by the student council"], c:1},
-          {type:"inf", q:"The recorded tourist message is mainly intended to…", o:["Sell boat tickets only","Suggest different ways of getting around the city","Describe the city's history","Advertise restaurants"], c:1},
-          {type:"seq", q:"Order the recording's four parts (1 = first):",
-            items:[
-              "Directions and layout of a study-abroad convention",
-              "A recorded message about city boat and bus tours",
-              "A committee discussing the film festival",
-              "A talk on nanotechnology"
-            ]}
-        ]
-      },
-      {
-        id: "B2-5", title: "Audio 5 · Planning a club trip to Tidborough",
-        kind: "file", file: "B2/Test_27_tidborough.mp3",
-        intro: "A four-part recording: a tourist-office phone call, a welcome talk to new shop staff, students discussing a marine-studies assignment, and a talk on careers with horses.",
-        questions: [
-          {type:"mc", q:"How far is the youth hostel from the town centre?", o:["1 km","2 km","5 km","Right next to the station"], c:1},
-          {type:"mc", q:"What happens on the 22nd of March?", o:["A natural-history exhibition opens","The street festival","The sports centre reopens","The beach express stops running"], c:1},
-          {type:"mc", q:"By what time does Derek advise getting to the station for the beach express?", o:["9:00","No later than 9:15","9:30","10:00"], c:1},
-          {type:"mc", q:"What discount do students get on beach-express tickets?", o:["10%","15%","20%","No discount"], c:2},
-          {type:"mc", q:"At Hawkins, who should staff get to deal with a customer complaint?", o:["A colleague","The staff member themselves","Their line manager","The HR office"], c:2},
-          {type:"mc", q:"According to Paul, which is the noisiest sea creature?", o:["The dolphin","The snapping shrimp","The seahorse","The whale"], c:1},
-          {type:"mc", q:"For specialised equine health and research, employers now require…", o:["No qualifications","A college certificate","A bachelor's degree","Postgraduate or PhD qualifications"], c:3},
-          {type:"tf", q:"The youth hostel is described as cheap and comfortable.", c:true},
-          {type:"tf", q:"The sports centre will be open throughout March.", c:false},
-          {type:"tf", q:"At Hawkins, progress meetings with the section supervisor are held every Thursday.", c:true},
-          {type:"tf", q:"Paul's first written assignment is worth 40% of the grade.", c:false},
-          {type:"tf", q:"The speaker says anyone can work in horse training without qualifications.", c:false},
-          {type:"inf", q:"Why does Derek suggest buying beach-express tickets beforehand from the tourist office?", o:["They are cheaper there","The station may be crowded","The train may be cancelled","Tickets sell out a month ahead"], c:1},
-          {type:"inf", q:"What is the main purpose of the Hawkins talk?", o:["To sell products to staff","To welcome and brief new temporary staff","To announce job cuts","To describe the company's history only"], c:1},
-          {type:"inf", q:"What can be inferred about ocean exploration before the 20th century?", o:["People believed the ocean was silent","People had detailed sound recordings","People knew shrimp were noisy","People already used hydrophones"], c:0},
-          {type:"inf", q:"The equine speaker implies that career success increasingly depends on…", o:["Family connections","Formal qualifications and practical experience","Luck","Living in the Middle East"], c:1},
-          {type:"seq", q:"Order the four sections (1 = first):",
-            items:[
-              "A phone call to a tourist office about a club trip",
-              "A welcome talk to new shop staff",
-              "Students discussing a marine-studies assignment",
-              "A talk about careers in the horse industry"
-            ]}
+          {type:"mc", q:"How did Sofia's blog start?", o:["She planned it carefully","By accident, after a photo","To make money"], c:1},
+          {type:"mc", q:"What did Sofia study at university?", o:["Cooking","Business","Photography"], c:1},
+          {type:"mc", q:"What does Sofia find hardest?", o:["The cooking","Photographing the food","Writing recipes"], c:1},
+          {type:"mc", q:"Where do most of her ideas come from?", o:["Cookbooks","Travelling","Television"], c:1},
+          {type:"mc", q:"What mistake do beginners make?", o:["They give up too soon","They try to make everything look perfect","They copy others"], c:1},
+          {type:"mc", q:"What advice does Sofia give?", o:["Keep recipes simple","Use expensive equipment","Post every day"], c:0},
+          {type:"mc", q:"What does Sofia want to do next?", o:["Write a book","Make short videos","Open a restaurant"], c:1}
         ]
       }
     ]
