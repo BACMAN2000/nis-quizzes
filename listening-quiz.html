@@ -83,6 +83,45 @@
   .speed input{width:120px}
   .q{padding:14px 0; border-top:1px solid var(--line)}
   .q:first-child{border-top:0}
+  /* ===== Inspera-style shell (matches Reading/Writing) ===== */
+  body.exam-mode > header{display:none}
+  .ins-shell{position:fixed; inset:0; display:flex; flex-direction:column; background:#fff; z-index:50}
+  .ins-hdr{display:flex; align-items:center; gap:16px; padding:10px 20px; border-bottom:1px solid #cbd5e1; background:#fff; flex-shrink:0}
+  .ins-hdr .ins-brand img{height:32px; width:auto; display:block}
+  .ins-hdr .ins-cand{font-size:.9rem; color:#64748b}
+  .ins-hdr .ins-right{margin-left:auto; display:flex; align-items:center; gap:10px}
+  .ins-audio{font-size:.85rem; color:#0f766e; font-weight:700}
+  .ins-hdr button{background:#fff; color:#475569; border:1px solid #cbd5e1; padding:7px 14px; border-radius:8px; font-weight:600; cursor:pointer; font-size:.85rem}
+  .ins-hdr button.ins-fin{background:#4987c6; color:#fff; border-color:#4987c6}
+  .ins-main{flex:1; overflow-y:auto; padding:18px 22px 28px}
+  .ins-inner{max-width:1000px; margin:0 auto}
+  .ins-title h1{font-size:1.3rem; margin:0 0 10px; color:#0f172a}
+  .ins-pane{display:none}
+  .ins-pane.active{display:block}
+  .ins-instr{background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:14px 18px; margin:8px 0 14px}
+  .ins-instr strong{display:block; color:#0f172a; font-size:1rem; margin-bottom:4px}
+  .ins-instr p{margin:0; color:#475569; font-size:.92rem}
+  .ins-player{background:#f1f5f9; border:1px solid #e2e8f0; border-radius:10px; padding:12px 14px; margin-bottom:14px}
+  .ins-ftr{display:flex; align-items:stretch; gap:8px; border-top:1px solid #cbd5e1; padding:8px 14px; background:#fff; overflow-x:auto; flex-shrink:0}
+  .ins-tabs{display:flex; gap:6px; flex:1}
+  .ins-tab{padding:8px 14px; border:1px solid #e2e8f0; border-radius:8px; background:#f1f5f9; cursor:pointer; min-width:92px; text-align:center; flex-shrink:0; display:flex; flex-direction:column; gap:3px}
+  .ins-tab .tn{font-weight:700; font-size:.82rem; color:#0f172a}
+  .ins-tab .tp{font-size:.76rem; color:#64748b}
+  .ins-tab.active{background:#fff; border-color:#4987c6; box-shadow:0 0 0 2px #d1d2ea}
+  .ins-tab.active .tn{color:#4987c6}
+  .ins-tab .tq{display:none; gap:4px; justify-content:center; flex-wrap:wrap; margin-top:2px}
+  .ins-tab.active .tq{display:flex}
+  .ins-tab.active .tp{display:none}
+  .lqn{width:26px; height:26px; display:inline-flex; align-items:center; justify-content:center; border:1px solid #cbd5e1; border-radius:5px; background:#fff; color:#475569; font-size:.78rem; font-weight:700; cursor:pointer; padding:0}
+  .lqn:hover{border-color:#4987c6; color:#4987c6}
+  .lqn.done{background:#4987c6; border-color:#4987c6; color:#fff}
+  .lqn.cur{box-shadow:0 0 0 2px #d1d2ea; border-color:#4987c6}
+  .ins-arrows{display:flex; gap:6px; align-items:center; padding-left:8px; border-left:1px solid #e2e8f0}
+  .ins-arrows button{background:#4987c6; color:#fff; border:none; padding:9px 16px; border-radius:8px; font-weight:700; cursor:pointer; min-width:46px}
+  .ins-arrows button:disabled{background:#cbd5e1; cursor:not-allowed}
+  .ins-content .q{background:#fafafa; border:1px solid #e2e8f0; border-radius:10px; padding:14px 18px; margin:12px 0; border-top:1px solid #e2e8f0}
+  .q-flash{animation:lqflash 1.2s ease}
+  @keyframes lqflash{0%{box-shadow:0 0 0 3px #fcd34d}100%{box-shadow:0 0 0 3px transparent}}
   .q .stem{font-weight:600; margin-bottom:6px}
   .q .meta{font-size:12px; color:var(--muted); margin-bottom:8px; display:flex; gap:8px; align-items:center}
   .pill{display:inline-block; padding:2px 8px; background:#eef2ff; color:#3730a3; border-radius:999px; font-size:11px; font-weight:700}
@@ -977,6 +1016,7 @@ function shuffle(a){
 /* ---------- VIEW: Welcome ---------- */
 function viewWelcome(){
   TTS.stop();
+  document.body.classList.remove('exam-mode');
   hdrRight.innerHTML = "";
   app.innerHTML = `
     <div class="card">
@@ -1027,60 +1067,81 @@ function viewWelcome(){
 /* ---------- VIEW: Quiz ---------- */
 function viewQuiz(){
   const lev = QUIZ[state.level];
-  hdrRight.innerHTML = `<span class="badge-level">${state.level}</span>`;
-  app.innerHTML = `
-    <div class="card">
-      <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap">
-        <div>
-          <h2>${lev.label}</h2>
-          <div class="hint">${lev.blurb} · <b>${state.name}</b> · ${state.klass}</div>
-        </div>
-        <div class="right">
-          <button class="btn ghost" id="btnBack">← Cambiar nivel</button>
-        </div>
-      </div>
-      <div class="progress"><div id="bar"></div></div>
-      <div class="hint" id="bartxt">0 ítems respondidos</div>
-    </div>
-    <div id="audios"></div>
-    <div class="card">
-      <div class="warn">
-        Verifica tus respuestas antes de enviar. Una vez enviadas, no se pueden modificar.
-      </div>
-      <div class="toolbar">
-        <button class="btn" id="btnSubmit">📤 Enviar respuestas</button>
-        <button class="btn ghost" id="btnSaveLocal">💾 Solo guardar copia local</button>
-      </div>
-    </div>
-  `;
-  $("#btnBack").onclick = ()=>{ if(confirm("¿Volver al inicio? Perderás tus respuestas actuales.")) { TTS.stop(); viewWelcome(); } };
-  $("#btnSubmit").onclick = onSubmit;
-  $("#btnSaveLocal").onclick = ()=>saveLocal();
+  document.body.classList.add('exam-mode');
+  // per-part starting question number
+  let counter = 1;
+  const pInfo = lev.audios.map(a=>{ const o={start:counter, count:a.questions.length}; counter += a.questions.length; return o; });
+  state.curPart = 0;
 
-  const cont = $("#audios");
-  lev.audios.forEach((audio)=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    let playerHTML;
-    if(audio.kind === "tts"){
-      playerHTML = renderTTSPlayer(audio);
-    } else {
-      playerHTML = `
-        <div class="audioblock">
-          <audio controls preload="none" src="${CONFIG.AUDIO_BASE}${audio.file}"></audio>
-          <div class="hint">Archivo: <code>${audio.file}</code></div>
-        </div>`;
-    }
-    card.innerHTML = `
-      <h2>${audio.title}</h2>
-      <div class="hint">${audio.intro}</div>
-      ${playerHTML}
-      <div id="qs-${audio.id}"></div>
-    `;
-    cont.appendChild(card);
-    if(audio.kind === "tts") bindTTSPlayer(audio);
-    renderQuestions(audio, $(`#qs-${audio.id}`));
-  });
+  const paneHTML = lev.audios.map((a,i)=>{
+    const info = pInfo[i];
+    const range = info.count>1 ? `${info.start}–${info.start+info.count-1}` : `${info.start}`;
+    const player = (a.kind==='tts') ? renderTTSPlayer(a)
+      : `<audio controls preload="none" src="${CONFIG.AUDIO_BASE}${a.file}"></audio>`;
+    return `<section class="ins-pane${i===0?' active':''}" data-part="${i}">
+      <div class="ins-instr"><strong>Questions ${range}</strong><p>${a.intro||''}</p></div>
+      <div class="ins-player">${player}</div>
+      <div class="ins-content" id="qs-${a.id}"></div>
+    </section>`;
+  }).join('');
+
+  const tabsHTML = lev.audios.map((a,i)=>{
+    const info = pInfo[i];
+    let qn='';
+    for(let j=0;j<info.count;j++){ qn += `<button class="lqn" id="lqn-${i}-${j}" onclick="event.stopPropagation();window._lGoQ(${i},${j})">${info.start+j}</button>`; }
+    return `<div class="ins-tab${i===0?' active':''}" data-part="${i}" onclick="window._lGoPart(${i})">
+      <div class="tn">Part ${i+1}</div><div class="tp" id="lprog-${i}">0 of ${info.count}</div><div class="tq">${qn}</div>
+    </div>`;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="ins-shell">
+      <header class="ins-hdr">
+        <div class="ins-brand"><img src="nordic-logo-h.svg" alt="Nordic"></div>
+        <div class="ins-cand">Candidate: <strong>${state.name}</strong> · ${state.klass}</div>
+        <div class="ins-right">
+          <span class="ins-audio">🔊 Listening</span>
+          <button id="insExit">Exit</button>
+          <button class="ins-fin" id="insSubmit">Submit ✓</button>
+        </div>
+      </header>
+      <main class="ins-main"><div class="ins-inner">
+        <div class="ins-title"><h1>${lev.label} — Listening</h1></div>
+        ${paneHTML}
+      </div></main>
+      <footer class="ins-ftr">
+        <div class="ins-tabs">${tabsHTML}</div>
+        <div class="ins-arrows"><button id="lprev">◀</button><button id="lnext">▶</button></div>
+      </footer>
+    </div>`;
+
+  lev.audios.forEach(a=>{ if(a.kind==='tts') bindTTSPlayer(a); renderQuestions(a, $(`#qs-${a.id}`)); });
+
+  window._lShowPart = function(i){
+    const n = lev.audios.length;
+    i = Math.max(0, Math.min(n-1, i)); state.curPart = i;
+    document.querySelectorAll('.ins-pane').forEach((p,k)=>p.classList.toggle('active', k===i));
+    document.querySelectorAll('.ins-tab').forEach((t,k)=>t.classList.toggle('active', k===i));
+    const pv=$('#lprev'), nx=$('#lnext'); if(pv) pv.disabled=(i===0); if(nx) nx.disabled=(i===n-1);
+    const m=document.querySelector('.ins-main'); if(m) m.scrollTo({top:0});
+    try{ TTS.stop(); }catch(e){}
+  };
+  window._lGoPart = function(i){ window._lShowPart(i); };
+  window._lGoQ = function(part, local){
+    window._lShowPart(part);
+    document.querySelectorAll('.lqn.cur').forEach(b=>b.classList.remove('cur'));
+    const btn=document.getElementById('lqn-'+part+'-'+local); if(btn) btn.classList.add('cur');
+    const a=lev.audios[part]; const el=document.getElementById('lq_'+a.id+'__'+local);
+    if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.classList.remove('q-flash'); void el.offsetWidth; el.classList.add('q-flash'); setTimeout(()=>el.classList.remove('q-flash'),1200); }
+  };
+  window._lNav = function(d){ window._lShowPart(state.curPart + d); };
+  $('#lprev').onclick=()=>window._lNav(-1);
+  $('#lnext').onclick=()=>window._lNav(1);
+  window._lShowPart(0);
+
+  $('#insExit').onclick=()=>{ if(confirm('¿Salir? Perderás tus respuestas actuales.')){ try{TTS.stop();}catch(e){} document.body.classList.remove('exam-mode'); viewWelcome(); } };
+  $('#insSubmit').onclick=onSubmit;
+
   updateProgress();
 }
 
@@ -1169,6 +1230,7 @@ function renderQuestions(audio, container){
     const key = `${audio.id}__${qi}`;
     const el = document.createElement("div");
     el.className = "q";
+    el.id = "lq_" + key;
     let typePill = `<span class="pill">Comprensión</span>`;
     if(q.type==="tf") typePill = `<span class="pill tf">Verdadero / Falso</span>`;
     if(q.type==="inf") typePill = `<span class="pill inf">Inferencia</span>`;
@@ -1291,10 +1353,17 @@ function updateProgress(){
       }
     });
   });
-  const pct = pointsTotal? Math.round(100*pointsAnswered/pointsTotal):0;
-  const bar = $("#bar"); const txt = $("#bartxt");
-  if(bar) bar.style.width = pct + "%";
-  if(txt) txt.textContent = `${pointsAnswered} / ${pointsTotal} ítems respondidos`;
+  const _pi_done = {};
+  lev.audios.forEach((a,pi)=>{
+    let done=0;
+    a.questions.forEach((q,qi)=>{
+      const key=`${a.id}__${qi}`; const v=state.answers[key];
+      const ans = (q.type==="seq") ? !!(v && Object.values(v).some(x=>x!=null)) : (v!==undefined && v!=="");
+      if(ans) done++;
+      const b=document.getElementById('lqn-'+pi+'-'+qi); if(b) b.classList.toggle('done', !!ans);
+    });
+    const p=document.getElementById('lprog-'+pi); if(p) p.textContent = done+' of '+a.questions.length;
+  });
 }
 
 /* ---------- SCORING ---------- */
@@ -1434,6 +1503,7 @@ function saveLocal(prefilled){
 
 /* ---------- VIEW: Result ---------- */
 function viewResult(payload, sent){
+  document.body.classList.remove('exam-mode');
   const pct = Math.round(100 * payload.score / payload.total);
   const verdict = pct>=85?"Excellent":pct>=70?"Good":pct>=50?"Keep practicing":"Needs review";
   hdrRight.innerHTML = `<span class="badge-level">${payload.level}</span>`;
