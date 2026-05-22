@@ -122,6 +122,25 @@
   .ins-content .q{background:#fafafa; border:1px solid #e2e8f0; border-radius:10px; padding:14px 18px; margin:12px 0; border-top:1px solid #e2e8f0}
   .q-flash{animation:lqflash 1.2s ease}
   @keyframes lqflash{0%{box-shadow:0 0 0 3px #fcd34d}100%{box-shadow:0 0 0 3px transparent}}
+  /* ===== Sign-in / level screens (match Reading/Writing) ===== */
+  body.signin-mode > header{display:none}
+  body.signin-mode{background:linear-gradient(180deg,#dfe3f7 0%,#eef1fb 35%,#f4f6fb 100%)}
+  .signin-wrap{max-width:780px; margin:0 auto; padding:48px 22px}
+  .signin-wrap .crumb{color:#64748b; font-size:14px; margin-bottom:10px}
+  .signin-wrap h1{font-size:2rem; margin:0 0 6px; color:#0f172a}
+  .signin-wrap .sub{color:#475569; margin:0 0 22px; font-size:1.05rem; line-height:1.5}
+  .signin-card{background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(15,23,42,.12); padding:28px 30px}
+  .signin-card label{display:block; font-weight:700; color:#0f172a; font-size:.95rem; margin:16px 0 6px}
+  .signin-card label:first-child{margin-top:0}
+  .signin-card input{width:100%; padding:13px 14px; border:1px solid #e2e8f0; border-radius:10px; font:inherit; font-size:1rem; background:#fff}
+  .signin-card input:focus{outline:none; border-color:#4987c6; box-shadow:0 0 0 3px #d1d2ea}
+  .signin-actions{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap}
+  .signin-actions button, .signin-actions a{font:inherit; font-weight:700; padding:13px 22px; border-radius:10px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; border:1px solid transparent}
+  .signin-actions .primary{background:#4987c6; color:#fff}
+  .signin-actions .secondary2{background:#fff; color:#0f172a; border-color:#cbd5e1}
+  .level-pick{max-width:780px; margin:0 auto; padding:34px 22px}
+  .level-pick h1{font-size:1.7rem; margin:0 0 4px; color:#0f172a}
+  .level-pick .sub{color:#475569; margin:0 0 18px}
   .q .stem{font-weight:600; margin-bottom:6px}
   .q .meta{font-size:12px; color:var(--muted); margin-bottom:8px; display:flex; gap:8px; align-items:center}
   .pill{display:inline-block; padding:2px 8px; background:#eef2ff; color:#3730a3; border-radius:999px; font-size:11px; font-weight:700}
@@ -997,6 +1016,7 @@ TTS.init();
 const state = {
   name: "",
   klass: "",
+  email: "",
   level: null,
   startTime: null,
   answers: {},
@@ -1017,31 +1037,46 @@ function shuffle(a){
 function viewWelcome(){
   TTS.stop();
   document.body.classList.remove('exam-mode');
+  document.body.classList.add('signin-mode');
   hdrRight.innerHTML = "";
   app.innerHTML = `
-    <div class="card">
-      <h1>Listening Quiz 🎧</h1>
-      <p style="margin:6px 0 12px">
-        <a class="btn small secondary" style="text-decoration:none" href="reading-quiz.html">📖 Ir al Reading Quiz</a>
-        <a class="btn small ghost" style="text-decoration:none" href="quizzes.html">⌂ Inicio</a>
-      </p>
-      <p>Vas a escuchar audios y responder <b>40 preguntas</b> de comprensión, verdadero/falso, inferencia y secuencia. Tus respuestas se guardan automáticamente al terminar.</p>
-      <div class="row" style="margin-top:10px">
-        <div>
-          <label>Tu nombre completo</label>
-          <input id="iName" type="text" placeholder="Ej: Andrés Pérez Castro" autocomplete="name">
-        </div>
-        <div>
-          <label>Grado / sección</label>
-          <input id="iClass" type="text" placeholder="Ej: G10 - A" autocomplete="off" value="${CONFIG.CLASS_LABEL}">
+    <div class="signin-wrap">
+      <div class="crumb">Welcome &rsaquo; Sign in</div>
+      <h1>Sign in to start</h1>
+      <p class="sub">Enter your details to begin. You will receive a PDF report of your result by email when you finish.</p>
+      <div class="signin-card">
+        <label for="iName">Your full name</label>
+        <input id="iName" placeholder="e.g. Maria Garcia" value="${state.name||''}" autocomplete="name">
+        <label for="iClass">Your grade / class</label>
+        <input id="iClass" placeholder="e.g. Grade 9 / 3rd ESO" value="${state.klass||''}">
+        <label for="iEmail">Your school email</label>
+        <input id="iEmail" type="email" placeholder="e.g. maria.garcia@nordic-school.edu.pe" value="${state.email||''}">
+        <div class="signin-actions">
+          <button class="primary" id="iContinue">Continue &rarr;</button>
+          <a class="secondary2" href="quizzes.html">&larr; Back</a>
         </div>
       </div>
-      <h3 style="margin-top:18px">Elige tu nivel</h3>
+    </div>`;
+  $("#iContinue").onclick = ()=>{
+    const nm=$("#iName").value.trim(), kl=$("#iClass").value.trim(), em=$("#iEmail").value.trim();
+    if(!nm || !kl){ alert("Please enter your full name and grade / class."); return; }
+    if(em && !/^\S+@\S+\.\S+$/.test(em)){ alert("Please enter a valid email address."); return; }
+    state.name=nm; state.klass=kl; state.email=em;
+    viewLevelSelect();
+  };
+}
+
+function viewLevelSelect(){
+  TTS.stop();
+  document.body.classList.remove('exam-mode');
+  document.body.classList.add('signin-mode');
+  app.innerHTML = `
+    <div class="level-pick">
+      <h1>Hello, ${state.name}! 🎧</h1>
+      <p class="sub">Choose your level to begin the Listening test.</p>
       <div class="levels" id="levels"></div>
-      <p class="hint">Los niveles A2 y B1 usan la voz del navegador (Cambridge KET/PET). B2 y C1 usan audio TOEFL real.</p>
-    </div>
-    <div class="footer">NIS English · 2026</div>
-  `;
+      <div class="signin-actions" style="margin-top:22px"><a class="secondary2" id="lvlBack">&larr; Back</a></div>
+    </div>`;
   const levels = $("#levels");
   Object.keys(QUIZ).forEach(k=>{
     const el = document.createElement("div");
@@ -1052,16 +1087,13 @@ function viewWelcome(){
       <div class="cef">${QUIZ[k].cefr||''}</div>
     `;
     el.onclick = ()=>{
-      const nm = $("#iName").value.trim();
-      const kl = $("#iClass").value.trim();
-      if(!nm){ alert("Por favor escribe tu nombre."); return; }
-      state.name = nm; state.klass = kl || CONFIG.CLASS_LABEL;
       state.level = k; state.startTime = Date.now();
       state.answers = {}; state.seqOrder = {};
       viewQuiz();
     };
     levels.appendChild(el);
   });
+  $("#lvlBack").onclick = ()=> viewWelcome();
 }
 
 /* ---------- VIEW: Quiz ---------- */
@@ -1447,6 +1479,8 @@ function onSubmit(){
   const payload = {
     name: state.name,
     klass: state.klass,
+    email: state.email,
+    skill: "Listening",
     level: state.level,
     score: score.correct,
     total: score.total,
@@ -1504,6 +1538,7 @@ function saveLocal(prefilled){
 /* ---------- VIEW: Result ---------- */
 function viewResult(payload, sent){
   document.body.classList.remove('exam-mode');
+  document.body.classList.remove('signin-mode');
   const pct = Math.round(100 * payload.score / payload.total);
   const verdict = pct>=85?"Excellent":pct>=70?"Good":pct>=50?"Keep practicing":"Needs review";
   hdrRight.innerHTML = `<span class="badge-level">${payload.level}</span>`;
