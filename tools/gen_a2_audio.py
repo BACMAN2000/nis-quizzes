@@ -11,7 +11,7 @@ import os, re, sys, json, time, subprocess, urllib.request, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KEY_FILE = os.path.join(ROOT, "A2 Level.txt")
-MP3_DIR  = os.path.join(ROOT, "mp3")
+MP3_DIR  = os.path.join(ROOT, "mp3", "A2")  # organized by level
 MODEL    = "eleven_multilingual_v2"
 OUTFMT   = "mp3_44100_128"
 
@@ -77,15 +77,18 @@ def main():
     key = open(KEY_FILE, encoding="utf-8").read().strip()
     os.makedirs(MP3_DIR, exist_ok=True)
     tmp = tempfile.mkdtemp(prefix="a2tts_")
-    # 0.6s silence between lines
+    # 0.6s silence between lines, 1.5s lead-in so the start is never clipped
     sil = os.path.join(tmp, "sil.mp3")
+    lead = os.path.join(tmp, "lead.mp3")
     subprocess.run(["ffmpeg","-y","-f","lavfi","-i","anullsrc=r=44100:cl=mono","-t","0.6","-q:a","9",sil],
+                   check=True, capture_output=True)
+    subprocess.run(["ffmpeg","-y","-f","lavfi","-i","anullsrc=r=44100:cl=mono","-t","1.5","-q:a","9",lead],
                    check=True, capture_output=True)
     for pid, scripts in PARTS.items():
         segs = []
         for sc in scripts:
             segs += segments(sc)
-        files = []
+        files = [lead]  # lead-in silence so the first word is never clipped
         for j,(vid,txt) in enumerate(segs):
             seg = os.path.join(tmp, f"{pid}_{j:02d}.mp3")
             print(f"  {pid} seg {j+1}/{len(segs)} ({len(txt)} chars)...")
