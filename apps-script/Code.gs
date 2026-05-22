@@ -72,10 +72,11 @@ function parseInput_(e) {
   return {};
 }
 
-/* ---------- Reading / Listening: one row with score + all answers ---------- */
+/* ---------- Reading / Listening: one row with score, stats AND all answers ---------- */
 function writeScoreRow_(ss, skill, d) {
   var headers = ['Timestamp', 'Name', 'Grade/Class', 'Email', 'Level', 'Exam',
-                 'Score', 'Total', 'Percent', 'CEFR', 'Minutes', 'Tab switches', 'Answers'];
+                 'Score', 'Total', 'Percent', 'CEFR', 'Minutes', 'Tab switches',
+                 'By part', 'Strong (≥75%)', 'Weak (<50%)', 'Answers'];
   var sheet = getOrCreateTab_(ss, skill, headers);
 
   var grade   = d.grade || d.klass || '';
@@ -83,6 +84,17 @@ function writeScoreRow_(ss, skill, d) {
   var pct     = (d.percent != null) ? d.percent
               : (d.total ? Math.round(d.score / d.total * 100) : '');
 
+  // Per-part stats + strengths / weaknesses (from the "parts" array)
+  var byPart = '', strong = '', weak = '';
+  if (d.parts && d.parts.length) {
+    byPart = d.parts.map(function (p) { return p.name + ': ' + p.pct + '%'; }).join('  |  ');
+    strong = d.parts.filter(function (p) { return p.pct >= 75; }).map(function (p) { return p.name; }).join(', ');
+    weak   = d.parts.filter(function (p) { return p.pct < 50;  }).map(function (p) { return p.name; }).join(', ');
+  } else if (d.breakdown) {
+    byPart = JSON.stringify(d.breakdown);
+  }
+
+  // Every answer the student gave
   var answers = '';
   if (d.detail && d.detail.length) {                 // Reading quiz format
     answers = d.detail.map(function (q) {
@@ -97,7 +109,7 @@ function writeScoreRow_(ss, skill, d) {
     new Date(), d.name || '', grade, d.email || '', d.level || '',
     d.examTitle || d.examType || skill,
     d.score, d.total, (pct !== '' ? pct + '%' : ''), d.cefrLabel || '',
-    minutes, d.tabSwitches || 0, answers
+    minutes, d.tabSwitches || 0, byPart, strong, weak, answers
   ]);
 }
 
